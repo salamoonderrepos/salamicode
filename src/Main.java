@@ -1,5 +1,8 @@
+// TODO main:
+//  - add file reading of course
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("wait im goated");
+        SalamiInterpreter.eval("test.salami");
     }
 }
