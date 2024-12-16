@@ -90,7 +90,7 @@ public class SalamiInterpreter {
                             rslt += (Integer) tokentoadd.getValue();
                         }
                         // create a new token for the result
-                        Token<Integer> r = new Token<Integer>(rslt);
+                        Token<Integer> r = new Token<>(rslt);
                         // add it to the stack
                         stack.add(r);
                     } else {
@@ -111,6 +111,6 @@ public class SalamiInterpreter {
             System.out.println("File not found: " + e.getMessage());
         }
         // return 3 because 3 is a funny number and i haven't done the eval calculations yet
-        return 0;
+        return 3;
     }
 }
