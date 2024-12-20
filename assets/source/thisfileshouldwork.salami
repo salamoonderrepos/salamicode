@@ -1,0 +1,38 @@
+-- set variables like this
+set x to 3
+-- declare functions like this
+func add (a,b)
+return a + b
+-- end of functions marked by return statements
+
+-- declare a function that returns nothing
+func doSomething (a b)
+-- does something
+return void
+-- all return statements must have one object being returned, even if its nothing
+
+-- setting y to the return value of add
+set y to add (1 3)
+
+-- () <-- these are groupings. they are used for order of operations and order of parsing.
+-- {} <-- these are array curls. they are used to tell the interpreter that you have a list of values under the same name.
+-- [] <-- these are evaluators. they are used to wrap boolean comparisons.
+-- ALL ELEMENTS ARE SEPARATED BY WHITESPACES
+
+-- Groupings and arrays:
+set b to {(add (2 3)) 2 (add (5 6))}
+-- because things are separated by spaces, sometimes you need to tell the parser what specifically are elements and what arent.
+set c to {5 "oink" 108.2}
+-- elements of arrays are not bound by types and can be anything. the array just says that those specific values are under the same name.
+
+-- Evaluators:
+set test1 to true
+set test2 to false
+
+-- comp takes a boolean and executes anything after it in the same line if its true
+comp [test1==test2] doSomething (2 2)
+-- evaluators are kind of like groupins but for booleans
+set num1 to 29
+set num2 to 10
+comp [num1>=num2] jump (add (num1 num2))
+-- jump also pairs really well with this
