@@ -5,4 +5,6 @@ public enum Type {
     OP,
     NUM,
     COMMENT,
+    FLOAT,
+    STRING
 }
