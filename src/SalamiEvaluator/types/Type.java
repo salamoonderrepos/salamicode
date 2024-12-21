@@ -6,5 +6,12 @@ public enum Type {
     NUM,
     COMMENT,
     FLOAT,
-    STRING
+    STRING,
+    RGROUPING,
+    LGROUPING,
+    RARRAY,
+    LARRAY,
+    RCOMPARE,
+    LCOMPARE,
+    NEWLINE,
 }

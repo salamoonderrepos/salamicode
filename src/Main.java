@@ -9,11 +9,20 @@
 // implement custom function writing for a more modular system
 
 import SalamiEvaluator.Lexer;
+import SalamiEvaluator.Parser;
 
 public class Main {
     public static void main(String[] args) {
-        Lexer l = new Lexer();
-        l.lex();
+        if (args.length < 1) {
+            System.out.println("Usage: java Main <filename>");
+            return;
+        }
+
+        String fileName = args[0];
+
+
+        Parser p = new Parser(new Lexer(fileName));
+        p.parse();
 
     }
 }
