@@ -37,21 +37,25 @@ public class Lexer {
         Scanner scan = new Scanner(f);
 
         while (scan.hasNextLine()) {
-            String line = scan.nextLine();
-            if (Objects.equals(line, "")) {
+            int index = 0; // imagine a pointer going from left to right for each line. index is the position of that pointer
+
+            String line = scan.nextLine(); // get next line
+            if (Objects.equals(line, "")) { //if the line is empty then add a newline token
                 lineindex++;
                 tk.addToken(new Token(Type.NEWLINE, String.valueOf(lineindex)));
-                continue;
+                continue; // continue, basically just skip the rest of the code and go to the next line
             }
-            int index = 0;
+
 
             // handle comments:
-            if (line.startsWith("--")) {
+            if (line.startsWith("--")) { // if it starts with -- then add comment token
                 tk.addToken(new Token(Type.COMMENT, line));
                 lineindex++;
-                tk.addToken(new Token(Type.NEWLINE, String.valueOf(lineindex)));
+                tk.addToken(new Token(Type.NEWLINE, String.valueOf(lineindex))); // add newline token
                 continue;
             }
+
+            // do all this code until the pointer reaches the end of the line. then go to the next line, and reset the index to 0.
             while (index < line.length()) {
                 char currentChar = line.charAt(index);
 
@@ -137,51 +141,25 @@ public class Lexer {
                     continue;
                 }
 
-                if (currentChar=='\''){
+                // HANDLE STRINGS why are we caps locked??
+                if (currentChar == '\'') {
                     index++; // Skip the opening quote
                     StringBuilder stringBuilder = new StringBuilder();
-
-                    boolean isEscaped = false;
-                    while (index < line.length()) {
-                        char c = line.charAt(index);
-
-                        if (isEscaped) {
-                            // Handle escape sequences
-                            switch (c) {
-                                case 'n': stringBuilder.append('\n'); break; // Newline
-                                case 't': stringBuilder.append('\t'); break; // Tab
-                                case '"': stringBuilder.append('"'); break;  // Escaped quote
-                                case '\'': stringBuilder.append('\''); break; // Escaped single quote
-                                case '\\': stringBuilder.append('\\'); break; // Escaped backslash
-                                default:
-                                    throw new LexerException("Unknown escape sequence: \\" + c);
-                            }
-                            isEscaped = false;
-                        } else if (c == '\\') {
-                            // Start of an escape sequence
-                            isEscaped = true;
-                        } else if (c == currentChar) {
-                            // End of the string
-                            index++; // Move past the closing quote
-                            break;
-                        } else {
-                            // Regular character in the string
-                            stringBuilder.append(c);
+                    boolean strended = false;
+                    while (index<line.length()){
+                        char curcar = line.charAt(index);
+                        switch (curcar){
+                            case '\'': strended = true; break;
+                            default: stringBuilder.append(curcar);
                         }
+                        if (strended) break;
                         index++;
                     }
-
-                    if (isEscaped) {
-                        throw new LexerException("Unclosed escape sequence at the end of the line");
+                    if (!strended){
+                        throw new LexerException("Unclosed String Literal at line [" + lineindex + ", " + (index+1)+"]");
                     }
-
-                    // If we exit the loop without finding a closing quote, throw an error
-                    if (index > line.length()) {
-                        throw new LexerException("Unclosed string literal");
-                    }
-
-                    // Add the string token
                     tk.addToken(new Token(Type.STRING, stringBuilder.toString()));
+                    index++;
                     continue;
                 }
 
