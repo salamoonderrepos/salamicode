@@ -14,4 +14,5 @@ public enum Type {
     RCOMPARE,
     LCOMPARE,
     NEWLINE,
+    EOF,
 }

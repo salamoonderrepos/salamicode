@@ -22,4 +22,8 @@ public class TokenizedList {
             System.out.println(t.toString());
         }
     }
+
+    public Token grab(int ind){
+        return tokens.get(ind);
+    }
 }

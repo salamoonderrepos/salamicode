@@ -1,10 +1,4 @@
--- this is a comment
-set x to 28
-set y to 132
-set z to 31
-comp [x>=132] jump 3
-set b to 'jork it'
-
-label bussinme
-set x to x + 1
-jump bussinme
+set x to 0
+label countToTen
+x++
+comp [x<=10] jump countToTen

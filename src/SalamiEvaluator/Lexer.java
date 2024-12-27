@@ -193,6 +193,9 @@ public class Lexer {
             lineindex++;
             tk.addToken(new Token(Type.NEWLINE, String.valueOf(lineindex)));
         }
+        // end of the file here
+        tk.addToken(new Token(Type.EOF, ""));
+
         tk.get();
         scan.close();
         return tk;
