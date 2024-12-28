@@ -2,82 +2,136 @@ package SalamiEvaluator;
 
 import SalamiEvaluator.types.Type;
 import SalamiEvaluator.types.ast.*;
-import java.text.ParseException;
-import java.util.Arrays;
 
-class ParserException extends Throwable{
-    public ParserException(String s){
-        super(s);
-    }
-}
-
+import java.io.FileNotFoundException;
 
 
 public class Parser {
-    Lexer l;
-    TokenizedList tokens;
-    int current = 0;
-
-    public Parser(Lexer a){
-        l = a;
-        tokens = l.lex();
-    }
+    static int current = 0;
+    static TokenizedList tokens = new TokenizedList();
+    public Parser(){}
 
     // create a list of variables which can easily be created and getted
     // create a list of functions which can be made with a certain id which refernce an actual function call
     // kind of like:
     // new KeyFunction(functionthathandlesjumpning, "jump");
     // create an AST tree and classes for the such
-    public void parse(){
-
+    private static void resetParser(){
+        current = 0;
+        tokens.clear();
     }
+    public static ProgramNode parseFile(String source) throws ParserException, LexerException, FileNotFoundException {
+        resetParser();
+        tokens = Lexer.tokenizeFile(source);
+        return parse();
+    }
+    public static ProgramNode parseLine(String source) throws ParserException, LexerException, FileNotFoundException{
+        resetParser();
+        tokens = Lexer.tokenizeLine(source,0);
+        tokens.addToken(new Token(Type.EOF, "EndOfLine")); // bandaid solution
+        return parse();
+    }
+    public static ProgramNode parse() throws ParserException, LexerException, FileNotFoundException{
+
+        ProgramNode p = new ProgramNode();
+        while (!isEnd()) {
+            // do the parsing till it ends :(
+            p.addStatement(parseStatement());
+        }
+        return p;
+    }
+    // Order of Presidence :)
+
+
+    public static ExpressionNode parseAdditiveExpression() throws ParserException{
+        ExpressionNode left = parseMultiplicativeExpression();
+        while (grabCurrentToken().getValue().equals("+") | grabCurrentToken().getValue().equals("-")){
+            String op = advance().getValue();
+            ExpressionNode right = parseMultiplicativeExpression();
+            left = new BinaryExpressionNode(left, op, right);
+        }
+        return left;
+    }
+    public static ExpressionNode parseMultiplicativeExpression() throws ParserException{
+        ExpressionNode left = parseExpression();
+        while (grabCurrentToken().getValue().equals("/") | grabCurrentToken().getValue().equals("*") | grabCurrentToken().getValue().equals("%")){
+            String op = advance().getValue();
+            ExpressionNode right = parseExpression();
+            left = new BinaryExpressionNode(left, op, right);
+        }
+        return left;
+    }
+
 
     //finish parse statements for stuff
-    public ASTNode parseStatement() throws ParserException{
-        if(tokenEqual(Type.ID, "set")) return parseSetStatement();
-        throw new ParserException("Unexpected Token at "+peek());
-    }
-
-    public ASTNode parseSetStatement() throws ParserException{
-        consume(Type.ID, "set");
-        String variable = consume(Type.ID).data;
-        consume(Type.ID, "to");
-        Token valueToken = consume(Type.NUM, Type.FLOAT);
-        return new SetNode<>(variable, valueToken.data);
-    }
-
-    public Token consume(Type type) throws ParserException{
-        if (tokenEqual(type)) return advance();
-        throw new ParserException("Expected '" + type + "' but got '" +peek()+"'");
-    }
-    private Token consume(Type type, String lexeme) throws ParserException{
-        if (tokenEqual(type) && peek().data.equals(lexeme)) return advance();
-        throw new ParserException("Expected '" + lexeme + "' but got '" + peek().data + "'");
-    }
-    private Token consume(Type... types) {
-        for (Type type : types) {
-            if (tokenEqual(type)) return advance();
+    public static StatementNode parseStatement() throws ParserException{
+        switch (grabCurrentToken().getType()) {
+            case COMMENT: return new CommentNode(advance().getValue());
+            default: return parseGeneralExpression();
         }
-        throw new RuntimeException("Expected " + Arrays.toString(types) + " but got " + peek().type);
-    }
-    private Token advance(){
-        if (!isAtEnd()) current++;
-        return tokens.grab(current-1);
-    }
-    private boolean tokenEqual(Type type) {
-        if (isAtEnd()) return false;
-        return peek().type == type;
-    }
-    private boolean tokenEqual(Type type, String lexeme) {
-        if (isAtEnd()) return false;
-        return (peek().type == type) && (peek().data.equals(lexeme));
+        //throw new ParserException("Unexpected Token at "+grabCurrentToken());
     }
 
-    private boolean isAtEnd(){
-        return peek().type == Type.EOF;
+    public static ExpressionNode parseGeneralExpression()  throws ParserException {
+        return parseAdditiveExpression();
     }
 
-    private Token peek() {
+    public static ExpressionNode parseExpression() throws ParserException{
+        // id just like to break down whats going on here for future me
+
+        // we create a switch statement which has cases depending on the type of the current token.
+        // also its gonna yell at you to use an "enhanced switch" but don't because its more readable without it :)
+        switch (grabCurrentToken().getType()) {
+            case ID: return new IdentifierNode(advance().getValue());
+
+            case VOID: advance(); return new VoidLiteralNode();
+
+            // if the current token is an identifier, then return an identifier node with the value of the token.
+            // this value is obtained by calling "advance" which is just a fancy way of saying:
+            // "give me the value, but also increment current by one in the process"
+            case NUM: return new NumericalLiteralNode(Integer.parseInt(advance().getValue())); // all token values are strings. dont forget that.
+
+            case LGROUPING: advance(); ExpressionNode value = parseGeneralExpression(); eat(Type.RGROUPING, ")"); return value;
+            default: throw new ParserException("Unexpected ExpressionNode at "+grabCurrentToken());
+        }
+    }
+
+    public static Token advance(){
+        Token prev = grabCurrentToken();
+        current++;
+        return prev;
+    }
+
+    public static boolean eat(Type t, String v) throws ParserException{
+        if (grabCurrentToken().getValue().equals(v) && grabCurrentToken().getType() == t){
+            advance();
+            return true;
+        }
+        throw new ParserException("Expected \'"+v+"\' of type "+t+" but got "+grabCurrentToken()+" instead.");
+    }
+
+    public static boolean eat(Type t) throws ParserException{
+        if (grabCurrentToken().getType() == t){
+            advance();
+            return true;
+        }
+        throw new ParserException("Expected type "+t+" but got "+grabCurrentToken().getType()+" instead.");
+    }
+
+    public static Token grabCurrentToken(){
         return tokens.grab(current);
     }
+    public static Token peekAhead(){
+        if (!isEnd()) return tokens.grab(current+1);
+        return tokens.grab(current);
+    }
+    public static boolean isEnd(){
+        return tokens.grab(current).type == Type.EOF;
+    }
+
+
+    // rethink the entire parser because i forgot
+    // we know the TokenizedList can be indexed using grab(index)
+    // we want to go through each token.
+    // need a function to check if the token equals a type and lexeme, before current++;
 }

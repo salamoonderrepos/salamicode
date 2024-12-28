@@ -23,6 +23,16 @@ public class TokenizedList {
         }
     }
 
+    public void addTokens(TokenizedList t){
+        for (Token token : t.tokens){
+            addToken(token);
+        }
+    }
+
+    public void clear(){
+        tokens.clear();
+    }
+
     public Token grab(int ind){
         return tokens.get(ind);
     }

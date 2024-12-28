@@ -15,4 +15,5 @@ public enum Type {
     LCOMPARE,
     NEWLINE,
     EOF,
+    VOID,
 }

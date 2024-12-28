@@ -1,0 +1,15 @@
+package SalamiEvaluator.types.ast;
+
+public enum NodeType {
+    AST,
+    BINARYEXPRESSION,
+    EXPRESSION,
+    PROGRAM,
+    STATEMENT,
+    NUMERICALLITERAL,
+    STRINGLITERAL,
+    FLOATINGPOINTLITERAL,
+    IDENTIFIER,
+    COMMENT,
+    VOIDLITERAL,
+}

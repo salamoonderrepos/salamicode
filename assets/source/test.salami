@@ -1,4 +1,0 @@
-set x to 0
-label countToTen
-x++
-comp [x<=10] jump countToTen
