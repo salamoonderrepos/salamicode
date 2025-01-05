@@ -1,19 +1,15 @@
 # What is this
-Salami is a coding language created by me, Salamoonder, as a way to practice my Java skills and have some fun with it too.
+SalamiCode is a coding language designed and developed by Salamoonder. SalamiCode is meant to be an easy-to-learn, assembly-like, dynamically typed language.
+Simply create a file ending in `.salami`, and run it with the java program (look below).
 
-Salami is made to be easy to read at a glance, but offer more complex practices if you need them. You should also be able to extend a screen extension and make your own cool little "games" and stuff.
-
-The file `thisfileshouldwork.salami` should be able to be executed without error by the end of this project. This project should also be able to be easily edited, so if maybe someone else wanted to add their own custom keywords and stuff they can easily do that.
-
-# How to use
+# How to use (currently)
 I have no idea how to build this into an executable or what that would even look like, but here is a way you can try it on your own:
 1. Download the source code.
 2. Make sure you have JDK 17 installed
-3. Run `java Main <enableRepl> <fileName>`
+3. Run `java Main <fileName> <enableRepl>`
 
 ## Repl?
-Basically, it's just a terminal for SalamiCode. You can type stuff and see what my parser spits out. It doesn't interpret anything (yet) but if you would rather have a quick way to look at it then replace `<enableRepl>` with `true`.  
-If you enable the repl from the command line you don't have to supply a file name either :).
+A terminal for SalamiCode so you can test it without having to make a new file. Just set the `<enableRepl>` flag to `true` and it will launch the console. Each line you enter is treated like a line from a file, so the parser thinks it's actually reading from a file line by line.
 
 ## File?
 
