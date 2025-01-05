@@ -12,13 +12,14 @@ import SalamiEvaluator.Lexer;
 import SalamiEvaluator.LexerException;
 import SalamiEvaluator.Parser;
 import SalamiEvaluator.ParserException;
-import SalamiEvaluator.types.ast.ExpressionNode;
-import SalamiEvaluator.types.ast.NumericalLiteralNode;
-import SalamiEvaluator.types.ast.ProgramNode;
-import SalamiEvaluator.types.ast.VoidLiteralNode;
+import SalamiEvaluator.types.ast.*;
 import SalamiRuntime.Interpreter;
+import SalamiRuntime.InterpreterException;
+import SalamiRuntime.Runtime.Environment;
 import SalamiRuntime.Runtime.Value;
+import SalamiRuntime.Runtime.ValueException;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Random;
 import java.util.Scanner;
@@ -48,26 +49,39 @@ public class Main {
             "THIS IS WORSE THAN CYBERPUNK ON RELEASE",
             "OWCH! THAT ONE HURT :(",
             "I THINK IM GONNA... BLEUAHHHHHH... ITS SO.. YOUR CODE IS JUST SO BAD... HEUUGHH..",
-            "TOO HARD DADDY", // im sorry
             "5183 FATAL ERRORS OCCURED. DELETING LINKEDIN PROFILE :(",
-            "so sad 10 lik for part 2 :>",
-            "WAS AT HOUSE CODING GAME WHEN PHONE RING \"YOUR CODE IS KIL\" \"YES\""
     };
     public static void main(String[] args) {
-        if (args.length < 1) {
-            System.out.println("Usage: java Main <enableRepl> <filename>");
+        if (args.length == 0) { // if no filename is provided
+            System.out.println("Provide a file to process.");
             return;
         }
 
 
-        boolean doRepl = Boolean.parseBoolean(args[0]);
+        boolean doRepl = Boolean.parseBoolean(args[1]);
         System.out.println(doRepl);
-
+        Environment env = Interpreter.initialize();
+        // create a specially made environment
+        // this is for predefined variables like "pi" and stuff
         if (!doRepl) {
-            String fileName = args[1];
+            String fileName = args[0];
+            File file = new File(fileName);
+
+            if (!file.exists()){
+                System.out.println("File does not exist.");
+                return;
+            }
+            //System.out.println(fileName);
+            //if (!fileName.endsWith(".salami") | !fileName.endsWith(".sal")){
+            //    System.out.println("File must end with `.salami` or `.sal`");
+            //    return;
+            //}
             try {
-                System.out.println(Parser.parseFile(fileName));
-            } catch (ParserException | LexerException | FileNotFoundException e) {
+                ProgramNode p = Parser.parseFile(file);
+                System.out.println(p);
+                System.out.println(Interpreter.evaluate(p, env));
+                // passes in a ast node tree and the initialized env variable
+            } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException e) {
                 System.out.println(randomMessage());
                 System.out.println("ERROR HAS OCCURRED INTERPRETING A FILE\n");
                 System.out.println(e.getMessage());
@@ -83,9 +97,9 @@ public class Main {
                 try {
                     ProgramNode ast = Parser.parseLine(next);
                     System.out.println(ast);
-                    //Value result = Interpreter.evaluate(new NumericalLiteralNode(69420f));
-                    //System.out.println(result);
-                } catch (ParserException | LexerException | FileNotFoundException e) {
+                    Value result = Interpreter.evaluate(ast, env);
+                    System.out.println(result);
+                } catch (ParserException | LexerException | InterpreterException | FileNotFoundException | ValueException e) {
                     System.out.println(randomMessage());
                     System.out.println("ERROR HAS OCCURRED INTERPRETING REPL\n");
                     System.out.println(e.getMessage());
@@ -93,8 +107,6 @@ public class Main {
             } while (true);
             scan.close();
         }
-
-        System.out.println(Interpreter.evaluate(new VoidLiteralNode()));
     }
     public static String randomMessage(){
         Random random = new Random();

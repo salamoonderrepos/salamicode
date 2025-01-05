@@ -3,6 +3,7 @@ package SalamiEvaluator;
 import SalamiEvaluator.types.Type;
 import SalamiEvaluator.types.ast.*;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 
@@ -10,25 +11,19 @@ public class Parser {
     static int current = 0;
     static TokenizedList tokens = new TokenizedList();
     public Parser(){}
-
-    // create a list of variables which can easily be created and getted
-    // create a list of functions which can be made with a certain id which refernce an actual function call
-    // kind of like:
-    // new KeyFunction(functionthathandlesjumpning, "jump");
     // create an AST tree and classes for the such
     private static void resetParser(){
         current = 0;
         tokens.clear();
     }
-    public static ProgramNode parseFile(String source) throws ParserException, LexerException, FileNotFoundException {
+    public static ProgramNode parseFile(File source) throws ParserException, LexerException, FileNotFoundException {
         resetParser();
-        tokens = Lexer.tokenizeFile(source);
+        tokens = Lexer.lex(source);
         return parse();
     }
     public static ProgramNode parseLine(String source) throws ParserException, LexerException, FileNotFoundException{
         resetParser();
-        tokens = Lexer.tokenizeLine(source,0);
-        tokens.addToken(new Token(Type.EOF, "EndOfLine")); // bandaid solution
+        tokens = Lexer.lex(source);
         return parse();
     }
     public static ProgramNode parse() throws ParserException, LexerException, FileNotFoundException{
@@ -45,7 +40,7 @@ public class Parser {
 
     public static ExpressionNode parseAdditiveExpression() throws ParserException{
         ExpressionNode left = parseMultiplicativeExpression();
-        while (grabCurrentToken().getValue().equals("+") | grabCurrentToken().getValue().equals("-")){
+        while (grabCurrentToken().getValue().equals("+") | grabCurrentToken().getValue().equals("-") | grabCurrentToken().getValue().equals("-*")){
             String op = advance().getValue();
             ExpressionNode right = parseMultiplicativeExpression();
             left = new BinaryExpressionNode(left, op, right);
@@ -67,9 +62,29 @@ public class Parser {
     public static StatementNode parseStatement() throws ParserException{
         switch (grabCurrentToken().getType()) {
             case COMMENT: return new CommentNode(advance().getValue());
+            case SET: return parseSetStatement();
             default: return parseGeneralExpression();
         }
         //throw new ParserException("Unexpected Token at "+grabCurrentToken());
+    }
+
+
+    // SET x TO 40
+    // SET b TO 'cunkonearth'-'onearth'
+    // SET foo TO 32.2 FINALLY
+    public static StatementNode parseSetStatement() throws ParserException{
+        boolean isfinal=false;
+        advance();
+        final Token identifier = eat(Type.ID);
+        eat(Type.TO);
+        final ExpressionNode value = parseGeneralExpression();
+        if (grabCurrentToken().type == Type.FINALLY){
+            eat(Type.FINALLY);
+            isfinal=true;
+        }
+        eat(Type.SEMICOLON);
+        return new VariableDeclarationStatement(identifier.getValue(), value, isfinal);
+
     }
 
     public static ExpressionNode parseGeneralExpression()  throws ParserException {
@@ -89,7 +104,13 @@ public class Parser {
             // if the current token is an identifier, then return an identifier node with the value of the token.
             // this value is obtained by calling "advance" which is just a fancy way of saying:
             // "give me the value, but also increment current by one in the process"
+
+            case FLOAT: return new FloatingLiteralNode(Float.parseFloat(advance().getValue()));
+
             case NUM: return new NumericalLiteralNode(Integer.parseInt(advance().getValue())); // all token values are strings. dont forget that.
+
+            case STRING: return new StringLiteralNode(advance().getValue());
+
 
             case LGROUPING: advance(); ExpressionNode value = parseGeneralExpression(); eat(Type.RGROUPING, ")"); return value;
             default: throw new ParserException("Unexpected ExpressionNode at "+grabCurrentToken());
@@ -102,18 +123,16 @@ public class Parser {
         return prev;
     }
 
-    public static boolean eat(Type t, String v) throws ParserException{
+    public static Token eat(Type t, String v) throws ParserException{
         if (grabCurrentToken().getValue().equals(v) && grabCurrentToken().getType() == t){
-            advance();
-            return true;
+            return advance();
         }
         throw new ParserException("Expected \'"+v+"\' of type "+t+" but got "+grabCurrentToken()+" instead.");
     }
 
-    public static boolean eat(Type t) throws ParserException{
+    public static Token eat(Type t) throws ParserException{
         if (grabCurrentToken().getType() == t){
-            advance();
-            return true;
+            return advance();
         }
         throw new ParserException("Expected type "+t+" but got "+grabCurrentToken().getType()+" instead.");
     }

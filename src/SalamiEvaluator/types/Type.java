@@ -16,4 +16,8 @@ public enum Type {
     NEWLINE,
     EOF,
     VOID,
+    SET,
+    TO,
+    FINALLY,
+    SEMICOLON,
 }

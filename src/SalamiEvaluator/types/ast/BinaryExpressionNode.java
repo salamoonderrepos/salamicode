@@ -1,9 +1,9 @@
 package SalamiEvaluator.types.ast;
 
 public class BinaryExpressionNode extends ExpressionNode{
-    ExpressionNode leftExpression;
-    String op;
-    ExpressionNode rightExpression;
+    public ExpressionNode leftExpression;
+    public String op;
+    public ExpressionNode rightExpression;
     public BinaryExpressionNode(ExpressionNode leftEx, String _op, ExpressionNode rightEx) {
         super(NodeType.BINARYEXPRESSION);
         leftExpression = leftEx;

@@ -8,24 +8,24 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Lexer {
-    public static String FILE = "assets\\source\\test.salami";
-    public static final String[] OPERATORS = {"%","*", "-", "/", "+", "=", "==", "!=", ">", "<", ">=", "<=", "++"};
+    public static final String[] OPERATORS = {"%","*", "-", "/", "+", "=", "==", "!=", ">", "<", ">=", "<=", "++","-*"};
     public static final String DELIMITERS = "{}[]()";
-    public Lexer(String fileName){FILE=fileName;}
+    public static final String[] KEYWORDS = {"set", "to"};
     public Lexer(){}
 
-    public static TokenizedList lex() throws LexerException, FileNotFoundException{
+    public static TokenizedList lex(File FILE) throws LexerException, FileNotFoundException{
         return tokenizeFile(FILE);
     }
-    public static TokenizedList lex(String source) throws LexerException, FileNotFoundException{
-        return tokenizeFile(source);
+    public static TokenizedList lex(String source) throws LexerException{
+        TokenizedList finaltk = tokenizeLine(source, 1);
+        finaltk.addToken(new Token(Type.EOF, "EndOfLine"));
+        return finaltk;
     }
 
-    public static TokenizedList tokenizeFile(String fileLocation)
+    public static TokenizedList tokenizeFile(File f)
     throws FileNotFoundException, LexerException {
         int lineindex = 1;
         TokenizedList tk = new TokenizedList();
-        File f = new File(fileLocation);
         Scanner scan = new Scanner(f);
 
         while (scan.hasNextLine()) {
@@ -74,6 +74,9 @@ public class Lexer {
                 }
                 String subid = line.substring(start, index);// Extract the identifier
                 if (subid.equals("void")) {tk.addToken(new Token(Type.VOID, "Void")); continue;}
+                if (subid.equals("set")) {tk.addToken(new Token(Type.SET, "set")); continue;}
+                if (subid.equals("to")) {tk.addToken(new Token(Type.TO, "to")); continue;}
+                if (subid.equals("finally")) {tk.addToken(new Token(Type.FINALLY, "finally")); continue;}
                 tk.addToken(new Token(Type.ID, subid));
                 continue;
             }
@@ -145,6 +148,7 @@ public class Lexer {
 
             // HANDLE STRINGS why are we caps locked??
             if (currentChar == '\'') {
+
                 index++; // Skip the opening quote
                 StringBuilder stringBuilder = new StringBuilder();
                 boolean strended = false;
@@ -164,12 +168,17 @@ public class Lexer {
                 index++;
                 continue;
             }
-
+            if (currentChar == ';') {
+                tk.addToken(new Token(Type.SEMICOLON, "END OF LINE"));
+                index++;
+                continue;
+            }
             // Handle unknown/invalid characters
             throw new LexerException("Undetermined Character at line [" + lineindex + ", " + (index+1) + "]: \"" +currentChar+"\"");
         }
 
         System.out.println(line);
+        System.out.println(tk);
         return tk;
         //tk.addToken(new Token(Type.NEWLINE, String.valueOf(lineindex)));
     }

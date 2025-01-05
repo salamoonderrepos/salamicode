@@ -1,7 +1,7 @@
 package SalamiEvaluator.types.ast;
 
 public class IdentifierNode extends ExpressionNode {
-    String value;
+    public String value;
     public IdentifierNode(String d){
         super(NodeType.IDENTIFIER);
         value = d;

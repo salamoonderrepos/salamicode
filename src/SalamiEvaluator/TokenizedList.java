@@ -36,4 +36,11 @@ public class TokenizedList {
     public Token grab(int ind){
         return tokens.get(ind);
     }
+
+    @Override
+    public String toString() {
+        return "TokenizedList{" +
+                "tokens=" + tokens +
+                '}';
+    }
 }

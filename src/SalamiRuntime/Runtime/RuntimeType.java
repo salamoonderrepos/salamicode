@@ -1,6 +1,9 @@
 package SalamiRuntime.Runtime;
 
 public enum RuntimeType {
-    Number,
-    Void,
+    NUMBER,
+    FLOAT,
+    VOID,
+    STRING,
+    BOOLEAN,
 }
