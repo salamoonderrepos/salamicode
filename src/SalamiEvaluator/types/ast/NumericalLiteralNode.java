@@ -1,5 +1,8 @@
 package SalamiEvaluator.types.ast;
 
+/**
+ *
+ */
 public class NumericalLiteralNode extends ExpressionNode {
     public double value;
     public NumericalLiteralNode(double d){

@@ -1,21 +1,19 @@
-// ok ive researched. thigns i need todo:
-// create a lexer
-// create a tree format system
-// create a parser
-// create a evaluater or something like that
+// hey heres what i have planned
+// add subroutines
+// remove semicolons
 
-// for the lexer:
-// make tokens that actually do stuff
-// implement custom function writing for a more modular system
 
+import Logger.Logger;
 import SalamiEvaluator.Lexer;
 import SalamiEvaluator.LexerException;
 import SalamiEvaluator.Parser;
 import SalamiEvaluator.ParserException;
 import SalamiEvaluator.types.ast.*;
+import SalamiRuntime.Initializer;
 import SalamiRuntime.Interpreter;
 import SalamiRuntime.InterpreterException;
 import SalamiRuntime.Runtime.Environment;
+import SalamiRuntime.Runtime.ProgramCounter;
 import SalamiRuntime.Runtime.Value;
 import SalamiRuntime.Runtime.ValueException;
 
@@ -25,6 +23,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
+    static final Logger logger = new Logger("Main");
+
     static final String[] responses = {
             "WHOOPS. MY BAD.",
             "SORRY...",
@@ -58,56 +58,97 @@ public class Main {
         }
 
 
+
         boolean doRepl = Boolean.parseBoolean(args[1]);
-        System.out.println(doRepl);
-        Environment env = Interpreter.initialize();
-        // create a specially made environment
-        // this is for predefined variables like "pi" and stuff
+        boolean silent;
+        try {silent = Boolean.parseBoolean(args[2]);} catch (IndexOutOfBoundsException e ){silent = false;}
+        //System.out.println(doRepl);
+        Environment env = Initializer.initialize_global_environment();
+        // create the global scope
+        // things like PI and stuff are there
+
         if (!doRepl) {
             String fileName = args[0];
             File file = new File(fileName);
 
-            if (!file.exists()){
-                System.out.println("File does not exist.");
-                return;
+            if (fileIsValid(file)){
+                runFile(file, env, silent);
             }
-            //System.out.println(fileName);
-            //if (!fileName.endsWith(".salami") | !fileName.endsWith(".sal")){
-            //    System.out.println("File must end with `.salami` or `.sal`");
-            //    return;
-            //}
-            try {
-                ProgramNode p = Parser.parseFile(file);
-                System.out.println(p);
-                System.out.println(Interpreter.evaluate(p, env));
-                // passes in a ast node tree and the initialized env variable
-            } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException e) {
-                System.out.println(randomMessage());
-                System.out.println("ERROR HAS OCCURRED INTERPRETING A FILE\n");
-                System.out.println(e.getMessage());
-            }
+
+
         } else {
+            // initialize scanner
             Scanner scan = new Scanner(System.in);
             String next;
             System.out.println("SalamiCode REPL v0.1");
+
+
             do {
+
                 System.out.println(">>> ");
                 next = scan.nextLine();
                 if (next.equals("exit()")) break;
                 try {
-                    ProgramNode ast = Parser.parseLine(next);
-                    System.out.println(ast);
-                    Value result = Interpreter.evaluate(ast, env);
-                    System.out.println(result);
-                } catch (ParserException | LexerException | InterpreterException | FileNotFoundException | ValueException e) {
-                    System.out.println(randomMessage());
-                    System.out.println("ERROR HAS OCCURRED INTERPRETING REPL\n");
-                    System.out.println(e.getMessage());
+                    runLine(next, env, silent);
+                } catch (ParserException | LexerException | InterpreterException | ValueException e) {
+                    handleError(e,"repl");
                 }
             } while (true);
             scan.close();
         }
+
+        logger.yell("END OF PROGRAM");
     }
+    public static void handleError(Throwable e, String file){
+        System.out.println(randomMessage()+"\n\n");
+        System.out.println("ERROR HAS OCCURRED WITH LOCATION '"+file+'\''+'\n');
+        System.out.println(e);
+        //System.out.println(e.getClass().getName());
+    }
+    public static void runFile(File file, Environment env, boolean silent){
+        try {
+            if (silent) {
+                logger.silence();
+                Parser.logger.silence();
+                Lexer.logger.silence();
+            }
+            ProgramNode p = Parser.parseFile(file);
+            ProgramCounter counter = new ProgramCounter(0);
+            logger.log(p);
+            logger.log(Interpreter.evaluate(p, env, counter, null));
+            logger.log(env);
+            // passes in an ast node tree and the initialized env variable
+        } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException e) {
+            handleError(e, file.getAbsolutePath());
+        }
+    }
+
+    public static void runLine(String line, Environment env, boolean silent) throws ParserException, LexerException, InterpreterException{
+        if (silent) {
+            logger.silence();
+            Parser.logger.silence();
+            Lexer.logger.silence();
+        }
+        ProgramCounter counter = new ProgramCounter(0);
+        ProgramNode ast = Parser.parseLine(line);
+        logger.log(ast);
+        Value result = Interpreter.evaluate(ast, env, counter, null);
+        logger.log(result);
+    }
+
+    public static boolean fileIsValid(File file){
+        if (!file.exists()){
+            System.out.println("File does not exist.");
+            return false;
+        }
+
+//        if (!file.getAbsolutePath().endsWith(".salami") | !file.getAbsolutePath().endsWith(".sal")){
+//            System.out.println("File must end with `.salami` or `.sal`");
+//            return false;
+//        }
+        return true;
+    }
+
     public static String randomMessage(){
         Random random = new Random();
         int index = random.nextInt(responses.length);

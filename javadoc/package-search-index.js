@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"Logger"},{"l":"SalamiEvaluator"},{"l":"SalamiEvaluator.types"},{"l":"SalamiEvaluator.types.ast"},{"l":"SalamiRuntime"},{"l":"SalamiRuntime.Runtime"}];updateSearchResults();

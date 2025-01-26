@@ -1,5 +1,8 @@
 package SalamiRuntime.Runtime;
 
+/**
+ * An empty value. Means nothing. Useful for placeholders.
+ */
 public class VoidValue extends Value{
     String value = "void";
     public VoidValue(){

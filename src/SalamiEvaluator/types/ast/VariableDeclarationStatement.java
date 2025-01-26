@@ -1,7 +1,7 @@
 package SalamiEvaluator.types.ast;
 
 public class VariableDeclarationStatement extends StatementNode{
-    boolean isFinal;
+    public boolean isFinal;
     public String identifier;
     public ExpressionNode value;
     public VariableDeclarationStatement(String id, ExpressionNode val, boolean fin){

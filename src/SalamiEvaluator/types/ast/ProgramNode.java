@@ -3,6 +3,9 @@ package SalamiEvaluator.types.ast;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A collection of statements.
+ */
 public class ProgramNode extends StatementNode {
     public List<StatementNode> statements = new ArrayList<>();
 

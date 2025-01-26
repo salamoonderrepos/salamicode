@@ -1,5 +1,9 @@
 package SalamiRuntime.Runtime;
 
+
+/**
+ * The base value class.
+ */
 abstract public class Value {
     public RuntimeType type;
     public Value(RuntimeType t){

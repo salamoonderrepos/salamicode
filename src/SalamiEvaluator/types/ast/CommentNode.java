@@ -2,6 +2,9 @@ package SalamiEvaluator.types.ast;
 
 import SalamiEvaluator.types.Type;
 
+/**
+ *
+ */
 public class CommentNode extends StatementNode{
     String raw;
     String content;

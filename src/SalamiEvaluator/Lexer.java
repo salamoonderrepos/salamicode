@@ -1,14 +1,23 @@
 package SalamiEvaluator;
 
 import SalamiEvaluator.types.Type;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Objects;
+import Logger.Logger;
 import java.util.Scanner;
 
+/**
+ * <p>Manages converting the raw text data into a list of tokens for the {@link Parser} to parse.</p>
+ * <p>For example:<br>
+ * <code>set x to 32+1</code> <br>
+ * would turn into <br>
+ * <code>[SET: "set"], [ID: "x"], [TO: "to"], [NUM: "32"], [OP: "+"], [NUM: "1]</code>
+ * </p>
+ */
 public class Lexer {
-    public static final String[] OPERATORS = {"%","*", "-", "/", "+", "=", "==", "!=", ">", "<", ">=", "<=", "++","-*"};
+    public static final Logger logger = new Logger("Lexer");
+    public static final String[] OPERATORS = {"%","*", "-", "/", "+", "==", "!=", ">", "<", ">=", "<=", "++","-*", "&", "|", "!"};
     public static final String DELIMITERS = "{}[]()";
     public static final String[] KEYWORDS = {"set", "to"};
     public Lexer(){}
@@ -29,7 +38,11 @@ public class Lexer {
         Scanner scan = new Scanner(f);
 
         while (scan.hasNextLine()) {
-            tk.addTokens(tokenizeLine(scan.nextLine(), lineindex));
+            TokenizedList nextLine = tokenizeLine(scan.nextLine(), lineindex);
+            if (scan.hasNextLine()) {
+                nextLine.addToken(new Token(Type.NEWLINE, String.valueOf(lineindex)));
+            }
+            tk.addTokens(nextLine);
             lineindex++;
         }
         // end of the file here
@@ -43,7 +56,7 @@ public class Lexer {
     public static TokenizedList tokenizeLine(String line, int lineindex) throws LexerException{
         int index = 0; // imagine a pointer going from left to right for each line. index is the position of that pointer
         TokenizedList tk = new TokenizedList();
-        if (Objects.equals(line, "")) { //if the line is empty then add a newline token
+        if (line.isEmpty()) { //if the line is empty then add a newline token
             //tk.addToken(new Token(Type.NEWLINE, String.valueOf(lineindex)));
             return tk;
         }
@@ -59,6 +72,7 @@ public class Lexer {
         // do all this code until the pointer reaches the end of the line. then go to the next line, and reset the index to 0.
         while (index < line.length()) {
             char currentChar = line.charAt(index);
+
 
             // Skip whitespace
             if (Character.isWhitespace(currentChar)) {
@@ -77,13 +91,22 @@ public class Lexer {
                 if (subid.equals("set")) {tk.addToken(new Token(Type.SET, "set")); continue;}
                 if (subid.equals("to")) {tk.addToken(new Token(Type.TO, "to")); continue;}
                 if (subid.equals("finally")) {tk.addToken(new Token(Type.FINALLY, "finally")); continue;}
+                if (subid.equals("label")) {tk.addToken(new Token(Type.LABELSET, "label")); continue;}
+                if (subid.equals("jump")) {tk.addToken(new Token(Type.JUMP, "jump")); continue;}
+                if (subid.equals("comp")) {tk.addToken(new Token(Type.COMP, "comp")); continue;}
+                if (subid.equals("print")) {tk.addToken(new Token(Type.PRINT, "print")); continue;}
+                if (subid.equals("sub")) {tk.addToken(new Token(Type.SUB, "sub")); continue;}
+                if (subid.equals("subend")) {tk.addToken(new Token(Type.SUBEND, "subend")); continue;}
+                if (subid.equals("return")) {tk.addToken(new Token(Type.RETURN, "return")); continue;}
                 tk.addToken(new Token(Type.ID, subid));
                 continue;
             }
 
             // Handle numbers (digits)
+
             if (Character.isDigit(currentChar)) {
-                int start = index;  // Start of the number
+                int start = index;
+
                 Type dtype = Type.NUM; // Default to integer type
 
                 // Consume digits before the decimal point
@@ -117,6 +140,11 @@ public class Lexer {
                 String twoCharOp = line.substring(index, index + 2);
                 boolean isanoperator = isOp(twoCharOp);
                 if (isanoperator){
+                    if (twoCharOp.equals("++")){
+                        tk.addToken(new Token(Type.INCREMENT, twoCharOp));
+                        index+=2;
+                        continue;
+                    }
                     tk.addToken(new Token(Type.OP, twoCharOp));
                     index+=2;
                     continue;
@@ -177,8 +205,8 @@ public class Lexer {
             throw new LexerException("Undetermined Character at line [" + lineindex + ", " + (index+1) + "]: \"" +currentChar+"\"");
         }
 
-        System.out.println(line);
-        System.out.println(tk);
+        logger.log(line);
+        logger.log(tk);
         return tk;
         //tk.addToken(new Token(Type.NEWLINE, String.valueOf(lineindex)));
     }

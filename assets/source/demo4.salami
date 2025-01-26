@@ -1,0 +1,13 @@
+print power(3 2)
+print power(28 2)
+print power(31 38)
+
+sub power(x y)
+    print 'Operation: ' + x + ' to the power of ' + y
+    set result to x
+    label loopst
+    set result to result * x
+    set y to y - 1
+    comp [![(y-1)==0]] jump loopst
+    return result
+subend

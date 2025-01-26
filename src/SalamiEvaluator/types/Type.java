@@ -20,4 +20,13 @@ public enum Type {
     TO,
     FINALLY,
     SEMICOLON,
+    INCREMENT,
+    LABELSET,
+    JUMP,
+    COMP,
+    OF,
+    PRINT,
+    SUB,
+    SUBEND,
+    RETURN,
 }
