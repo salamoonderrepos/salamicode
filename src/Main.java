@@ -20,11 +20,11 @@ import SalamiRuntime.Runtime.ValueException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Random;
+import Logger.Timer;
 import java.util.Scanner;
 
 public class Main {
     static final Logger logger = new Logger("Main");
-
     static final String[] responses = {
             "WHOOPS. MY BAD.",
             "SORRY...",
@@ -50,8 +50,18 @@ public class Main {
             "OWCH! THAT ONE HURT :(",
             "I THINK IM GONNA... BLEUAHHHHHH... ITS SO.. YOUR CODE IS JUST SO BAD... HEUUGHH..",
             "5183 FATAL ERRORS OCCURED. DELETING LINKEDIN PROFILE :(",
+            "I THINK SOMETHING HAPPENED...",
+            "DONT WORRY. EMPATHY BANANA IS HERE FOR YOU.",
+            "THERES A WIKI YKNOW...",
+            "YOU WROTE THAT? AND YOU THOUGHT IT WOULD WORK?",
+            "RUN IT AGAIN THEN IT WILL WORK TRUST ME",
+            "SO, UH, YOU COME HERE OFTEN?",
+            "LOOK AT ME! LA DI DA DI DA!",
+            "YEAH MAN YOU BETTER CUT YOUR LOSSES..."
     };
     public static void main(String[] args) {
+        Timer maintimer = new Timer("MainTimer");
+
         if (args.length == 0) { // if no filename is provided
             System.out.println("Provide a file to process.");
             return;
@@ -62,6 +72,7 @@ public class Main {
         boolean doRepl = Boolean.parseBoolean(args[1]);
         boolean silent;
         try {silent = Boolean.parseBoolean(args[2]);} catch (IndexOutOfBoundsException e ){silent = false;}
+        try {Logger.doColor = Boolean.parseBoolean(args[3]);} catch (IndexOutOfBoundsException e ){Logger.doColor = true;}
         //System.out.println(doRepl);
         Environment env = Initializer.initialize_global_environment();
         // create the global scope
@@ -97,12 +108,12 @@ public class Main {
             scan.close();
         }
 
-        logger.yell("END OF PROGRAM");
+        logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.)");
     }
     public static void handleError(Throwable e, String file){
-        System.out.println(randomMessage()+"\n\n");
-        System.out.println("ERROR HAS OCCURRED WITH LOCATION '"+file+'\''+'\n');
-        System.out.println(e);
+        System.out.println(Logger.colorize(Logger.RED, randomMessage()+"\n"));
+        System.out.println(Logger.colorize(Logger.GRAY, "ERROR HAS OCCURRED WITH LOCATION '"+file+'\''));
+        System.out.println(Logger.colorize(Logger.RED, e)+'\n');
         //System.out.println(e.getClass().getName());
     }
     public static void runFile(File file, Environment env, boolean silent){

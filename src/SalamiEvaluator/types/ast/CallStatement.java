@@ -1,13 +1,11 @@
 package SalamiEvaluator.types.ast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class SubroutineCallStatement extends ExpressionNode{
+public class CallStatement extends ExpressionNode{
     public String identifier;
     public ArrayList<ExpressionNode> parameters;
-    public SubroutineCallStatement(String id, ArrayList<ExpressionNode> params){
+    public CallStatement(String id, ArrayList<ExpressionNode> params){
         super(NodeType.CALLSTATEMENT);
         identifier = id;
         parameters = params;
@@ -16,7 +14,7 @@ public class SubroutineCallStatement extends ExpressionNode{
 
     @Override
     public String toString() {
-        return "SubroutineCallStatement{" +
+        return "CallStatement{" +
                 "identifier='" + identifier + '\'' +
                 ", arguments=" + parameters +
                 '}';

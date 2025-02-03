@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Objects;
 import Logger.Logger;
+import Logger.Timer;
 import java.util.Scanner;
 
 /**
@@ -33,6 +34,7 @@ public class Lexer {
 
     public static TokenizedList tokenizeFile(File f)
     throws FileNotFoundException, LexerException {
+        Timer lextimer = new Timer("LexerTime");
         int lineindex = 1;
         TokenizedList tk = new TokenizedList();
         Scanner scan = new Scanner(f);
@@ -50,6 +52,7 @@ public class Lexer {
 
         //tk.get();
         scan.close();
+        logger.whisperImportant("Took "+lextimer.time()+" milliseconds");
         return tk;
     }
 

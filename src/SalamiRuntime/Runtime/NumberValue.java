@@ -21,4 +21,16 @@ public class NumberValue extends Value{
     public void add(double num){
         value += num;
     }
+
+    public static NumberValue parseNumberValue(Value a) throws ValueException{
+        if (a instanceof NumberValue numbervalue_a) {
+            return new NumberValue(numbervalue_a.value);
+        } else if (a instanceof FloatingValue floatingvalue_a){
+            if (Math.floor(floatingvalue_a.value)==floatingvalue_a.value) {
+                return new NumberValue(floatingvalue_a.value);
+            }
+            throw new ValueException("Cannot parse floating value into number because it contains decimals.");
+        }
+        throw new ValueException("Cannot parse "+a+" into a number value.");
+    }
 }

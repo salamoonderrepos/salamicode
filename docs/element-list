@@ -3,5 +3,10 @@ Logger
 SalamiEvaluator
 SalamiEvaluator.types
 SalamiEvaluator.types.ast
+SalamiPackager
+SalamiPackager.Packages
+SalamiPackager.Packages.math
+SalamiPackager.Packages.salami
 SalamiRuntime
 SalamiRuntime.Runtime
+SalamiRuntime.Runtime.Method

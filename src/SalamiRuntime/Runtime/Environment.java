@@ -1,6 +1,8 @@
 package SalamiRuntime.Runtime;
 
 import SalamiEvaluator.types.ast.ProgramNode;
+import SalamiRuntime.Runtime.Method.Function;
+import SalamiRuntime.Runtime.Method.MethodValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,11 +22,13 @@ public class Environment {
     Environment parent;
     Map<String, Integer> labels;
     Map<String, SubroutineValue> subroutines;
+    Map<String, MethodValue> methods;
     public Environment (){
         variables = new HashMap<>();
         finals = new ArrayList<String>();
         labels = new HashMap<>();
         subroutines = new HashMap<>();
+        methods = new HashMap<>();
     }
     public Environment (Environment p){
         variables = new HashMap<>();
@@ -34,6 +38,21 @@ public class Environment {
         parent = p;
     }
 
+    // METHOD MANAGEMENT
+
+    public MethodValue declareMethod(String identifier, List<Class<?>> params, Function code){
+        if (hasMethod(identifier)){throw new ValueException("Method attempted to declare with the name of another method in use.");}
+        MethodValue methodValue = new MethodValue(params, code);
+        methods.put(identifier, methodValue);
+        return methodValue;
+    }
+    public MethodValue lookupMethod(String identifier){
+        Environment env = resolveMethod(identifier);
+        return env.methods.get(identifier);
+    }
+    public boolean hasMethod(String identifier){
+        return methods.containsKey(identifier);
+    }
 
     // LABEL MANAGEMENT
     public Integer declareLabel(String identifier, Integer pc){
@@ -123,6 +142,7 @@ public class Environment {
         }
         throw new ValueException("Label '"+identifier+"' does not exist in current scope.");
     }
+
     public boolean hasVariable(String identifier){
         return variables.containsKey(identifier);
     }
@@ -132,6 +152,16 @@ public class Environment {
         }
         if (parent==null){
             throw new ValueException("Subroutine '"+identifier+"' does not exist in any scope.");
+        }
+
+        return parent.resolveSubroutine(identifier);
+    }
+    public Environment resolveMethod(String identifier){
+        if (hasMethod(identifier)){
+            return this;
+        }
+        if (parent==null){
+            throw new ValueException("Method '"+identifier+"' does not exist. Maybe you misspelled a subroutine?");
         }
 
         return parent.resolveSubroutine(identifier);

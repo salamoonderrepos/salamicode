@@ -1,18 +1,5 @@
-print power(3 2); print power(28 2); print power(31 38)
-
-sub power(x y)
-    printLabel(x y)
-    set result to x
-    label loopst
-    set result to result * x
-    set y to y - 1
-    comp [![(y-1)==0]] jump loopst
-    return result
-    sub printLabel(x y)
-            print 'Operation: ' + x + ' to the power of ' + y
-            return void
-    subend
-subend
-jump outside
-print 't'
-label outside
+set loops to 100000
+label loop
+set x to pow(loops 0.5)
+set loops to loops -1
+comp [![loops==0]] jump loop

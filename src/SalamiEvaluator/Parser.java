@@ -1,10 +1,10 @@
 package SalamiEvaluator;
 
 import Logger.Logger;
+import Logger.Timer;
 import SalamiEvaluator.types.Type;
 import SalamiEvaluator.types.ast.*;
 
-import javax.swing.plaf.nimbus.State;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -25,9 +25,12 @@ public class Parser {
         tokens.clear();
     }
     public static ProgramNode parseFile(File source) throws ParserException, LexerException, FileNotFoundException {
+        Timer parseTimer = new Timer("ParserTimer");
         resetParser();
         tokens = Lexer.lex(source);
-        return parse();
+        ProgramNode program = parse();
+        logger.whisperImportant("Took "+parseTimer.time()+" milliseconds");
+        return program;
     }
     public static ProgramNode parseLine(String source) throws ParserException, LexerException{
         resetParser();
@@ -163,12 +166,15 @@ public class Parser {
         while (current<tokens.tokens.size()){
             if (isStatementEnder()){
                 advance();
+            } else {
+                if (grabCurrentToken().getType()==endingindicator){
+                    advance();
+                    return programNode;
+                }
+                programNode.addStatement(parseStatement());
             }
-            if (grabCurrentToken().getType()==endingindicator){
-                advance();
-                return programNode;
-            }
-            programNode.addStatement(parseStatement());
+
+
 
         }
         throw new ParserException("EOF reached without ending indicator: "+endingindicator);
@@ -177,7 +183,7 @@ public class Parser {
     public static ExpressionNode parseSubroutineCallStatement() throws ParserException{
         final Token identifier = eat(Type.ID);
         final ArrayList<ExpressionNode> params = parseParameterExpressionList();
-        return new SubroutineCallStatement(identifier.getValue(), params);
+        return new CallStatement(identifier.getValue(), params);
     }
 
     public static ArrayList<String> parseParameterList() throws ParserException{

@@ -1,12 +1,12 @@
-set adjective1 to 'ADJECTIVEHERE' finally;
-set adjective2 to 'ADJECTIVEHERE' finally;
-set adjective3 to 'ADJECTIVEHERE' finally;
-set noun1 to 'NOUNHERE' finally;
-set noun2 to 'NOUNHERE' finally;
-set noun3 to 'NOUNHERE' finally;
-set verb1 to 'VERBHERE' finally;
-set verb2 to 'VERBHERE' finally;
-set verb3 to 'VERBHERE' finally;
+set adjective1 to get('Adjective?') finally;
+set adjective2 to get('Adjective?') finally;
+set adjective3 to get('Adjective?') finally;
+set noun1 to get('Noun?') finally;
+set noun2 to get('Noun?') finally;
+set noun3 to get('Noun?') finally;
+set verb1 to get('Verb?') finally;
+set verb2 to get('Verb?') finally;
+set verb3 to get('Verb?') finally;
 
-set final to 'My '+adjective1+' '+noun1+' was '+verb1+' last night. My '+adjective2+' '+noun2+' couldnt even stop them from ' + verb2 +'. So i took my rightfull place as '+adjective3+' to the throne and used my '+noun3+' which was '+verb3+'.';
-final
+set final to 'My '+adjective1+' '+noun1+' was '+verb1+' last night. My '+adjective2+' '+noun2+' couldnt even stop them from ' + verb2 +'. So I took my rightfull place as '+adjective3+' to the throne and used my '+noun3+' which was '+verb3+'.';
+print final

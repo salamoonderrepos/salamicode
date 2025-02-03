@@ -6,8 +6,13 @@ import SalamiEvaluator.Lexer;
 import SalamiEvaluator.Parser;
 import SalamiEvaluator.types.ast.*;
 import SalamiRuntime.Runtime.*;
+import SalamiRuntime.Runtime.Method.MethodValue;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Scanner;
+
+import Logger.Timer;
 
 
 /**
@@ -19,6 +24,8 @@ import java.util.Objects;
  */
 public class Interpreter {
     static final Logger programlogger = new Logger("RuntimeProgram");
+    static final Logger logger = new Logger("Interpreter");
+    static final Scanner reader = new Scanner(System.in);
     public Interpreter(){}
 
 
@@ -48,8 +55,8 @@ public class Interpreter {
                 return new VoidValue();
             // DONT HANDLE DECLARATION STATEMENTS BECAUSE THEY SHOULD ALREADY BE HANDLES
             case CALLSTATEMENT:
-                SubroutineCallStatement subcall = (SubroutineCallStatement) s;
-                return evaluate_subroutine_call_statement(subcall, environment, pc, program);
+                CallStatement call = (CallStatement) s;
+                return evaluate_call_statement(call, environment, pc, program);
             case PRINTSTATEMENT:
                 PrintStatement printstat = (PrintStatement) s;
                 return evaluate_print_statement(printstat, environment, pc, program);
@@ -98,6 +105,27 @@ public class Interpreter {
     ///
     ///-----------------------------
 
+    public static Value evaluate_call_statement(CallStatement callStatement, Environment env, ProgramCounter pc, ProgramNode programNode) throws InterpreterException{
+        if (env.hasMethod(callStatement.identifier)){
+            return evaluate_method_call_statement(callStatement, env, pc, programNode);
+        }
+        return evaluate_subroutine_call_statement(callStatement, env, pc, programNode);
+    }
+
+    public static Value evaluate_method_call_statement(CallStatement methodCallStatement, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
+        MethodValue method = env.lookupMethod(methodCallStatement.identifier);
+        if (methodCallStatement.parameters.size() != method.parameters.size()){
+            throw new InterpreterException("Parameter mismatch with method: "+methodCallStatement.identifier);
+        }
+        List<Value> passins = new java.util.ArrayList<>(List.of());
+        for (int i = 0; i<methodCallStatement.parameters.size(); i++){
+            passins.add(evaluate(methodCallStatement.parameters.get(i), env, pc, program));
+        }
+        return method.run(passins, programlogger);
+
+
+    }
+
     /**
      * Evaluates jump statements, which set the program counter to the label passed in. <br>
      * <code>jump loopName</code>
@@ -119,7 +147,7 @@ public class Interpreter {
     public static Value evaluate_return_statement(ReturnStatement returnStatement, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
         return evaluate(returnStatement.statement, env, pc, program);
     }
-    public static Value evaluate_subroutine_call_statement(SubroutineCallStatement subroutineCallStatement, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
+    public static Value evaluate_subroutine_call_statement(CallStatement subroutineCallStatement, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
         // order of action for a subroutine call statement
         // 1. find the corresponding subroutine in the environment
         // 2. declare the parameters being passed in into the subroutines environment
@@ -555,6 +583,8 @@ public class Interpreter {
      * @see Initializer
      */
     public static Value evaluate_program(ProgramNode p, Environment environment, ProgramCounter startingpc, boolean initializeProgram) throws InterpreterException, ValueException {
+        Timer evaltimer = new Timer("InterpreterTimer");
+
         Value eval = new VoidValue(); // initialize the eval variables
         ProgramCounter pc = startingpc;
         if (initializeProgram) Initializer.initialize_program(p, environment, new ProgramCounter(startingpc.get())); // declare labels ahead of time
@@ -564,6 +594,8 @@ public class Interpreter {
             eval = evaluate(statement, environment, pc, p);
             pc.increment();
         }
+        logger.whisperImportant("Took "+evaltimer.time()+" milliseconds");
+
         return eval;
     }
 
