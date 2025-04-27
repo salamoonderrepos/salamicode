@@ -29,4 +29,7 @@ public enum Type {
     SUB,
     SUBEND,
     RETURN,
+    THROW,
+    FROM,
+    EMPTY,
 }

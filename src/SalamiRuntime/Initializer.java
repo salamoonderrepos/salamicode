@@ -1,16 +1,13 @@
 package SalamiRuntime;
 
-import Logger.Logger;
+import Helper.Logger.Logger;
+import SalamiEvaluator.*;
 import SalamiEvaluator.types.ast.*;
 import SalamiRuntime.Runtime.*;
-import SalamiRuntime.Runtime.Method.Function;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import Logger.Timer;
-import java.util.Scanner;
+import Helper.Logger.Timer;
 
 /**
  * Handles pre-evaluating a program for labels and subroutines.
@@ -65,8 +62,12 @@ public class Initializer {
             return new FloatingValue((float) Math.pow(floatarg1.value,floatarg2.value));
         });
         env.declareMethod("toString", List.of(Value.class), (params, logger) -> StringValue.parseStringValue(params.get(0)));
-        env.declareMethod("toNumber", List.of(Value.class), (params, logger) -> NumberValue.parseNumberValue(params.get(0)));
-        env.declareMethod("toFloat", List.of(Value.class), (params, logger) -> FloatingValue.parseFloatingValue(params.get(0)));
+        env.declareMethod("toNumber", List.of(Value.class), (params, logger) -> {
+            return NumberValue.parseNumberValue(params.get(0));
+        });
+        env.declareMethod("toFloat", List.of(Value.class), (params, logger) -> {
+            return FloatingValue.parseFloatingValue(params.get(0));
+        });
 
         env.declareMethod("rand", List.of(NumberValue.class, NumberValue.class), (params, logger) -> {
             NumberValue numarg1 = (NumberValue) params.get(0);
@@ -81,19 +82,32 @@ public class Initializer {
             String v = Interpreter.reader.nextLine();
             return new StringValue(v);
         });
-        env.declareMethod("winter", List.of(), (params, logger) -> {
+        //env.declareMethod("throw", List.of(StringValue.class), (params, logger) -> {
+        //    StringValue s = (StringValue) params.get(0);
+        //    throw new RuntimeDisruptedException(s.value);
+        //    //return new VoidValue();
+        //});
+        env.declareMethod("salami", List.of(), (params, logger) -> {
             String poem =
             """
-            Glory to the marching pines along the roadside.
-            Frigid air churns each particle with sighs of desperation.
-            The fire warms them up with a scarf knitted quilt.
-            The petals fall with their last abscission.
-            
-            True, they love me.
-            False, they love me not.
-            The globe continued spinning.
+            That's me!
             """;
             return new StringValue(poem);
+        });
+        env.declareMethod("parse", List.of(StringValue.class), (params, logger) -> {
+            StringValue s = (StringValue) params.get(0);
+            try {
+                ProgramNode p = Parser.parseLine(s.value);
+                return Interpreter.evaluate(p,initialize_global_environment(), new ProgramCounter(0), p);
+            } catch (Error e){
+                throw new ValueException("String parsed with an error.");
+            } catch (ParserException e) {
+                throw new RuntimeException(e);
+            } catch (LexerException e) {
+                throw new RuntimeException(e);
+            } catch (InterpreterException e) {
+                throw new RuntimeException(e);
+            }
         });
 
 

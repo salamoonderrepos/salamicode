@@ -1,18 +1,19 @@
 package SalamiRuntime;
 
 
-import Logger.Logger;
+import Helper.Logger.Logger;
 import SalamiEvaluator.Lexer;
 import SalamiEvaluator.Parser;
 import SalamiEvaluator.types.ast.*;
 import SalamiRuntime.Runtime.*;
 import SalamiRuntime.Runtime.Method.MethodValue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import Logger.Timer;
+import Helper.Logger.Timer;
 
 
 /**
@@ -43,11 +44,14 @@ public class Interpreter {
      * @throws InterpreterException If it encounters a statement which it doesn't have an evaluator function for, it throws an error.
      * @throws ValueException If at any point two values are mismatched, or some other error like that, this gets thrown.
      */
-    public static Value evaluate(StatementNode s, Environment environment, ProgramCounter pc, ProgramNode program) throws InterpreterException, ValueException{
+    public static Value evaluate(StatementNode s, Environment environment, ProgramCounter pc, ProgramNode program) throws InterpreterException, ValueException, RuntimeDisruptedException{
         switch (s.type){
             case PROGRAM:
                 ProgramNode p = (ProgramNode) s;
                 return evaluate_program(p, environment, pc, true);
+            case THROWSTATEMENT:
+                ThrowStatement throwst = (ThrowStatement) s;
+                return evaluate_throw_statement(throwst, environment, pc, program);
             case RETURNSTATEMENT:
                 ReturnStatement ret = (ReturnStatement) s;
                 return evaluate_return_statement(ret, environment, pc, program);
@@ -75,6 +79,10 @@ public class Interpreter {
             case IDENTIFIER:
                 IdentifierNode identifier_node = (IdentifierNode) s;
                 return evaluate_identifier(identifier_node, environment);
+            case ATTRIBUTEEXPRESSION:
+                return evaluate_index_attributed_expression((AttributeExpressionNode) s, environment, pc, program);
+            case INDEXEXPRESSION:
+                return evaluate_index_expression((IndexExpressionNode) s, environment, pc, program);
             case STRINGLITERAL:
                 StringLiteralNode stringLiteralNode = (StringLiteralNode) s;
                 return new StringValue(stringLiteralNode.value);
@@ -84,6 +92,13 @@ public class Interpreter {
             case FLOATINGPOINTLITERAL:
                 FloatingLiteralNode floatNode = (FloatingLiteralNode) s;
                 return new FloatingValue(floatNode.value);
+            case ARRAYLITERAL:
+                List<Value> valueList = new ArrayList<>();
+                ArrayLiteralNode arrayNode = (ArrayLiteralNode) s;
+                for (ExpressionNode a : arrayNode.values){
+                    valueList.add(evaluate(a, environment, pc, program));
+                }
+                return new ArrayValue(valueList);
             case BINARYEXPRESSION:
                 BinaryExpressionNode binaryNode = (BinaryExpressionNode) s;
                 return evaluate_binary_expression(binaryNode, environment, pc, program);
@@ -206,6 +221,11 @@ public class Interpreter {
         return new VoidValue();
     }
 
+    public static VoidValue evaluate_throw_statement(ThrowStatement throwNode, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException, RuntimeDisruptedException {
+        StringValue message = StringValue.parseStringValue(evaluate(throwNode.value, env, pc, program));
+        throw new RuntimeDisruptedException(message.value);
+    }
+
     /** Evaluates variable declaration statements like: <br>
      * <code>set message to 'Hello, world!"</code>
      * @param declarationNode The <code>VariableDeclarationNode</code> AST node to be evaluated.
@@ -285,6 +305,42 @@ public class Interpreter {
         }
         throw new InterpreterException("Subroutine found EOF before returning.");
     }
+    public static Value evaluate_index_expression(IndexExpressionNode node, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException, ValueException {
+        Value indexVal = evaluate(node.index, env, pc, program);
+        Value collectionVal = evaluate(node.collection, env, pc, program);
+
+        if (collectionVal instanceof ArrayValue array) {
+            int indexnumber = (int) NumberValue.parseNumberValue(indexVal).value;
+            if (indexnumber < 0 || indexnumber >= array.values.size())
+                throw new InterpreterException("Array index out of bounds.");
+            return array.values.get(indexnumber);
+        }
+
+        if (collectionVal instanceof StringValue str) {
+            int indexnumber = (int) NumberValue.parseNumberValue(indexVal).value;
+            if (indexnumber < 0 || indexnumber >= str.value.length())
+                throw new InterpreterException("String index out of bounds.");
+            return new StringValue(Character.toString(str.value.charAt(indexnumber)));
+        }
+        throw new InterpreterException("Cannot index type: " + collectionVal.type);
+    }
+
+    public static Value evaluate_index_attributed_expression(AttributeExpressionNode node, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException, ValueException {
+        String attribute = node.attribute;
+        Value val = evaluate(node.collection, env, pc, program);
+
+        if (val.attributes.isEmpty()){
+            throw new InterpreterException("Cannot attribute type: " + val.type);
+        }
+
+        if (!val.attributes.containsKey(attribute)){
+            throw new InterpreterException("Attribute \""+attribute+"\" does not exist for value "+val.type);
+        };
+        AttributeValue attributeFunction = val.attributes.get(attribute);
+
+        return attributeFunction.getValue(logger);
+
+    }
 
     /**
      *
@@ -357,6 +413,10 @@ public class Interpreter {
 
             throw new InterpreterException("Void Value used inside of a logical expression");
         }
+        if (left.type == RuntimeType.ARRAY | right.type == RuntimeType.ARRAY){ // if the expression contains a void value then it must be resolved to void
+
+            return evaluate_arrayedly_logical_expression(left, right, binaryNode.op);
+        }
         if (left.type == RuntimeType.NUMBER && right.type == RuntimeType.NUMBER){ // if the expression contains a void value then it must be resolved to void
 
             return evaluate_numeric_logical_expression(left, right, binaryNode.op);
@@ -414,6 +474,15 @@ public class Interpreter {
             case ">=": return new BooleanValue(left.value >= right.value);
             case "<=": return new BooleanValue(left.value <= right.value);
             default: throw new InterpreterException("Cannot use "+op+" operator on type Float.");
+        }
+    }
+
+    public static BooleanValue evaluate_arrayedly_logical_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException{
+        FloatingValue left = FloatingValue.parseFloatingValue(preEvalLeft);
+        FloatingValue right = FloatingValue.parseFloatingValue(preEvalRight);
+        switch (op){
+            case "==": return new BooleanValue(left.value == right.value);
+            default: throw new InterpreterException("Cannot use "+op+" operator on type Array.");
         }
     }
 
@@ -511,6 +580,22 @@ public class Interpreter {
         }
     }
 
+    public static Value evaluate_arrayedly_binary_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException, ValueException{
+        ArrayValue left = ArrayValue.parseArrayValue(preEvalLeft);
+        ArrayValue right = ArrayValue.parseArrayValue(preEvalRight);
+        int index;
+        switch (op){
+            case "+": left.values.addAll(right.values); return left;
+            case "-":
+                left.values.remove(right.values.get(0)); return left;
+            case "*": throw new InterpreterException("Cannot use multiplication on array values");
+            case "/": throw new InterpreterException("Cannot use division on array values");
+            case "%": throw new InterpreterException("Cannot use modulus on array values");
+            case "-*": left.values.removeAll(right.values); return left;
+            default: throw new InterpreterException("Unexpected Operator in Binary Expression Node");
+        }
+    }
+
     /**
      * @param preEvalLeft
      * @param preEvalRight
@@ -531,7 +616,7 @@ public class Interpreter {
                 }
                 return new FloatingValue(left.value/right.value);
             case "%": throw new InterpreterException("Cannot use modulus on floating point values");
-            case "-*": throw new InterpreterException("-* Operator only works on string values.");
+            case "-*": throw new InterpreterException("-* Operator only works on string or array values.");
             default: throw new InterpreterException("Unexpected Operator in Binary Expression Node");
         }
     }
@@ -552,16 +637,21 @@ public class Interpreter {
 
             return new VoidValue();
         }
+        if (preEvalLeft.type == RuntimeType.ARRAY | preEvalRight.type == RuntimeType.ARRAY){ // check if either are floating values
+            return evaluate_arrayedly_binary_expression(preEvalLeft, preEvalRight, binaryNode.op); // if it is then we call the floating binary expression calculator.
+        }
         if (preEvalRight.type == RuntimeType.STRING | preEvalLeft.type == RuntimeType.STRING){ // if either side is a string then it must be a string type
             return evaluate_string_binary_expression(preEvalLeft, preEvalRight, binaryNode.op);
         }
         if (preEvalLeft.type == RuntimeType.FLOAT | preEvalRight.type == RuntimeType.FLOAT){ // check if either are floating values
             return evaluate_floating_binary_expression(preEvalLeft, preEvalRight, binaryNode.op); // if it is then we call the floating binary expression calculator.
         }
+
         if (preEvalRight.type != preEvalLeft.type){ // if they arent floats or strings or voids, and they arent the same, then assume its a node
             // we havent handled yet
             throw new InterpreterException("Type promotion is not available for these types. Are you performing operations on different type?");
         }
+
         return evaluate_numeric_binary_expression(preEvalLeft, preEvalRight, binaryNode.op);
         // if NONE of the conditions apply, we have to assume its just plain old numeric evaluation
 
@@ -582,7 +672,7 @@ public class Interpreter {
      *
      * @see Initializer
      */
-    public static Value evaluate_program(ProgramNode p, Environment environment, ProgramCounter startingpc, boolean initializeProgram) throws InterpreterException, ValueException {
+    public static Value evaluate_program(ProgramNode p, Environment environment, ProgramCounter startingpc, boolean initializeProgram) throws InterpreterException, ValueException, StackOverflowError{
         Timer evaltimer = new Timer("InterpreterTimer");
 
         Value eval = new VoidValue(); // initialize the eval variables

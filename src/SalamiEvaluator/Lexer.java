@@ -3,9 +3,9 @@ package SalamiEvaluator;
 import SalamiEvaluator.types.Type;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Objects;
-import Logger.Logger;
-import Logger.Timer;
+
+import Helper.Logger.Logger;
+import Helper.Logger.Timer;
 import java.util.Scanner;
 
 /**
@@ -101,6 +101,10 @@ public class Lexer {
                 if (subid.equals("sub")) {tk.addToken(new Token(Type.SUB, "sub")); continue;}
                 if (subid.equals("subend")) {tk.addToken(new Token(Type.SUBEND, "subend")); continue;}
                 if (subid.equals("return")) {tk.addToken(new Token(Type.RETURN, "return")); continue;}
+                if (subid.equals("of")) {tk.addToken(new Token(Type.OF, "of")); continue;}
+                if (subid.equals("throw")) {tk.addToken(new Token(Type.THROW, "throw")); continue;}
+                if (subid.equals("from")) {tk.addToken(new Token(Type.FROM, "from")); continue;}
+                if (subid.equals("the")) {continue;}
                 tk.addToken(new Token(Type.ID, subid));
                 continue;
             }
@@ -178,7 +182,7 @@ public class Lexer {
             }
 
             // HANDLE STRINGS why are we caps locked??
-            if (currentChar == '\'') {
+            if (currentChar == '\'' || currentChar == '"') {
 
                 index++; // Skip the opening quote
                 StringBuilder stringBuilder = new StringBuilder();
@@ -187,6 +191,7 @@ public class Lexer {
                     char curcar = line.charAt(index);
                     switch (curcar){
                         case '\'': strended = true; break;
+                        case '"': strended = true; break;
                         default: stringBuilder.append(curcar);
                     }
                     if (strended) break;

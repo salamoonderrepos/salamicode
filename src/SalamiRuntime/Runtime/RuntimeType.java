@@ -11,4 +11,6 @@ public enum RuntimeType {
     BOOLEAN,
     SUBROUTINE,
     METHOD,
+    ARRAY,
+    ATTRIBUTE,
 }

@@ -1,4 +1,4 @@
-package Logger;
+package Helper.Logger;
 
 public class Timer {
     long timestart;
