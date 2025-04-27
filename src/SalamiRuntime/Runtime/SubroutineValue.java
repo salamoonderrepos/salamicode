@@ -5,6 +5,7 @@ import SalamiEvaluator.types.ast.ProgramNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p>This acts as an independent manager for subroutines.
@@ -40,5 +41,17 @@ public class SubroutineValue extends Value{
                 ", location=" + location +
                 ", code=" + code +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        SubroutineValue that = (SubroutineValue) o;
+        return location == that.location && Objects.equals(env, that.env) && Objects.equals(parameters, that.parameters) && Objects.equals(code, that.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(env, parameters, location, code);
     }
 }

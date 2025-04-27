@@ -1,5 +1,7 @@
 package SalamiEvaluator.types.ast;
 
+import java.util.Objects;
+
 /**
  *
  */
@@ -15,5 +17,17 @@ public class NumericalLiteralNode extends ExpressionNode {
         return "NumericalLiteralNode{" +
                 "value=" + value +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        NumericalLiteralNode that = (NumericalLiteralNode) o;
+        return Double.compare(value, that.value) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 }

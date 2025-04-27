@@ -12,7 +12,7 @@ public class PrintStatement extends StatementNode {
     @Override
     public String toString() {
         return "PrintStatement{" +
-                "value=\"" + value +
-                "\"}";
+                "value=" + value +
+                "}";
     }
 }

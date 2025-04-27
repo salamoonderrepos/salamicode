@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="salamicode:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/salamicode_jar</output-path>
+    <root id="archive" name="salamicode.jar">
+      <element id="module-output" name="salamicode" />
+    </root>
+  </artifact>
+</component>

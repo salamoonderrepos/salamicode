@@ -35,6 +35,7 @@ public class Environment {
         finals = new ArrayList<String>();
         labels = new HashMap<>();
         subroutines = new HashMap<>();
+        methods = new HashMap<>();
         parent = p;
     }
 
@@ -164,7 +165,17 @@ public class Environment {
             throw new ValueException("Method '"+identifier+"' does not exist. Maybe you misspelled a subroutine?");
         }
 
-        return parent.resolveSubroutine(identifier);
+        return parent.resolveMethod(identifier);
+    }
+    public Boolean hasMethodRecursive(String identifier){
+        if (hasMethod(identifier)){
+            return true;
+        }
+        if (parent==null){
+            return false;
+        }
+
+        return parent.hasMethodRecursive(identifier);
     }
 
     @Override

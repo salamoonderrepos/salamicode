@@ -1,7 +1,7 @@
 package SalamiEvaluator;
 
-import Logger.Logger;
-import Logger.Timer;
+import Helper.Logger.Logger;
+import Helper.Logger.Timer;
 import SalamiEvaluator.types.Type;
 import SalamiEvaluator.types.ast.*;
 
@@ -64,7 +64,6 @@ public class Parser {
     // PLEASE DO THESE THINGS:
     // - ~~Add a general parser/evaluator to get the labels out of the way from the beginning~~ DONE!
     // - make the port function to access other environments
-    // - add the "of" keyword
     //finish parse statements for stuff
 
 
@@ -75,6 +74,7 @@ public class Parser {
         if (peekAhead().type==Type.INCREMENT){ // check if an increment statement is present before evaluating expressions.
             return parseIncrementStatement();
         }
+
         if (grabCurrentToken().getType()==Type.NEWLINE){
             advance();
             return parseStatement();
@@ -86,6 +86,7 @@ public class Parser {
             case JUMP: return parseJumpStatement();
             case COMP: return parseCompareStatement();
             case PRINT: return parsePrintStatement();
+            case THROW: return parseThrowStatement();
             case SUB: return parseSubroutineDeclarationStatement();
             case SUBEND: advance(); return new SubroutineEndIndicator();
             case RETURN: advance(); return new ReturnStatement(parseStatement());
@@ -95,6 +96,21 @@ public class Parser {
         }
         //throw new ParserException("Unexpected Token at "+grabCurrentToken());
     }
+
+    // for future reference this function is useless at this point
+    private static StatementNode parseIndexStatement() throws ParserException{
+        boolean isattributed = false;
+        final ExpressionNode index = parseGeneralExpression();
+        if (index.type==NodeType.IDENTIFIER){
+            isattributed = true;
+        }
+        eat(Type.OF);
+        final ExpressionNode collection = parseGeneralExpression();
+        eatEndOfStatement();
+        return new IndexExpressionNode(index, collection);
+        //return new ExpressionIncrementStatement("x");
+    }
+
     // SET x TO 40
     // SET b TO 'cunkonearth'-'onearth'
     // SET foo TO 32.2 FINALLY
@@ -139,6 +155,13 @@ public class Parser {
         final Token identifier = eat(Type.ID);
         eatEndOfStatement();
         return new JumpStatement(identifier.getValue());
+
+    }
+    public static StatementNode parseThrowStatement() throws ParserException{
+        advance();
+        final ExpressionNode message = parseGeneralExpression();
+        eatEndOfStatement();
+        return new ThrowStatement(message);
 
     }
     public static StatementNode parseIncrementStatement() throws ParserException{
@@ -211,7 +234,25 @@ public class Parser {
 
     // -------------- Groupings ---------------//
     public static ExpressionNode parseGeneralExpression()  throws ParserException {
-        return parseAdditiveExpression();
+        ExpressionNode expr = parseAdditiveExpression();
+        while (grabCurrentToken().getType()==Type.OF){
+            advance();
+            ExpressionNode right = parseGeneralExpression();
+            if (expr.type==NodeType.IDENTIFIER){
+                IdentifierNode attr = (IdentifierNode) expr;
+                expr = new AttributeExpressionNode(attr.value, right);
+            } else {
+                throw new ParserException("Identifier expected before attribution.");
+            }
+        }
+        while (grabCurrentToken().getType()==Type.FROM){
+            advance();
+            ExpressionNode right = parseGeneralExpression();
+            expr = new IndexExpressionNode(expr, right);
+        }
+        return expr;
+
+
     }
 
     // -------------- Unary ---------------//
@@ -232,6 +273,7 @@ public class Parser {
         }
 
     }
+    
 
     // -------------- Additives ---------------//
     public static ExpressionNode parseAdditiveExpression() throws ParserException{
@@ -255,12 +297,19 @@ public class Parser {
         return left;
     }
 
+
+
     // -------------- Literals ---------------//
     public static ExpressionNode parseExpression() throws ParserException{
         // id just like to break down whats going on here for future me
 
         // we create a switch statement which has cases depending on the type of the current token.
         // also its gonna yell at you to use an "enhanced switch" but don't because its more readable without it :)
+
+        while (grabCurrentToken().getType()==Type.EMPTY){
+            advance();
+        }
+
         switch (grabCurrentToken().getType()) {
             case OP: return parseUnaryExpression();
             case ID:
@@ -284,8 +333,25 @@ public class Parser {
 
             case LGROUPING: advance(); ExpressionNode value = parseGeneralExpression(); eat(Type.RGROUPING, ")"); return value;
             case LCOMPARE: advance(); ExpressionNode logicvalue = parseLogicalExpression(); eat(Type.RCOMPARE, "]"); return logicvalue;
+            case LARRAY: advance(); ExpressionNode array = parseArrayExpression(); eat(Type.RARRAY, "}"); return array;
             default: throw new ParserException("Unexpected ExpressionNode at "+grabCurrentToken());
         }
+    }
+
+    private static ExpressionNode parseArrayExpression() throws ParserException {
+        ArrayList<ExpressionNode> results = new ArrayList<>();
+        while (true){
+            while(grabCurrentToken().getType()==Type.NEWLINE){
+                advance();
+            }
+            if ((grabCurrentToken().getType()==Type.RARRAY)){
+                break;
+            }
+
+            results.add(parseGeneralExpression());
+
+        }
+        return new ArrayLiteralNode(results);
     }
 
     // -------------- Comparatives ---------------//
@@ -398,7 +464,7 @@ public class Parser {
         return tokens.grab(current);
     }
     public static boolean isEnd(){
-        return tokens.grab(current).type == Type.EOF;
+        return (tokens.grab(current).type == Type.EOF);
     }
     public static boolean isBeginning(){
         return current==0;

@@ -1,14 +1,18 @@
-// hey heres what i have planned
-// add subroutines
-// remove semicolons
+// recursion wont work
+// the environment passed into a subroutine has a null methods because it is never declared
+// dont know why
+// fix this please
+// @noah
 
 
-import Logger.Logger;
+import Helper.Debugger.Debugger;
+import Helper.Logger.Logger;
 import SalamiEvaluator.Lexer;
 import SalamiEvaluator.LexerException;
 import SalamiEvaluator.Parser;
 import SalamiEvaluator.ParserException;
 import SalamiEvaluator.types.ast.*;
+import SalamiPackager.Packager;
 import SalamiRuntime.Initializer;
 import SalamiRuntime.Interpreter;
 import SalamiRuntime.InterpreterException;
@@ -19,8 +23,12 @@ import SalamiRuntime.Runtime.ValueException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
-import Logger.Timer;
+import Helper.Logger.Timer;
+import SalamiRuntime.RuntimeDisruptedException;
+
 import java.util.Scanner;
 
 public class Main {
@@ -57,58 +65,96 @@ public class Main {
             "RUN IT AGAIN THEN IT WILL WORK TRUST ME",
             "SO, UH, YOU COME HERE OFTEN?",
             "LOOK AT ME! LA DI DA DI DA!",
-            "YEAH MAN YOU BETTER CUT YOUR LOSSES..."
+            "YEAH MAN YOU BETTER CUT YOUR LOSSES...",
+            "NOT YOUR CUP OF TEA EH?",
+            "EVEN I CANT READ YOUR SPAGHETTI CODE",
     };
+
     public static void main(String[] args) {
         Timer maintimer = new Timer("MainTimer");
+        boolean silent;
+        boolean debugger;
+        boolean doRepl;
 
-        if (args.length == 0) { // if no filename is provided
+        String fileName = args[0];
+
+        if (fileName==null) { // if no filename is provided
             System.out.println("Provide a file to process.");
             return;
         }
 
-
-
-        boolean doRepl = Boolean.parseBoolean(args[1]);
-        boolean silent;
-        try {silent = Boolean.parseBoolean(args[2]);} catch (IndexOutOfBoundsException e ){silent = false;}
-        try {Logger.doColor = Boolean.parseBoolean(args[3]);} catch (IndexOutOfBoundsException e ){Logger.doColor = true;}
-        //System.out.println(doRepl);
-        Environment env = Initializer.initialize_global_environment();
-        // create the global scope
-        // things like PI and stuff are there
-
-        if (!doRepl) {
-            String fileName = args[0];
-            File file = new File(fileName);
-
-            if (fileIsValid(file)){
-                runFile(file, env, silent);
-            }
-
-
-        } else {
-            // initialize scanner
-            Scanner scan = new Scanner(System.in);
-            String next;
-            System.out.println("SalamiCode REPL v0.1");
-
-
-            do {
-
-                System.out.println(">>> ");
-                next = scan.nextLine();
-                if (next.equals("exit()")) break;
-                try {
-                    runLine(next, env, silent);
-                } catch (ParserException | LexerException | InterpreterException | ValueException e) {
-                    handleError(e,"repl");
-                }
-            } while (true);
-            scan.close();
+        File file = new File(fileName);
+        if (!fileIsValid(file)){
+            throw new MainException("Given file is not valid.");
         }
 
-        logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.)");
+        Logger.doColor = true;
+        doRepl = false;
+        debugger = false;
+        silent = false;
+        logger.prettify();
+        for (String arg : args) {
+            if (arg.equals("--debug")) {
+                debugger = true;
+            } else if (arg.equals("--silent")) {
+                silent = true;
+            }else if (arg.equals("--repl")) {
+                doRepl = true;
+            }else if (arg.equals("--monochrome")) {
+                Logger.doColor = false;
+            }else if (arg.equals("--nolint")){
+                logger.deprettify();
+            }
+
+        }
+
+        if (silent) {
+            logger.silence();
+            Parser.logger.silence();
+            Lexer.logger.silence();
+        }
+
+        Environment env = Initializer.initialize_global_environment();
+
+//        if (!true == true){
+//            try {
+//                Packager.loadPackage("math", Initializer.initialize_global_environment());
+//            } catch (IOException e){
+//                logger.yell("FUCK YOU THERE WAS AN ERROR "+ e);
+//            } catch (InvocationTargetException e) {
+//                throw new RuntimeException(e);
+//            } catch (InstantiationException e) {
+//                throw new RuntimeException(e);
+//            } catch (IllegalAccessException e) {
+//                throw new RuntimeException(e);
+//            }
+//            return;
+//        }
+
+        if (doRepl) {
+            runRepl(file, env);
+            return;
+        }
+        if (debugger){
+            try {
+                runDebugger(file, env);
+                logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.) (Debugger)");
+                return;
+            } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException | StackOverflowError | RuntimeDisruptedException e) {
+                handleError(e, file.getAbsolutePath());
+                logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.) (Interrupted) (Debugger)");
+                return;
+            }
+        }
+        try {
+
+            runFile(file, env);
+            logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.)");
+        } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException | StackOverflowError | RuntimeDisruptedException e) {
+            handleError(e, file.getAbsolutePath());
+            logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.) (Interrupted)");
+        }
+
     }
     public static void handleError(Throwable e, String file){
         System.out.println(Logger.colorize(Logger.RED, randomMessage()+"\n"));
@@ -116,30 +162,44 @@ public class Main {
         System.out.println(Logger.colorize(Logger.RED, e)+'\n');
         //System.out.println(e.getClass().getName());
     }
-    public static void runFile(File file, Environment env, boolean silent){
-        try {
-            if (silent) {
-                logger.silence();
-                Parser.logger.silence();
-                Lexer.logger.silence();
-            }
-            ProgramNode p = Parser.parseFile(file);
-            ProgramCounter counter = new ProgramCounter(0);
-            logger.log(p);
-            logger.log(Interpreter.evaluate(p, env, counter, null));
-            logger.log(env);
-            // passes in an ast node tree and the initialized env variable
-        } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException e) {
-            handleError(e, file.getAbsolutePath());
-        }
+    public static void runFile(File file, Environment env) throws ParserException, LexerException, InterpreterException, FileNotFoundException, ValueException, StackOverflowError, RuntimeDisruptedException{
+        ProgramNode p = Parser.parseFile(file);
+        ProgramCounter counter = new ProgramCounter(0);
+        logger.log(p);
+        logger.log(Interpreter.evaluate(p, env, counter, null));
+        logger.log(env);
+        // passes in an ast node tree and the initialized env variable
+    }
+    public static void runDebugger(File file, Environment env) throws ParserException, LexerException, InterpreterException, FileNotFoundException, ValueException, StackOverflowError, RuntimeDisruptedException{
+        ProgramNode p = Parser.parseFile(file);
+        ProgramCounter counter = new ProgramCounter(0);
+        Debugger.run(p, env);
     }
 
-    public static void runLine(String line, Environment env, boolean silent) throws ParserException, LexerException, InterpreterException{
-        if (silent) {
-            logger.silence();
-            Parser.logger.silence();
-            Lexer.logger.silence();
-        }
+    public static void runRepl(File file, Environment env) {
+
+        // initialize scanner
+        Scanner scan = new Scanner(System.in);
+        String next;
+        System.out.println("SalamiCode REPL v0.1");
+
+
+        do {
+
+            System.out.println(">>> ");
+            next = scan.nextLine();
+            if (next.equals("exit()")) break;
+            try {
+                runLine(next, env);
+            } catch (ParserException | LexerException | InterpreterException | ValueException e) {
+                scan.close();
+                handleError(e, "repl");
+            }
+        } while (true);
+        scan.close();
+    }
+    public static void runLine(String line, Environment env) throws ParserException, LexerException, InterpreterException{
+
         ProgramCounter counter = new ProgramCounter(0);
         ProgramNode ast = Parser.parseLine(line);
         logger.log(ast);
@@ -152,11 +212,10 @@ public class Main {
             System.out.println("File does not exist.");
             return false;
         }
-
-//        if (!file.getAbsolutePath().endsWith(".salami") | !file.getAbsolutePath().endsWith(".sal")){
-//            System.out.println("File must end with `.salami` or `.sal`");
-//            return false;
-//        }
+        if (!(file.getName().endsWith(".salami") || file.getName().endsWith(".sal"))){
+            System.out.println("File must end with `.salami` or `.sal`");
+            return false;
+        }
         return true;
     }
 

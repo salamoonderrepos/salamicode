@@ -4,5 +4,5 @@
     "author": "Base",
     "version": "1.0.0",
     "dependencies": ["utils"],
-    "main": "base.salamicode.MathPackage"
+    "main": "SalamiPackager.Packages.math.MathPackage"
 }
