@@ -1,11 +1,13 @@
 package SalamiEvaluator;
 
-import SalamiEvaluator.types.Type;
+import SalamiEvaluator.types.TokenType;
 import java.io.File;
 import java.io.FileNotFoundException;
 
 import Helper.Logger.Logger;
 import Helper.Logger.Timer;
+
+import java.io.InputStream;
 import java.util.Scanner;
 
 /**
@@ -28,8 +30,35 @@ public class Lexer {
     }
     public static TokenizedList lex(String source) throws LexerException{
         TokenizedList finaltk = tokenizeLine(source, 1);
-        finaltk.addToken(new Token(Type.EOF, "EndOfLine"));
+        finaltk.addToken(new Token(TokenType.EOF, "EndOfLine",new int[]{finaltk.tokens.size(), 0}));
         return finaltk;
+    }
+    public static TokenizedList lex(InputStream stream) throws LexerException, FileNotFoundException {
+        return tokenizeStream(stream);
+    }
+
+    public static TokenizedList tokenizeStream(InputStream f)
+            throws FileNotFoundException, LexerException {
+        Timer lextimer = new Timer("LexerTime");
+        int lineindex = 1;
+        TokenizedList tk = new TokenizedList();
+        Scanner scan = new Scanner(f);
+
+        while (scan.hasNextLine()) {
+            TokenizedList nextLine = tokenizeLine(scan.nextLine(), lineindex);
+            if (scan.hasNextLine()) {
+                nextLine.addToken(new Token(TokenType.NEWLINE, String.valueOf(lineindex), new int[]{lineindex, 0}));
+            }
+            tk.addTokens(nextLine);
+            lineindex++;
+        }
+        // end of the file here
+        tk.addToken(new Token(TokenType.EOF, "", new int[]{tk.tokens.size(), 0}));
+
+        //tk.get();
+        scan.close();
+        logger.whisper("Took "+lextimer.time()+" milliseconds");
+        return tk;
     }
 
     public static TokenizedList tokenizeFile(File f)
@@ -42,17 +71,17 @@ public class Lexer {
         while (scan.hasNextLine()) {
             TokenizedList nextLine = tokenizeLine(scan.nextLine(), lineindex);
             if (scan.hasNextLine()) {
-                nextLine.addToken(new Token(Type.NEWLINE, String.valueOf(lineindex)));
+                nextLine.addToken(new Token(TokenType.NEWLINE, String.valueOf(lineindex), new int[]{lineindex, 0}));
             }
             tk.addTokens(nextLine);
             lineindex++;
         }
         // end of the file here
-        tk.addToken(new Token(Type.EOF, ""));
+        tk.addToken(new Token(TokenType.EOF, "", new int[]{tk.tokens.size(), 0}));
 
         //tk.get();
         scan.close();
-        logger.whisperImportant("Took "+lextimer.time()+" milliseconds");
+        logger.whisper("Took "+lextimer.time()+" milliseconds");
         return tk;
     }
 
@@ -67,7 +96,7 @@ public class Lexer {
 
         // handle comments:
         if (line.startsWith("--")) { // if it starts with -- then add comment token
-            tk.addToken(new Token(Type.COMMENT, line));
+            tk.addToken(new Token(TokenType.COMMENT, line, new int[]{lineindex, index+1}));
             //tk.addToken(new Token(Type.NEWLINE, String.valueOf(lineindex))); // add newline token
             return tk;
         }
@@ -86,27 +115,31 @@ public class Lexer {
             // Handle identifiers (letters)
             if (Character.isLetter(currentChar)) {
                 int start = index;  // Start of the identifier
-                while (index < line.length() && Character.isLetterOrDigit(line.charAt(index))) {
+                // unicode now so better identifiers
+                while (index < line.length() && Character.isUnicodeIdentifierPart(line.charAt(index))) {
                     index++;
                 }
                 String subid = line.substring(start, index);// Extract the identifier
-                if (subid.equals("void")) {tk.addToken(new Token(Type.VOID, "Void")); continue;}
-                if (subid.equals("set")) {tk.addToken(new Token(Type.SET, "set")); continue;}
-                if (subid.equals("to")) {tk.addToken(new Token(Type.TO, "to")); continue;}
-                if (subid.equals("finally")) {tk.addToken(new Token(Type.FINALLY, "finally")); continue;}
-                if (subid.equals("label")) {tk.addToken(new Token(Type.LABELSET, "label")); continue;}
-                if (subid.equals("jump")) {tk.addToken(new Token(Type.JUMP, "jump")); continue;}
-                if (subid.equals("comp")) {tk.addToken(new Token(Type.COMP, "comp")); continue;}
-                if (subid.equals("print")) {tk.addToken(new Token(Type.PRINT, "print")); continue;}
-                if (subid.equals("sub")) {tk.addToken(new Token(Type.SUB, "sub")); continue;}
-                if (subid.equals("subend")) {tk.addToken(new Token(Type.SUBEND, "subend")); continue;}
-                if (subid.equals("return")) {tk.addToken(new Token(Type.RETURN, "return")); continue;}
-                if (subid.equals("of")) {tk.addToken(new Token(Type.OF, "of")); continue;}
-                if (subid.equals("throw")) {tk.addToken(new Token(Type.THROW, "throw")); continue;}
-                if (subid.equals("from")) {tk.addToken(new Token(Type.FROM, "from")); continue;}
-                if (subid.equals("the")) {continue;}
-                tk.addToken(new Token(Type.ID, subid));
-                continue;
+                switch (subid) { // swapped if statements with switch statement
+                    case "void" -> tk.addToken(new Token(TokenType.VOID, "Void", new int[]{lineindex, start + 1}));
+                    case "set" -> tk.addToken(new Token(TokenType.SET, "set", new int[]{lineindex, start + 1}));
+                    case "to" -> tk.addToken(new Token(TokenType.TO, "to", new int[]{lineindex, start + 1}));
+                    case "finally" -> tk.addToken(new Token(TokenType.FINALLY, "finally", new int[]{lineindex, start + 1}));
+                    case "label" -> tk.addToken(new Token(TokenType.LABELSET, "label", new int[]{lineindex, start + 1}));
+                    case "jump" -> tk.addToken(new Token(TokenType.JUMP, "jump", new int[]{lineindex, start + 1}));
+                    case "comp" -> tk.addToken(new Token(TokenType.COMP, "comp", new int[]{lineindex, start + 1}));
+                    case "print" -> tk.addToken(new Token(TokenType.PRINT, "print", new int[]{lineindex, start + 1}));
+                    case "sub" -> tk.addToken(new Token(TokenType.SUB, "sub", new int[]{lineindex, start + 1}));
+                    case "subend" -> tk.addToken(new Token(TokenType.SUBEND, "subend", new int[]{lineindex, start + 1}));
+                    case "return" -> tk.addToken(new Token(TokenType.RETURN, "return", new int[]{lineindex, start + 1}));
+                    case "of" -> tk.addToken(new Token(TokenType.OF, "of", new int[]{lineindex, start + 1}));
+                    case "throw" -> tk.addToken(new Token(TokenType.THROW, "throw", new int[]{lineindex, start + 1}));
+                    case "from" -> tk.addToken(new Token(TokenType.FROM, "from", new int[]{lineindex, start + 1}));
+                    case "port" -> tk.addToken(new Token(TokenType.PORT, "port", new int[]{lineindex, start + 1}));
+                    case "the" -> {} // skip silently (filler word)
+                    default -> tk.addToken(new Token(TokenType.ID, subid, new int[]{lineindex, start + 1}));
+                }
+                continue; //whoops almost forgot this
             }
 
             // Handle numbers (digits)
@@ -114,7 +147,7 @@ public class Lexer {
             if (Character.isDigit(currentChar)) {
                 int start = index;
 
-                Type dtype = Type.NUM; // Default to integer type
+                TokenType dtype = TokenType.NUM; // Default to integer type
 
                 // Consume digits before the decimal point
                 while (index < line.length() && Character.isDigit(line.charAt(index))) {
@@ -127,7 +160,7 @@ public class Lexer {
 
                     // Check for digits after the decimal point
                     if (index < line.length() && Character.isDigit(line.charAt(index))) {
-                        dtype = Type.FLOAT; // Update type to FLOAT
+                        dtype = TokenType.FLOAT; // Update type to FLOAT
                         while (index < line.length() && Character.isDigit(line.charAt(index))) {
                             index++;
                         }
@@ -138,7 +171,7 @@ public class Lexer {
 
                 // Extract the number and add the token
                 String num = line.substring(start, index); // Extract the entire number
-                tk.addToken(new Token(dtype, num));
+                tk.addToken(new Token(dtype, num, new int[]{lineindex, index+1}));
                 continue;
             }
 
@@ -148,11 +181,11 @@ public class Lexer {
                 boolean isanoperator = isOp(twoCharOp);
                 if (isanoperator){
                     if (twoCharOp.equals("++")){
-                        tk.addToken(new Token(Type.INCREMENT, twoCharOp));
+                        tk.addToken(new Token(TokenType.INCREMENT, twoCharOp, new int[]{lineindex, index+1}));
                         index+=2;
                         continue;
                     }
-                    tk.addToken(new Token(Type.OP, twoCharOp));
+                    tk.addToken(new Token(TokenType.OP, twoCharOp, new int[]{lineindex, index+1}));
                     index+=2;
                     continue;
                 }
@@ -160,52 +193,73 @@ public class Lexer {
 
             // Handle Operators
             if (isOp(currentChar)){
-                tk.addToken(new Token(Type.OP, String.valueOf(currentChar)));
+                tk.addToken(new Token(TokenType.OP, String.valueOf(currentChar), new int[]{lineindex, index+1}));
                 index++;
                 continue;
             }
 
             // Handle Delimiters
             if (isDelimiter(currentChar)){
-                Type type = switch (currentChar) {
-                    case '(' -> Type.LGROUPING;
-                    case ')' -> Type.RGROUPING;
-                    case '{' -> Type.LARRAY;
-                    case '}' -> Type.RARRAY;
-                    case '[' -> Type.LCOMPARE;
-                    case ']' -> Type.RCOMPARE;
+                TokenType type = switch (currentChar) {
+                    case '(' -> TokenType.LGROUPING;
+                    case ')' -> TokenType.RGROUPING;
+                    case '{' -> TokenType.LARRAY;
+                    case '}' -> TokenType.RARRAY;
+                    case '[' -> TokenType.LCOMPARE;
+                    case ']' -> TokenType.RCOMPARE;
                     default -> throw new LexerException("Unknown delimiter at index " + index);
                 };
-                tk.addToken(new Token(type, String.valueOf(currentChar)));
+                tk.addToken(new Token(type, String.valueOf(currentChar), new int[]{lineindex, index+1}));
                 index++; // Move to the next character
                 continue;
             }
 
             // HANDLE STRINGS why are we caps locked??
             if (currentChar == '\'' || currentChar == '"') {
-
-                index++; // Skip the opening quote
-                StringBuilder stringBuilder = new StringBuilder();
-                boolean strended = false;
-                while (index<line.length()){
-                    char curcar = line.charAt(index);
-                    switch (curcar){
-                        case '\'': strended = true; break;
-                        case '"': strended = true; break;
-                        default: stringBuilder.append(curcar);
-                    }
-                    if (strended) break;
-                    index++;
+                char stringQuotationType = '"';
+                if (currentChar == '\''){
+                    stringQuotationType = '\'';
                 }
-                if (!strended){
+                //index++; // Skip the opening quote
+                StringBuilder stringBuilder = new StringBuilder();
+                boolean stringEnded = false;
+                boolean escaped = false;
+                while (!stringEnded){
+                    index++;
+                    if (index>=line.length()){break;}
+
+                    char curcar = line.charAt(index);
+                    if (escaped){
+                        escaped = false;
+                        switch (curcar){
+                            case '\'', '"', '\\': stringBuilder.append(curcar); break;
+                            case 'n': stringBuilder.append("\n"); break;
+                            default: stringBuilder.append('\\'+curcar);
+                        }
+                    } else {
+                        if (curcar==stringQuotationType){
+                            stringEnded = true;
+                            continue;
+                        }
+                        switch (curcar) {
+                            case '\\':
+                                escaped = true;
+                                continue;
+                            default:
+                                stringBuilder.append(curcar);
+                        }
+                    }
+                    if (stringEnded) break;
+                }
+                if (!stringEnded){
                     throw new LexerException("Unclosed String Literal at line [" + lineindex + ", " + (index+1)+"]");
                 }
-                tk.addToken(new Token(Type.STRING, stringBuilder.toString()));
+                tk.addToken(new Token(TokenType.STRING, stringBuilder.toString(), new int[]{lineindex, index+1}));
                 index++;
                 continue;
             }
             if (currentChar == ';') {
-                tk.addToken(new Token(Type.SEMICOLON, "END OF LINE"));
+                tk.addToken(new Token(TokenType.SEMICOLON, "SEMICOLON", new int[]{lineindex, index+1}));
                 index++;
                 continue;
             }
@@ -218,6 +272,7 @@ public class Lexer {
         return tk;
         //tk.addToken(new Token(Type.NEWLINE, String.valueOf(lineindex)));
     }
+
 
     private static boolean hasNextCharacter(String a, int i){
         return i + 1 < a.length();

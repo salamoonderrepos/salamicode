@@ -1,0 +1,11 @@
+port "factorial.sal"
+port "author.sal"
+
+print "Math Utilities V1.0.0"
+-- CONSTANTS
+set PI to 3.14159265358979323846
+set E to 2.71828182845904523536
+set GOLDEN_RATIO to 1.61803398874989484820
+sub square(a)
+return a * a
+subend

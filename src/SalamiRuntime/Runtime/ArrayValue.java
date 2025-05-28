@@ -2,6 +2,7 @@ package SalamiRuntime.Runtime;
 
 import SalamiRuntime.Runtime.Method.MethodValue;
 
+import javax.management.ValueExp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,9 @@ public class ArrayValue extends Value{
         return "ArrayValue{" +
                 "values=" + values +
                 '}';
+    }
+    public Value getArrayValue(int index) throws ValueException, IndexOutOfBoundsException{
+        return values.get(index);
     }
     public static ArrayValue parseArrayValue(Value a) throws ValueException{
         if (a instanceof NumberValue numbervalue_a) {

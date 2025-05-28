@@ -2,11 +2,12 @@ package SalamiEvaluator;
 
 import Helper.Logger.Logger;
 import Helper.Logger.Timer;
-import SalamiEvaluator.types.Type;
+import SalamiEvaluator.types.TokenType;
 import SalamiEvaluator.types.ast.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 
@@ -29,7 +30,15 @@ public class Parser {
         resetParser();
         tokens = Lexer.lex(source);
         ProgramNode program = parse();
-        logger.whisperImportant("Took "+parseTimer.time()+" milliseconds");
+        logger.whisper("Took "+parseTimer.time()+" milliseconds");
+        return program;
+    }
+    public static ProgramNode parseStream(InputStream stream) throws ParserException, LexerException, FileNotFoundException {
+        Timer parseTimer = new Timer("ParserTimer");
+        resetParser();
+        tokens = Lexer.lex(stream);
+        ProgramNode program = parse();
+        logger.whisper("Took "+parseTimer.time()+" milliseconds");
         return program;
     }
     public static ProgramNode parseLine(String source) throws ParserException, LexerException{
@@ -54,28 +63,36 @@ public class Parser {
     // Groupings
     // Unary
     // Multiplicative
-    // Addititive
+    // Additive
     // Literals
     // Logical Relations
     // Logical Equitors
-    // Logical Comparaters
+    // Logical Comparators
 
 
     // PLEASE DO THESE THINGS:
     // - ~~Add a general parser/evaluator to get the labels out of the way from the beginning~~ DONE!
-    // - make the port function to access other environments
+    // - ~~make the port function to access other environments~~ DONE!
     //finish parse statements for stuff
 
 
 
     //            STATEMENTS               //
 
+    public static ExpressionNode generalize_node(StatementNode node) throws ParserException{
+        // takes in nodes and generalizes them into a generic expression
+        switch (node.getNodeType()){
+            case VARIABLEDECLARATIONSTATEMENT: return new IdentifierNode(((VariableDeclarationStatement) node).identifier);
+        }
+        throw new ParserException("Attempted to generalize un-generalizeable node: "+node);
+    }
+
     public static StatementNode parseStatement() throws ParserException{
-        if (peekAhead().type==Type.INCREMENT){ // check if an increment statement is present before evaluating expressions.
+        if (peekAhead().type== TokenType.INCREMENT){ // check if an increment statement is present before evaluating expressions.
             return parseIncrementStatement();
         }
 
-        if (grabCurrentToken().getType()==Type.NEWLINE){
+        if (grabCurrentToken().getType()== TokenType.NEWLINE){
             advance();
             return parseStatement();
         }
@@ -87,6 +104,7 @@ public class Parser {
             case COMP: return parseCompareStatement();
             case PRINT: return parsePrintStatement();
             case THROW: return parseThrowStatement();
+            case PORT: return parsePortStatement();
             case SUB: return parseSubroutineDeclarationStatement();
             case SUBEND: advance(); return new SubroutineEndIndicator();
             case RETURN: advance(); return new ReturnStatement(parseStatement());
@@ -104,7 +122,7 @@ public class Parser {
         if (index.type==NodeType.IDENTIFIER){
             isattributed = true;
         }
-        eat(Type.OF);
+        eat(TokenType.OF);
         final ExpressionNode collection = parseGeneralExpression();
         eatEndOfStatement();
         return new IndexExpressionNode(index, collection);
@@ -120,14 +138,20 @@ public class Parser {
         eatEndOfStatement();
         return new PrintStatement(exp);
     }
+    public static StatementNode parsePortStatement() throws ParserException{
+        advance();
+        Token packageName = eat(TokenType.STRING);
+        eatEndOfStatement();
+        return new PortStatement(packageName.getValue());
+    }
     public static StatementNode parseSetStatement() throws ParserException{
         boolean isfinal=false;
         advance();
-        final Token identifier = eat(Type.ID);
-        eat(Type.TO);
+        final Token identifier = eat(TokenType.ID);
+        eat(TokenType.TO);
         final ExpressionNode value = parseGeneralExpression();
-        if (grabCurrentToken().type == Type.FINALLY){
-            eat(Type.FINALLY);
+        if (grabCurrentToken().type == TokenType.FINALLY){
+            eat(TokenType.FINALLY);
             isfinal=true;
         }
         eatEndOfStatement();
@@ -136,23 +160,23 @@ public class Parser {
     }
     public static StatementNode parseCompareStatement() throws ParserException{
         advance();
-        eat(Type.LCOMPARE);
+        eat(TokenType.LCOMPARE);
         final ExpressionNode compareexp = parseLogicalExpression();
-        eat(Type.RCOMPARE);
+        eat(TokenType.RCOMPARE);
         final StatementNode exec = parseStatement();
         //eatEndOfStatement();  // we dont need to parse end of statement because the parseStatement(); already does that
         return new CompareStatement(compareexp,exec);
     }
     public static StatementNode parseLabelStatement() throws ParserException{
         advance();
-        final Token identifier = eat(Type.ID);
+        final Token identifier = eat(TokenType.ID);
         eatEndOfStatement();
         return new LabelDeclarationStatement(identifier.getValue());
 
     }
     public static StatementNode parseJumpStatement() throws ParserException{
         advance();
-        final Token identifier = eat(Type.ID);
+        final Token identifier = eat(TokenType.ID);
         eatEndOfStatement();
         return new JumpStatement(identifier.getValue());
 
@@ -165,8 +189,8 @@ public class Parser {
 
     }
     public static StatementNode parseIncrementStatement() throws ParserException{
-        final Token identifier = eat(Type.ID);
-        eat(Type.INCREMENT);
+        final Token identifier = eat(TokenType.ID);
+        eat(TokenType.INCREMENT);
         eatEndOfStatement();
         return new ExpressionIncrementStatement(identifier.getValue());
         //return new ExpressionIncrementStatement("x");
@@ -175,16 +199,16 @@ public class Parser {
 
     public static StatementNode parseSubroutineDeclarationStatement() throws ParserException{
         advance();
-        final Token identifier = eat(Type.ID);
+        final Token identifier = eat(TokenType.ID);
         final ArrayList<String> params = parseParameterList();
         eatEndOfStatement();
-        final ProgramNode code = parseCodeBlock(Type.SUBEND);
+        final ProgramNode code = parseCodeBlock(TokenType.SUBEND);
         eatEndOfStatement();
         return new SubroutineDeclarationStatement(identifier.getValue(), params, code);
 
     }
 
-    public static ProgramNode parseCodeBlock(Type endingindicator) throws ParserException{
+    public static ProgramNode parseCodeBlock(TokenType endingindicator) throws ParserException{
         ProgramNode programNode = new ProgramNode();
         while (current<tokens.tokens.size()){
             if (isStatementEnder()){
@@ -204,27 +228,27 @@ public class Parser {
     }
 
     public static ExpressionNode parseSubroutineCallStatement() throws ParserException{
-        final Token identifier = eat(Type.ID);
+        final Token identifier = eat(TokenType.ID);
         final ArrayList<ExpressionNode> params = parseParameterExpressionList();
         return new CallStatement(identifier.getValue(), params);
     }
 
     public static ArrayList<String> parseParameterList() throws ParserException{
         ArrayList<String> results = new ArrayList<>();
-        eat(Type.LGROUPING);
-        while (!(grabCurrentToken().getType()==Type.RGROUPING)){
-            results.add(eat(Type.ID).getValue());
+        eat(TokenType.LGROUPING);
+        while (!(grabCurrentToken().getType()== TokenType.RGROUPING)){
+            results.add(eat(TokenType.ID).getValue());
         }
-        eat(Type.RGROUPING);
+        eat(TokenType.RGROUPING);
         return results;
     }
     public static ArrayList<ExpressionNode> parseParameterExpressionList() throws ParserException{
         ArrayList<ExpressionNode> results = new ArrayList<>();
-        eat(Type.LGROUPING);
-        while (!(grabCurrentToken().getType()==Type.RGROUPING)){
+        eat(TokenType.LGROUPING);
+        while (!(grabCurrentToken().getType()== TokenType.RGROUPING)){
             results.add(parseGeneralExpression());
         }
-        eat(Type.RGROUPING);
+        eat(TokenType.RGROUPING);
         return results;
     }
 
@@ -235,7 +259,7 @@ public class Parser {
     // -------------- Groupings ---------------//
     public static ExpressionNode parseGeneralExpression()  throws ParserException {
         ExpressionNode expr = parseAdditiveExpression();
-        while (grabCurrentToken().getType()==Type.OF){
+        while (grabCurrentToken().getType()== TokenType.OF){
             advance();
             ExpressionNode right = parseGeneralExpression();
             if (expr.type==NodeType.IDENTIFIER){
@@ -245,7 +269,7 @@ public class Parser {
                 throw new ParserException("Identifier expected before attribution.");
             }
         }
-        while (grabCurrentToken().getType()==Type.FROM){
+        while (grabCurrentToken().getType()== TokenType.FROM){
             advance();
             ExpressionNode right = parseGeneralExpression();
             expr = new IndexExpressionNode(expr, right);
@@ -306,14 +330,14 @@ public class Parser {
         // we create a switch statement which has cases depending on the type of the current token.
         // also its gonna yell at you to use an "enhanced switch" but don't because its more readable without it :)
 
-        while (grabCurrentToken().getType()==Type.EMPTY){
+        while (grabCurrentToken().getType()== TokenType.EMPTY){
             advance();
         }
 
         switch (grabCurrentToken().getType()) {
             case OP: return parseUnaryExpression();
             case ID:
-                if (peekAhead().getType()==Type.LGROUPING){
+                if (peekAhead().getType()== TokenType.LGROUPING){
                     return parseSubroutineCallStatement();
                 }
                 return new IdentifierNode(advance().getValue());
@@ -331,9 +355,9 @@ public class Parser {
             case STRING: return new StringLiteralNode(advance().getValue());
 
 
-            case LGROUPING: advance(); ExpressionNode value = parseGeneralExpression(); eat(Type.RGROUPING, ")"); return value;
-            case LCOMPARE: advance(); ExpressionNode logicvalue = parseLogicalExpression(); eat(Type.RCOMPARE, "]"); return logicvalue;
-            case LARRAY: advance(); ExpressionNode array = parseArrayExpression(); eat(Type.RARRAY, "}"); return array;
+            case LGROUPING: advance(); ExpressionNode value = parseGeneralExpression(); eat(TokenType.RGROUPING, ")"); return value;
+            case LCOMPARE: advance(); ExpressionNode logicvalue = parseLogicalExpression(); eat(TokenType.RCOMPARE, "]"); return logicvalue;
+            case LARRAY: advance(); ExpressionNode array = parseArrayExpression(); eat(TokenType.RARRAY, "}"); return array;
             default: throw new ParserException("Unexpected ExpressionNode at "+grabCurrentToken());
         }
     }
@@ -341,10 +365,10 @@ public class Parser {
     private static ExpressionNode parseArrayExpression() throws ParserException {
         ArrayList<ExpressionNode> results = new ArrayList<>();
         while (true){
-            while(grabCurrentToken().getType()==Type.NEWLINE){
+            while(grabCurrentToken().getType()== TokenType.NEWLINE){
                 advance();
             }
-            if ((grabCurrentToken().getType()==Type.RARRAY)){
+            if ((grabCurrentToken().getType()== TokenType.RARRAY)){
                 break;
             }
 
@@ -378,10 +402,10 @@ public class Parser {
                 if (grabCurrentToken().getValue().equals("!")){
                     String op = advance().getValue();
                     ExpressionNode right;
-                    if (peekAhead().getType()==Type.LCOMPARE){
+                    if (peekAhead().getType()== TokenType.LCOMPARE){
                         advance();
                         right = parseLogicalExpression();
-                        eat(Type.RCOMPARE);
+                        eat(TokenType.RCOMPARE);
                     } else {
                         right = parseSpecificLogicalExpression();
                     }
@@ -391,7 +415,7 @@ public class Parser {
             case ID: return new IdentifierNode(advance().getValue());
 
             case VOID: advance(); return new VoidLiteralNode();
-            case LCOMPARE: advance(); ExpressionNode stuff = parseLogicalExpression(); eat(Type.RCOMPARE); return stuff;
+            case LCOMPARE: advance(); ExpressionNode stuff = parseLogicalExpression(); eat(TokenType.RCOMPARE); return stuff;
             default: return parseExpression();
         }
     }
@@ -418,26 +442,26 @@ public class Parser {
         return prev;
     }
 
-    public static Token eat(Type t, String v) throws ParserException{
+    public static Token eat(TokenType t, String v) throws ParserException{
         if (grabCurrentToken().getValue().equals(v) && grabCurrentToken().getType() == t){
             return advance();
         }
         throw new ParserException("Expected \'"+v+"\' of type "+t+" but got "+grabCurrentToken()+" instead.");
     }
     public static void eatEndOfStatement() throws ParserException{
-        if (grabCurrentToken().type!=Type.EOF){
+        if (grabCurrentToken().type!= TokenType.EOF){
             try {
-                eat(Type.SEMICOLON, Type.NEWLINE);
+                eat(TokenType.SEMICOLON, TokenType.NEWLINE);
             } catch (ParserException e){
                 throw new ParserException("Expected indicator that the statement ended.");
             }
         }
     }
     public static boolean isStatementEnder() throws ParserException{
-        return grabCurrentToken().getType() == Type.NEWLINE | grabCurrentToken().getType() == Type.SEMICOLON;
+        return grabCurrentToken().getType() == TokenType.NEWLINE | grabCurrentToken().getType() == TokenType.SEMICOLON;
     }
-    public static Token eat(Type... types) throws ParserException {
-        for (Type t : types){
+    public static Token eat(TokenType... types) throws ParserException {
+        for (TokenType t : types){
             if (grabCurrentToken().getType() == t) {
                 return advance();
             }
@@ -445,7 +469,7 @@ public class Parser {
         throw new ParserException("Expected type "+types[0]+" but got "+grabCurrentToken().getType()+" instead.");
     }
 
-    public static Token eat(Type t) throws ParserException{
+    public static Token eat(TokenType t) throws ParserException{
         if (grabCurrentToken().getType() == t){
             return advance();
         }
@@ -464,12 +488,12 @@ public class Parser {
         return tokens.grab(current);
     }
     public static boolean isEnd(){
-        return (tokens.grab(current).type == Type.EOF);
+        return (tokens.grab(current).type == TokenType.EOF);
     }
     public static boolean isBeginning(){
         return current==0;
     }
-    public static int find(Type t){
+    public static int find(TokenType t){
         int last = current;
         while (grabCurrentToken().getType()!=t){
             advance();

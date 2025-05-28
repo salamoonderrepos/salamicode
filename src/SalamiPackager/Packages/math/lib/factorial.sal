@@ -1,0 +1,8 @@
+sub factorial(n)
+set fact to 1
+label nGreaterThanZero
+    set fact to fact * n
+    set n to n - 1
+comp [n>0] jump nGreaterThanZero
+return fact
+subend

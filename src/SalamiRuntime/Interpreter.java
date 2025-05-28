@@ -3,17 +3,25 @@ package SalamiRuntime;
 
 import Helper.Logger.Logger;
 import SalamiEvaluator.Lexer;
+import SalamiEvaluator.LexerException;
 import SalamiEvaluator.Parser;
+import SalamiEvaluator.ParserException;
 import SalamiEvaluator.types.ast.*;
+import SalamiPackager.Packager;
+import SalamiPackager.Packages.SalamiPackage;
 import SalamiRuntime.Runtime.*;
 import SalamiRuntime.Runtime.Method.MethodValue;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
 import Helper.Logger.Timer;
+
+import javax.sound.sampled.Port;
 
 
 /**
@@ -24,10 +32,20 @@ import Helper.Logger.Timer;
  * @see Lexer
  */
 public class Interpreter {
-    static final Logger programlogger = new Logger("RuntimeProgram");
-    static final Logger logger = new Logger("Interpreter");
-    static final Scanner reader = new Scanner(System.in);
-    public Interpreter(){}
+    final Logger programlogger;
+    public final Logger logger;
+    final Scanner reader;
+
+    public Interpreter(String location){
+        programlogger = new Logger("RuntimeProgram/"+location);
+        logger = new Logger("Interpreter/"+location);
+        reader = new Scanner(System.in);
+    }
+    public Interpreter(){
+        programlogger = new Logger("RuntimeProgram");
+        logger = new Logger("Interpreter");
+        reader = new Scanner(System.in);
+    }
 
 
 
@@ -44,11 +62,14 @@ public class Interpreter {
      * @throws InterpreterException If it encounters a statement which it doesn't have an evaluator function for, it throws an error.
      * @throws ValueException If at any point two values are mismatched, or some other error like that, this gets thrown.
      */
-    public static Value evaluate(StatementNode s, Environment environment, ProgramCounter pc, ProgramNode program) throws InterpreterException, ValueException, RuntimeDisruptedException{
+    public Value evaluate(StatementNode s, Environment environment, ProgramCounter pc, ProgramNode program) throws InterpreterException, ValueException, RuntimeDisruptedException{
         switch (s.type){
             case PROGRAM:
                 ProgramNode p = (ProgramNode) s;
                 return evaluate_program(p, environment, pc, true);
+            case PORTSTATEMENT:
+                return new VoidValue();
+                // DONT HANDLE PORTS CUZ THEY SHOULD BE DONE BY INITIALIZER
             case THROWSTATEMENT:
                 ThrowStatement throwst = (ThrowStatement) s;
                 return evaluate_throw_statement(throwst, environment, pc, program);
@@ -72,6 +93,18 @@ public class Interpreter {
                 return evaluate_label_statement(labdec, environment, pc);
             case VARIABLEDECLARATIONSTATEMENT:
                 VariableDeclarationStatement vardec = (VariableDeclarationStatement) s;
+//                if (!environment.canVariable){
+//                    if (environment.exitCapabilitiesQuietly){
+//                        try {
+//                            return evaluate(Parser.generalize_node(vardec), environment, pc, program);
+//                        } catch (ParserException e) {
+//                            throw new InterpreterException(e.getMessage());
+//                        }
+//                    } else {
+//                        throw new CapabilityException("Variable capabilities are not allowed when declaring \""+vardec.identifier+'"');
+//                    }
+//                }
+                // THIS HAS TO BE SIMPLER :(
                 return evaluate_set_statement(vardec, environment, pc, program);
             case EXPRESSIONINCREMENTSTATEMENT:
                 ExpressionIncrementStatement expinc = (ExpressionIncrementStatement) s;
@@ -83,6 +116,7 @@ public class Interpreter {
                 return evaluate_index_attributed_expression((AttributeExpressionNode) s, environment, pc, program);
             case INDEXEXPRESSION:
                 return evaluate_index_expression((IndexExpressionNode) s, environment, pc, program);
+
             case STRINGLITERAL:
                 StringLiteralNode stringLiteralNode = (StringLiteralNode) s;
                 return new StringValue(stringLiteralNode.value);
@@ -114,20 +148,37 @@ public class Interpreter {
         }
     }
 
+
+
+
     ///-----------------------------
     ///
     ///         STATEMENTS
     ///
     ///-----------------------------
 
-    public static Value evaluate_call_statement(CallStatement callStatement, Environment env, ProgramCounter pc, ProgramNode programNode) throws InterpreterException{
+    public Value evaluate_call_statement(CallStatement callStatement, Environment env, ProgramCounter pc, ProgramNode programNode) throws InterpreterException{
         if (env.hasMethod(callStatement.identifier)){
             return evaluate_method_call_statement(callStatement, env, pc, programNode);
         }
         return evaluate_subroutine_call_statement(callStatement, env, pc, programNode);
     }
+    public Value evaluate_port_statement(PortStatement s, Environment environment, ProgramCounter pc) throws InterpreterException {
+        String packname = s.value;
+        if ((packname.endsWith(".scpkg") || packname.endsWith(".spkg"))) {
+            SalamiPackage pack = Packager.unzipPackage("packages\\" + packname);
+            Packager.loadPackage(pack, environment);
 
-    public static Value evaluate_method_call_statement(CallStatement methodCallStatement, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
+        } else if ((packname.endsWith(".salami") || packname.endsWith(".sal"))) {
+            File file = new File("packages\\"+packname);
+            Packager.loadFile(file, environment);
+        } else {
+            throw new InterpreterException("Port statement does not reference a correct file.");
+        }
+        return new VoidValue();
+    }
+
+    public Value evaluate_method_call_statement(CallStatement methodCallStatement, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
         MethodValue method = env.lookupMethod(methodCallStatement.identifier);
         if (methodCallStatement.parameters.size() != method.parameters.size()){
             throw new InterpreterException("Parameter mismatch with method: "+methodCallStatement.identifier);
@@ -149,20 +200,20 @@ public class Interpreter {
      * @param pc The program counter to be set so it can actually jump.
      * @return a {@link VoidValue}.
      */
-    public static VoidValue evaluate_jump_statement(JumpStatement jumpNode, Environment env, ProgramCounter pc){
+    public VoidValue evaluate_jump_statement(JumpStatement jumpNode, Environment env, ProgramCounter pc){
         pc.set(env.lookupLabel(jumpNode.identifier));
         return new VoidValue();
     }
 
 
-    public static SubroutineValue evaluate_subroutine_declaration_statement(SubroutineDeclarationStatement subroutineDeclarationStatement, Environment env, ProgramCounter pc){
+    public SubroutineValue evaluate_subroutine_declaration_statement(SubroutineDeclarationStatement subroutineDeclarationStatement, Environment env, ProgramCounter pc){
         SubroutineValue subroutine = env.declareSubroutine(subroutineDeclarationStatement.identifier,pc.get(),subroutineDeclarationStatement.parameters, subroutineDeclarationStatement.code);
         return subroutine;
     }
-    public static Value evaluate_return_statement(ReturnStatement returnStatement, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
-        return evaluate(returnStatement.statement, env, pc, program);
+    public Value evaluate_return_statement(ReturnStatement returnStatement, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
+        return new ReturnValue(evaluate(returnStatement.statement, env, pc, program));
     }
-    public static Value evaluate_subroutine_call_statement(CallStatement subroutineCallStatement, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
+    public Value evaluate_subroutine_call_statement(CallStatement subroutineCallStatement, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
         // order of action for a subroutine call statement
         // 1. find the corresponding subroutine in the environment
         // 2. declare the parameters being passed in into the subroutines environment
@@ -203,7 +254,7 @@ public class Interpreter {
      * @param pc The program counter to tell the label where it is in the program.
      * @return a {@link VoidValue}.
      */
-    public static VoidValue evaluate_label_statement(LabelDeclarationStatement declarationNode, Environment env, ProgramCounter pc){
+    public VoidValue evaluate_label_statement(LabelDeclarationStatement declarationNode, Environment env, ProgramCounter pc){
         env.declareLabel(declarationNode.identifier, pc.get());
         return new VoidValue();
     }
@@ -216,12 +267,12 @@ public class Interpreter {
      * @return a {@link VoidValue}.
      * @throws InterpreterException In case the evaluation of what needs to be printed goes wrong.
      */
-    public static VoidValue evaluate_print_statement(PrintStatement printNode, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException {
+    public VoidValue evaluate_print_statement(PrintStatement printNode, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException {
         programlogger.log(StringValue.parseStringValue(evaluate(printNode.value, env, pc, program)).value);
         return new VoidValue();
     }
 
-    public static VoidValue evaluate_throw_statement(ThrowStatement throwNode, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException, RuntimeDisruptedException {
+    public VoidValue evaluate_throw_statement(ThrowStatement throwNode, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException, RuntimeDisruptedException {
         StringValue message = StringValue.parseStringValue(evaluate(throwNode.value, env, pc, program));
         throw new RuntimeDisruptedException(message.value);
     }
@@ -234,7 +285,7 @@ public class Interpreter {
      * @return a {@link VoidValue}.
      * @throws InterpreterException If what we are defining the variable as can't be evaluated, then it throws an error.
      */
-    public static VoidValue evaluate_set_statement(VariableDeclarationStatement declarationNode, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
+    public VoidValue evaluate_set_statement(VariableDeclarationStatement declarationNode, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
         env.declareVariable(declarationNode.identifier, evaluate(declarationNode.value, env, pc, program), declarationNode.isFinal);
         return new VoidValue();
     }
@@ -246,14 +297,13 @@ public class Interpreter {
      * @return
      * @throws InterpreterException
      */
-    public static BooleanValue evaluate_compare_statement(CompareStatement compareNode, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
+    public Value evaluate_compare_statement(CompareStatement compareNode, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
         if (evaluate(compareNode.comp, env, pc, program) instanceof BooleanValue bval){
             if (bval.value) {
-                evaluate(compareNode.execute, env, pc, program);
-                return new BooleanValue(true);
+                return evaluate(compareNode.execute, env, pc, program);
             }
         }
-        return new BooleanValue(false);
+        return new VoidValue();
     }
 
     /**
@@ -263,7 +313,7 @@ public class Interpreter {
      * @return
      * @throws InterpreterException
      */
-    public static VoidValue evaluate_increment_statement(ExpressionIncrementStatement incrementNode, Environment env, ProgramCounter pc) throws InterpreterException{
+    public VoidValue evaluate_increment_statement(ExpressionIncrementStatement incrementNode, Environment env, ProgramCounter pc) throws InterpreterException{
         Value variable_value = env.lookupVariale(incrementNode.identifier);
         switch (variable_value.type){
             case NUMBER:
@@ -289,7 +339,7 @@ public class Interpreter {
     ///
     ///-----------------------------
 
-    public static Value evaluate_subroutine(ProgramNode p, Environment environment, ProgramCounter startingpc) throws InterpreterException, ValueException {
+    public Value evaluate_subroutine(ProgramNode p, Environment environment, ProgramCounter startingpc) throws InterpreterException, ValueException {
 
         Value eval = new VoidValue(); // initialize the eval variables
         ProgramCounter pc = startingpc;
@@ -298,14 +348,15 @@ public class Interpreter {
         while (pc.get()<p.statements.size()){
             StatementNode statement = p.statements.get(pc.get());
             eval = evaluate(statement, environment, pc, p);
-            if (statement.type==NodeType.RETURNSTATEMENT){
-                return eval;
+            if (eval.type==RuntimeType.RETURNVALUE){
+                ReturnValue rv = (ReturnValue) eval;
+                return rv.value;
             }
             pc.increment();
         }
         throw new InterpreterException("Subroutine found EOF before returning.");
     }
-    public static Value evaluate_index_expression(IndexExpressionNode node, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException, ValueException {
+    public Value evaluate_index_expression(IndexExpressionNode node, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException, ValueException {
         Value indexVal = evaluate(node.index, env, pc, program);
         Value collectionVal = evaluate(node.collection, env, pc, program);
 
@@ -325,7 +376,7 @@ public class Interpreter {
         throw new InterpreterException("Cannot index type: " + collectionVal.type);
     }
 
-    public static Value evaluate_index_attributed_expression(AttributeExpressionNode node, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException, ValueException {
+    public Value evaluate_index_attributed_expression(AttributeExpressionNode node, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException, ValueException {
         String attribute = node.attribute;
         Value val = evaluate(node.collection, env, pc, program);
 
@@ -349,7 +400,7 @@ public class Interpreter {
      * @return
      * @throws ValueException
      */
-    public static Value evaluate_identifier(IdentifierNode node, Environment environment) throws ValueException{
+    public Value evaluate_identifier(IdentifierNode node, Environment environment) throws ValueException{
         return environment.lookupVariale(node.value);
     }
 
@@ -360,7 +411,7 @@ public class Interpreter {
      * @return
      * @throws InterpreterException
      */
-    public static Value evaluate_unary_expression(UnaryExpressionNode unaryNode, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException {
+    public Value evaluate_unary_expression(UnaryExpressionNode unaryNode, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException {
         Value preevalright = evaluate(unaryNode.rightExpression, env, pc, program);
         switch (unaryNode.op){
             case "!":
@@ -406,7 +457,7 @@ public class Interpreter {
      * @return
      * @throws InterpreterException
      */
-    public static BooleanValue evaluate_logical_expression(BinaryExpressionNode binaryNode, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
+    public BooleanValue evaluate_logical_expression(BinaryExpressionNode binaryNode, Environment env, ProgramCounter pc, ProgramNode program) throws InterpreterException{
         Value left = (Value) evaluate(binaryNode.leftExpression, env, pc, program);
         Value right = (Value) evaluate(binaryNode.rightExpression, env, pc, program);
         if (left.type == RuntimeType.VOID | right.type == RuntimeType.VOID){ // if the expression contains a void value then it must be resolved to void
@@ -444,7 +495,7 @@ public class Interpreter {
      * @return
      * @throws InterpreterException
      */
-    public static BooleanValue evaluate_numeric_logical_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException{
+    public BooleanValue evaluate_numeric_logical_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException{
         NumberValue left = (NumberValue) preEvalLeft;
         NumberValue right = (NumberValue) preEvalRight;
         switch (op){
@@ -464,7 +515,7 @@ public class Interpreter {
      * @return
      * @throws InterpreterException
      */
-    public static BooleanValue evaluate_floating_logical_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException{
+    public BooleanValue evaluate_floating_logical_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException{
         FloatingValue left = FloatingValue.parseFloatingValue(preEvalLeft);
         FloatingValue right = FloatingValue.parseFloatingValue(preEvalRight);
         switch (op){
@@ -477,7 +528,7 @@ public class Interpreter {
         }
     }
 
-    public static BooleanValue evaluate_arrayedly_logical_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException{
+    public BooleanValue evaluate_arrayedly_logical_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException{
         FloatingValue left = FloatingValue.parseFloatingValue(preEvalLeft);
         FloatingValue right = FloatingValue.parseFloatingValue(preEvalRight);
         switch (op){
@@ -493,7 +544,7 @@ public class Interpreter {
      * @return
      * @throws InterpreterException
      */
-    public static BooleanValue evaluate_string_logical_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException{
+    public BooleanValue evaluate_string_logical_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException{
         StringValue left = StringValue.parseStringValue(preEvalLeft);
         StringValue right = StringValue.parseStringValue(preEvalRight);
         switch (op){
@@ -509,7 +560,7 @@ public class Interpreter {
      * @return
      * @throws InterpreterException
      */
-    public static BooleanValue evaluate_boolean_logical_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException{
+    public BooleanValue evaluate_boolean_logical_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException{
         BooleanValue left = (BooleanValue) preEvalLeft;
         BooleanValue right = (BooleanValue) preEvalRight;
         switch (op){
@@ -528,7 +579,7 @@ public class Interpreter {
      * @return
      * @throws InterpreterException
      */
-    public static Value evaluate_numeric_binary_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException, ValueException{
+    public Value evaluate_numeric_binary_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException, ValueException{
 
 
 
@@ -560,7 +611,7 @@ public class Interpreter {
      * @return
      * @throws InterpreterException
      */
-    public static Value evaluate_string_binary_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException, ValueException{
+    public Value evaluate_string_binary_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException, ValueException{
         StringValue left = StringValue.parseStringValue(preEvalLeft);
         StringValue right = StringValue.parseStringValue(preEvalRight);
         int index;
@@ -580,7 +631,7 @@ public class Interpreter {
         }
     }
 
-    public static Value evaluate_arrayedly_binary_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException, ValueException{
+    public Value evaluate_arrayedly_binary_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException, ValueException{
         ArrayValue left = ArrayValue.parseArrayValue(preEvalLeft);
         ArrayValue right = ArrayValue.parseArrayValue(preEvalRight);
         int index;
@@ -603,7 +654,7 @@ public class Interpreter {
      * @return
      * @throws InterpreterException
      */
-    public static Value evaluate_floating_binary_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException, ValueException{
+    public Value evaluate_floating_binary_expression(Value preEvalLeft, Value preEvalRight, String op) throws InterpreterException, ValueException{
         FloatingValue left = FloatingValue.parseFloatingValue(preEvalLeft);
         FloatingValue right = FloatingValue.parseFloatingValue(preEvalRight);
         switch (op){
@@ -629,7 +680,7 @@ public class Interpreter {
      * @return
      * @throws InterpreterException
      */
-    public static Value evaluate_binary_expression(BinaryExpressionNode binaryNode, Environment environment, ProgramCounter pc, ProgramNode program) throws InterpreterException, ValueException {
+    public Value evaluate_binary_expression(BinaryExpressionNode binaryNode, Environment environment, ProgramCounter pc, ProgramNode program) throws InterpreterException, ValueException {
         if (binaryNode.logical){return evaluate_logical_expression(binaryNode, environment, pc, program);}
         Value preEvalLeft = evaluate(binaryNode.leftExpression, environment, pc, program); // pre evaluate the expressions because we dont know what type of value it will be
         Value preEvalRight = evaluate(binaryNode.rightExpression, environment, pc, program);
@@ -672,7 +723,7 @@ public class Interpreter {
      *
      * @see Initializer
      */
-    public static Value evaluate_program(ProgramNode p, Environment environment, ProgramCounter startingpc, boolean initializeProgram) throws InterpreterException, ValueException, StackOverflowError{
+    public Value evaluate_program(ProgramNode p, Environment environment, ProgramCounter startingpc, boolean initializeProgram) throws InterpreterException, ValueException, StackOverflowError{
         Timer evaltimer = new Timer("InterpreterTimer");
 
         Value eval = new VoidValue(); // initialize the eval variables
@@ -681,13 +732,16 @@ public class Interpreter {
         //
         while (pc.get()<p.statements.size()){
             StatementNode statement = p.statements.get(pc.get());
+
             eval = evaluate(statement, environment, pc, p);
             pc.increment();
         }
-        logger.whisperImportant("Took "+evaltimer.time()+" milliseconds");
+        logger.whisper("Took "+evaltimer.time()+" milliseconds");
 
         return eval;
     }
+
+
 
 }
 

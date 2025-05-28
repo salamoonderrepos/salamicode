@@ -1,6 +1,8 @@
 package SalamiRuntime.Runtime;
 
+import Helper.Parameters.EnvironmentParameters;
 import SalamiEvaluator.types.ast.ProgramNode;
+import SalamiRuntime.CapabilityException;
 import SalamiRuntime.Runtime.Method.Function;
 import SalamiRuntime.Runtime.Method.MethodValue;
 
@@ -23,6 +25,16 @@ public class Environment {
     Map<String, Integer> labels;
     Map<String, SubroutineValue> subroutines;
     Map<String, MethodValue> methods;
+
+    // Toggleables (DEFAULTS DO NOT CHANGE)
+    public boolean canPort = true;
+    public boolean canReference = true;
+    public boolean canSubroutine = true;
+    public boolean canLabel = true;
+    public boolean canMethod = true;
+    public boolean canVariable = true;
+    public boolean exitCapabilitiesQuietly = false; // Ignore capability exceptions or throw them
+
     public Environment (){
         variables = new HashMap<>();
         finals = new ArrayList<String>();
@@ -37,6 +49,37 @@ public class Environment {
         subroutines = new HashMap<>();
         methods = new HashMap<>();
         parent = p;
+    }
+    public Environment (Environment p, EnvironmentParameters params){
+        variables = new HashMap<>();
+        finals = new ArrayList<String>();
+        labels = new HashMap<>();
+        subroutines = new HashMap<>();
+        methods = new HashMap<>();
+        parent = p;
+
+        canPort = params.canPort;
+        canReference = params.canReference;
+        canSubroutine = params.canSubroutine;
+        canLabel = params.canLabel;
+        canMethod = params.canMethod;
+        canVariable = params.canVariable;
+        exitCapabilitiesQuietly = params.exitCapabilitiesQuietly; // Ignore capability exceptions or throw them
+    }
+    public Environment (EnvironmentParameters params){
+        variables = new HashMap<>();
+        finals = new ArrayList<String>();
+        labels = new HashMap<>();
+        subroutines = new HashMap<>();
+        methods = new HashMap<>();
+
+        canPort = params.canPort;
+        canReference = params.canReference;
+        canSubroutine = params.canSubroutine;
+        canLabel = params.canLabel;
+        canMethod = params.canMethod;
+        canVariable = params.canVariable;
+        exitCapabilitiesQuietly = params.exitCapabilitiesQuietly; // Ignore capability exceptions or throw them
     }
 
     // METHOD MANAGEMENT
@@ -102,6 +145,7 @@ public class Environment {
     }
     public Value declareVariable(String identifier, Value value, boolean isFinal) throws ValueException{
         //System.out.print(value);
+
         if (hasVariable(identifier)){ return assignVariable(identifier, value);}
         variables.put(identifier, value);
         if (isFinal) {

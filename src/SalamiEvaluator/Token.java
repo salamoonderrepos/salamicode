@@ -1,13 +1,20 @@
 package SalamiEvaluator;
 
-import SalamiEvaluator.types.Type;
+import SalamiEvaluator.types.TokenType;
 
 public class Token{
-    Type type;
+    TokenType type;
     String data;
-    public Token(Type t, String d){
+    // {line, column}
+    int[] loc = new int[2];
+    public Token(TokenType t, String d){
         type = t;
         data = d;
+    }
+    public Token(TokenType t, String d, int[] loc){
+        type = t;
+        data = d;
+        loc = loc;
     }
     @Override
     public String toString() {
@@ -16,7 +23,7 @@ public class Token{
     public String getValue () {
         return data;
     }
-    public Type getType (){
+    public TokenType getType (){
         return type;
     }
 }

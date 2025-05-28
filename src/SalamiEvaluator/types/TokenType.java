@@ -1,6 +1,6 @@
 package SalamiEvaluator.types;
 
-public enum Type {
+public enum TokenType {
     ID,
     OP,
     NUM,
@@ -31,5 +31,6 @@ public enum Type {
     RETURN,
     THROW,
     FROM,
+    PORT,
     EMPTY,
 }

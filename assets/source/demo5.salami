@@ -1,0 +1,32 @@
+set messages to {
+    "Hey! Whats up?"
+    "Sure! Why not?"
+    "Of course!"
+    "Sounds good!"
+    "Yep!"
+    "I love you!"
+} finally
+
+set reversedmessages to {}
+
+set loops to (length of messages) - 1
+label loopOverEachMessage
+
+    set message to loops from messages
+    set reversedmessage to ""
+
+        set characterloops to (length of message)-1
+        label characterloop
+
+    --print (characterloops from message)
+            set reversedmessage to reversedmessage + (characterloops from message)
+
+            set characterloops to characterloops - 1
+
+        comp [characterloops>(-1)] jump characterloop
+
+    set reversedmessages to reversedmessages+reversedmessage
+    print reversedmessage
+    set loops to loops - 1
+comp [![loops==0]] jump loopOverEachMessage
+print reversedmessages

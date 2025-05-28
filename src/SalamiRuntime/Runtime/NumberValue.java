@@ -1,11 +1,5 @@
 package SalamiRuntime.Runtime;
 
-import SalamiEvaluator.Lexer;
-import SalamiEvaluator.LexerException;
-import SalamiEvaluator.TokenizedList;
-import SalamiEvaluator.types.Type;
-import SalamiRuntime.Interpreter;
-
 import java.util.Objects;
 
 /**

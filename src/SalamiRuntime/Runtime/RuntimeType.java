@@ -13,4 +13,5 @@ public enum RuntimeType {
     METHOD,
     ARRAY,
     ATTRIBUTE,
+    RETURNVALUE
 }

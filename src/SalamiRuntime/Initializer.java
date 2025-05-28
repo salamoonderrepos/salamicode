@@ -1,6 +1,7 @@
 package SalamiRuntime;
 
 import Helper.Logger.Logger;
+import Helper.Parameters.EnvironmentParameters;
 import SalamiEvaluator.*;
 import SalamiEvaluator.types.ast.*;
 import SalamiRuntime.Runtime.*;
@@ -15,6 +16,7 @@ import Helper.Logger.Timer;
  */
 public class Initializer {
     public static Logger logger = new Logger("Initializer");
+    public static Interpreter initializer_interpreter = new Interpreter("initializer");
 
     /**
      * <p>
@@ -39,7 +41,7 @@ public class Initializer {
 
             initpc.increment();
         }
-        logger.whisperImportant("Took "+inittimer.time()+" milliseconds");
+        logger.whisper("Took "+inittimer.time()+" milliseconds");
         return env;
     }
 
@@ -49,9 +51,6 @@ public class Initializer {
      */
     public static final Environment initialize_global_environment(){
         Environment env = new Environment();
-        env.declareVariable("pi", new FloatingValue(3.14159F), true);
-        env.declareVariable("mathE", new FloatingValue(2.71828F), true);
-        env.declareVariable("goldRatio", new FloatingValue(1.618F), true);
         env.declareVariable("true", new BooleanValue(true), true);
         env.declareVariable("false", new BooleanValue(false), true);
         env.declareLabel("start", 0);
@@ -72,14 +71,16 @@ public class Initializer {
         env.declareMethod("rand", List.of(NumberValue.class, NumberValue.class), (params, logger) -> {
             NumberValue numarg1 = (NumberValue) params.get(0);
             NumberValue numarg2 = (NumberValue) params.get(1);
+            int numarg1value = (int) numarg1.value;
+            int numarg2value = (int) numarg2.value;
             Random numgen = new Random();
-            return new NumberValue(numgen.nextDouble(numarg2.value - numarg1.value + 1) + numarg1.value);
+            return new NumberValue(numgen.nextInt(numarg2value - numarg1value + 1) + numarg1value);
         });
         env.declareMethod("get", List.of(StringValue.class), (params, logger) -> {
             StringValue s = (StringValue) params.get(0);
             logger.log(s.value, Logger.GREEN);
             System.out.print(">>> ");
-            String v = Interpreter.reader.nextLine();
+            String v = initializer_interpreter.reader.nextLine();
             return new StringValue(v);
         });
         //env.declareMethod("throw", List.of(StringValue.class), (params, logger) -> {
@@ -94,19 +95,48 @@ public class Initializer {
             """;
             return new StringValue(poem);
         });
+        env.declareMethod("version", List.of(), (params, logger) -> {
+            String poem =
+                    """
+                    SalamiCode V1.7.3
+                    """;
+            return new StringValue(poem);
+        });
+        env.declareMethod("governedparse", List.of(StringValue.class, ArrayValue.class), (params, logger) -> {
+            StringValue s = (StringValue) params.get(0);
+            ArrayValue array = (ArrayValue) params.get(1);
+            try {
+                ProgramNode p = Parser.parseLine(s.value);
+                Environment modenv = initialize_global_environment();
+                modenv = new Environment(modenv, new EnvironmentParameters(
+                        ((BooleanValue) array.getArrayValue(0)).value,
+                        ((BooleanValue) array.getArrayValue(1)).value,
+                        ((BooleanValue) array.getArrayValue(2)).value,
+                        ((BooleanValue) array.getArrayValue(3)).value,
+                        ((BooleanValue) array.getArrayValue(4)).value,
+                        ((BooleanValue) array.getArrayValue(5)).value,
+                        ((BooleanValue) array.getArrayValue(6)).value
+                        ));
+                return initializer_interpreter.evaluate(p,modenv, new ProgramCounter(0), p);
+
+            } catch (IndexOutOfBoundsException e){
+                throw new ValueException("Array given does not match required parameters to parse.");
+            } catch (Error e){
+                throw new ValueException("String parsed with an error. `"+e.getMessage()+"`");
+            } catch (ParserException | LexerException | InterpreterException e) {
+                throw new RuntimeDisruptedException(e.getMessage());
+            }
+        });
         env.declareMethod("parse", List.of(StringValue.class), (params, logger) -> {
             StringValue s = (StringValue) params.get(0);
             try {
                 ProgramNode p = Parser.parseLine(s.value);
-                return Interpreter.evaluate(p,initialize_global_environment(), new ProgramCounter(0), p);
+                Environment modenv = initialize_global_environment();
+                return initializer_interpreter.evaluate(p,modenv, new ProgramCounter(0), p);
             } catch (Error e){
-                throw new ValueException("String parsed with an error.");
-            } catch (ParserException e) {
-                throw new RuntimeException(e);
-            } catch (LexerException e) {
-                throw new RuntimeException(e);
-            } catch (InterpreterException e) {
-                throw new RuntimeException(e);
+                throw new ValueException("String parsed with an error. `"+e.getMessage()+"`");
+            } catch (ParserException | LexerException | InterpreterException e) {
+                throw new RuntimeDisruptedException(e.getMessage());
             }
         });
 
@@ -125,12 +155,15 @@ public class Initializer {
     public static Environment evaluate_init(StatementNode stat, Environment env, ProgramCounter pc) throws InterpreterException{
         switch (stat.type){
             case LABELDECLARATIONSTATEMENT:
-                Interpreter.evaluate_label_statement((LabelDeclarationStatement) stat, env, pc);
+                initializer_interpreter.evaluate_label_statement((LabelDeclarationStatement) stat, env, pc);
                 return env;
             case SUBROUTINEDECLARATIONSTATEMENT:
                 SubroutineDeclarationStatement substat = (SubroutineDeclarationStatement) stat;
-                SubroutineValue sub = Interpreter.evaluate_subroutine_declaration_statement(substat, env, pc);
+                SubroutineValue sub = initializer_interpreter.evaluate_subroutine_declaration_statement(substat, env, pc);
                 sub.env = initialize_program(sub.code, sub.env, new ProgramCounter(0));
+                return env;
+            case PORTSTATEMENT:
+                initializer_interpreter.evaluate_port_statement((PortStatement) stat, env, pc);
                 return env;
         }
         return env;

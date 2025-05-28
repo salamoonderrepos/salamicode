@@ -12,7 +12,9 @@ import SalamiEvaluator.LexerException;
 import SalamiEvaluator.Parser;
 import SalamiEvaluator.ParserException;
 import SalamiEvaluator.types.ast.*;
+import SalamiPackager.PackageException;
 import SalamiPackager.Packager;
+import SalamiPackager.Packages.SalamiPackage;
 import SalamiRuntime.Initializer;
 import SalamiRuntime.Interpreter;
 import SalamiRuntime.InterpreterException;
@@ -76,7 +78,13 @@ public class Main {
         boolean debugger;
         boolean doRepl;
 
-        String fileName = args[0];
+        if (args.length<1){
+            System.out.println("(C) SalamiCode V1.7.3 \nUsage: (filename) {--silent} {--repl} {--monochrome} {--nolint}");
+            return;
+        }
+
+        String fileName = null;
+        fileName = args[0];
 
         if (fileName==null) { // if no filename is provided
             System.out.println("Provide a file to process.");
@@ -84,9 +92,16 @@ public class Main {
         }
 
         File file = new File(fileName);
+//        System.out.println(System.getProperty("user.dir"));
+//        if (!file.isAbsolute()){
+//            file = new File(System.getProperty("user.dir"), fileName);
+//        }
+
+
         if (!fileIsValid(file)){
             throw new MainException("Given file is not valid.");
         }
+
 
         Logger.doColor = true;
         doRepl = false;
@@ -112,24 +127,20 @@ public class Main {
             logger.silence();
             Parser.logger.silence();
             Lexer.logger.silence();
+            Interpreter.logger.silence();
+            Packager.logger.silence();
+            Initializer.logger.silence();
         }
 
         Environment env = Initializer.initialize_global_environment();
 
-//        if (!true == true){
-//            try {
-//                Packager.loadPackage("math", Initializer.initialize_global_environment());
-//            } catch (IOException e){
-//                logger.yell("FUCK YOU THERE WAS AN ERROR "+ e);
-//            } catch (InvocationTargetException e) {
-//                throw new RuntimeException(e);
-//            } catch (InstantiationException e) {
-//                throw new RuntimeException(e);
-//            } catch (IllegalAccessException e) {
-//                throw new RuntimeException(e);
-//            }
-//            return;
-//        }
+        if (!true == true){
+            SalamiPackage test = Packager.unzipPackage("C:\\Users\\Noah4\\Documents\\javaprograms\\salamicode\\src\\SalamiPackager\\Packages\\math.spkg");
+            Environment packagedenv = Packager.loadPackage(test, env);
+            logger.log("Boilerplate stuff");
+
+            return;
+        }
 
         if (doRepl) {
             runRepl(file, env);
@@ -140,7 +151,8 @@ public class Main {
                 runDebugger(file, env);
                 logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.) (Debugger)");
                 return;
-            } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException | StackOverflowError | RuntimeDisruptedException e) {
+            } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException | StackOverflowError | RuntimeDisruptedException |
+                     PackageException e) {
                 handleError(e, file.getAbsolutePath());
                 logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.) (Interrupted) (Debugger)");
                 return;
@@ -150,7 +162,8 @@ public class Main {
 
             runFile(file, env);
             logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.)");
-        } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException | StackOverflowError | RuntimeDisruptedException e) {
+        } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException | StackOverflowError | RuntimeDisruptedException |
+                 PackageException e) {
             handleError(e, file.getAbsolutePath());
             logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.) (Interrupted)");
         }

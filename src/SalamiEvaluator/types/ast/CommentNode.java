@@ -1,7 +1,5 @@
 package SalamiEvaluator.types.ast;
 
-import SalamiEvaluator.types.Type;
-
 /**
  *
  */
