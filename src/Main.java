@@ -18,6 +18,8 @@ import SalamiPackager.Packages.SalamiPackage;
 import SalamiRuntime.Initializer;
 import SalamiRuntime.Interpreter;
 import SalamiRuntime.InterpreterException;
+import SalamiRuntime.Manager.EnvironmentFactory;
+import SalamiRuntime.Manager.InterpreterFactory;
 import SalamiRuntime.Runtime.Environment;
 import SalamiRuntime.Runtime.ProgramCounter;
 import SalamiRuntime.Runtime.Value;
@@ -35,6 +37,7 @@ import java.util.Scanner;
 
 public class Main {
     static final Logger logger = new Logger("Main");
+    static final Interpreter mainInterpreter = InterpreterFactory.createMainInterpreter("Main");;
     static final String[] responses = {
             "WHOOPS. MY BAD.",
             "SORRY...",
@@ -127,28 +130,28 @@ public class Main {
             logger.silence();
             Parser.logger.silence();
             Lexer.logger.silence();
-            Interpreter.logger.silence();
+            mainInterpreter.logger.silence();
             Packager.logger.silence();
             Initializer.logger.silence();
         }
 
-        Environment env = Initializer.initialize_global_environment();
+
 
         if (!true == true){
             SalamiPackage test = Packager.unzipPackage("C:\\Users\\Noah4\\Documents\\javaprograms\\salamicode\\src\\SalamiPackager\\Packages\\math.spkg");
-            Environment packagedenv = Packager.loadPackage(test, env);
+            Interpreter packagedinterpreter = Packager.loadPackage(test, mainInterpreter);
             logger.log("Boilerplate stuff");
 
             return;
         }
 
         if (doRepl) {
-            runRepl(file, env);
+            runRepl(file);
             return;
         }
         if (debugger){
             try {
-                runDebugger(file, env);
+                runDebugger(file);
                 logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.) (Debugger)");
                 return;
             } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException | StackOverflowError | RuntimeDisruptedException |
@@ -160,7 +163,7 @@ public class Main {
         }
         try {
 
-            runFile(file, env);
+            runFile(file);
             logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.)");
         } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException | StackOverflowError | RuntimeDisruptedException |
                  PackageException e) {
@@ -175,21 +178,21 @@ public class Main {
         System.out.println(Logger.colorize(Logger.RED, e)+'\n');
         //System.out.println(e.getClass().getName());
     }
-    public static void runFile(File file, Environment env) throws ParserException, LexerException, InterpreterException, FileNotFoundException, ValueException, StackOverflowError, RuntimeDisruptedException{
+    public static void runFile(File file) throws ParserException, LexerException, InterpreterException, FileNotFoundException, ValueException, StackOverflowError, RuntimeDisruptedException{
         ProgramNode p = Parser.parseFile(file);
         ProgramCounter counter = new ProgramCounter(0);
         logger.log(p);
-        logger.log(Interpreter.evaluate(p, env, counter, null));
-        logger.log(env);
+        logger.log(mainInterpreter.evaluate(p, counter, null));
+        logger.log(mainInterpreter.getLocalEnvironment());
         // passes in an ast node tree and the initialized env variable
     }
-    public static void runDebugger(File file, Environment env) throws ParserException, LexerException, InterpreterException, FileNotFoundException, ValueException, StackOverflowError, RuntimeDisruptedException{
+    public static void runDebugger(File file) throws ParserException, LexerException, InterpreterException, FileNotFoundException, ValueException, StackOverflowError, RuntimeDisruptedException{
         ProgramNode p = Parser.parseFile(file);
         ProgramCounter counter = new ProgramCounter(0);
-        Debugger.run(p, env);
+        Debugger.run(p, mainInterpreter);
     }
 
-    public static void runRepl(File file, Environment env) {
+    public static void runRepl(File file) {
 
         // initialize scanner
         Scanner scan = new Scanner(System.in);
@@ -203,7 +206,7 @@ public class Main {
             next = scan.nextLine();
             if (next.equals("exit()")) break;
             try {
-                runLine(next, env);
+                runLine(next);
             } catch (ParserException | LexerException | InterpreterException | ValueException e) {
                 scan.close();
                 handleError(e, "repl");
@@ -211,12 +214,12 @@ public class Main {
         } while (true);
         scan.close();
     }
-    public static void runLine(String line, Environment env) throws ParserException, LexerException, InterpreterException{
+    public static void runLine(String line) throws ParserException, LexerException, InterpreterException{
 
         ProgramCounter counter = new ProgramCounter(0);
         ProgramNode ast = Parser.parseLine(line);
         logger.log(ast);
-        Value result = Interpreter.evaluate(ast, env, counter, null);
+        Value result = mainInterpreter.evaluate(ast, counter, null);
         logger.log(result);
     }
 

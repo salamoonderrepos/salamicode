@@ -1,14 +1,19 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![Static Badge](https://img.shields.io/badge/Current_Version-V1.7-green)
+![Static Badge](https://img.shields.io/badge/Current_Version-V1.8.TESTINGBRANCH-green)
 ![Static Badge](https://img.shields.io/badge/SalamiCode-orange)
+![Static Badge](https://img.shields.io/badge/TEST%20BRANCH-red)
+
 ```
- _______  _______  ___      _______  __   __  ___   _______  _______  ______   _______ 
-|       ||   _   ||   |    |   _   ||  |_|  ||   | |       ||       ||      | |       |
-|  _____||  |_|  ||   |    |  |_|  ||       ||   | |       ||   _   ||  _    ||    ___|
-| |_____ |       ||   |    |       ||       ||   | |       ||  | |  || | |   ||   |___
-|_____  ||       ||   |___ |       ||       ||   | |      _||  |_|  || |_|   ||    ___|
- _____| ||   _   ||       ||   _   || ||_|| ||   | |     |_ |       ||       ||   |___
-|_______||__| |__||_______||__| |__||_|   |_||___| |_______||_______||______| |_______|
+   .-'''-.    ____      .---.        ____    ,---.    ,---..-./`)     _______      ,-----.     ______         .-''-.   
+  / _     \ .'  __ `.   | ,_|      .'  __ `. |    \  /    |\ .-.')   /   __  \   .'  .-,  '.  |    _ `''.   .'_ _   \  
+ (`' )/`--'/   '  \  \,-./  )     /   '  \  \|  ,  \/  ,  |/ `-' \  | ,_/  \__) / ,-.|  \ _ \ | _ | ) _  \ / ( ` )   ' 
+(_ o _).   |___|  /  |\  '_ '`)   |___|  /  ||  |\_   /|  | `-'`"`,-./  )      ;  \  '_ /  | :|( ''_'  ) |. (_ o _)  | 
+ (_,_). '.    _.-`   | > (_)  )      _.-`   ||  _( )_/ |  | .---. \  '_ '`)    |  _`,/ \ _/  || . (_) `. ||  (_,_)___| 
+.---.  \  :.'   _    |(  .  .-'   .'   _    || (_ o _) |  | |   |  > (_)  )  __: (  '\_/ \   ;|(_    ._) ''  \   .---. 
+\    `-'  ||  _( )_  | `-'`-'|___ |  _( )_  ||  (_,_)  |  | |   | (  .  .-'_/  )\ `"/  \  ) / |  (_.\.' /  \  `-'    / 
+ \       / \ (_ o _) /  |        \\ (_ o _) /|  |      |  | |   |  `-'`-'     /  '. \_/``".'  |       .'    \       /  
+  `-...-'   '.(_,_).'   `--------` '.(_,_).' '--'      '--' '---'    `._____.'     '-----'    '-----'`       `'-..-'   
+                                                                                                                       
 ```
 (SalamiCode)
 
@@ -39,15 +44,8 @@ SalamiCode started as a project intending to help me with my math assignments. I
 ## Documentation
 I **HIGHLY** recommend visiting [the wikis](https://github.com/salamoonderrepos/salamicode/wiki). It contains a bunch of information for beginner's like langauge syntax, built-in methods, and advanced features for advanced users.
 
-# Roadmap
-
-## 1.9 *- ???*
-- Package creation and implementation
-
-## 1.8 *- ???*
-- Custom object creation
-- Classes
-- Executable installer
+# Previous Releases
+(Refer to main branch for roadmap.)
 
 ## 1.7 (C) *- Attributes and Arrays*
 Added arrays and indexing for strings and arrays using `from` statement. Access attributes of values using `to`.

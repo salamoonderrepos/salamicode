@@ -27,17 +27,17 @@ public class Packager {
     public static HashSet<String> activleyLoadingPackages = new HashSet<>();
     public static final boolean harshDuplicateLoading = false;
     public static final boolean harshRecursivePorting = false;
-    public static Environment loadFile(File file, Environment env) throws PackageException {
+    public static Interpreter loadFile(File file, Interpreter interpreter) throws PackageException {
         Timer fileloadtimer = new Timer("FileLoadTimer");
         if (arePackageDuplicates(file.getName())){
             logger.whisper("Took "+fileloadtimer.time()+" milliseconds (FILELOAD) (DUPLICATE)");
-            return env;
+            return interpreter;
 
         }
         activleyLoadingPackages.add(file.getName());
         try {
             ProgramNode parsedFile = Parser.parseFile(file);
-            Interpreter.evaluate(parsedFile, env, new ProgramCounter(0), parsedFile);
+            interpreter.evaluate(parsedFile, new ProgramCounter(0), parsedFile);
         } catch (ParserException | LexerException e) {
             throw new PackageException("Error parsing "+file.getName()+": "+e.getMessage());
         } catch (InterpreterException e ) {
@@ -48,22 +48,22 @@ public class Packager {
         logger.whisper("Took "+fileloadtimer.time()+" milliseconds (FILELOAD)");
         activleyLoadingPackages.remove(file.getName());
         loadedPackages.add(file.getName());
-        return env;
+        return interpreter;
     }
-    public static Environment loadPackage(SalamiPackage pack, Environment env) throws PackageException {
+    public static Interpreter loadPackage(SalamiPackage pack, Interpreter interpreter) throws PackageException {
         Timer packageloadtimer = new Timer("PackageLoadTimer");
         if (arePackageDuplicates(pack.ID)){
             logger.whisper("Took "+packageloadtimer.time()+" milliseconds (PACKLOAD) (DUPLICATE)");
-            return env;
+            return interpreter;
         }
         activleyLoadingPackages.add(pack.ID);
         try {
             // we dont have to initialize the main.salami because it is automatically initialized in the evaluate function.
-            Interpreter.evaluate(pack.main, env, new ProgramCounter(0), pack.main);
+            interpreter.evaluate(pack.main, new ProgramCounter(0), pack.main);
             logger.whisper("Took "+packageloadtimer.time()+" milliseconds (PACKLOAD)");
             activleyLoadingPackages.remove(pack.ID);
             loadedPackages.add(pack.ID);
-            return env;
+            return interpreter;
         } catch (InterpreterException e) {
             throw new PackageException("Exception occurred interpreting package: "+ pack.extrameta.get("name") + "\n" + e.getMessage());
         }

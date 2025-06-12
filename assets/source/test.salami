@@ -1,1 +1,3 @@
-port "math2.scpkg"
+set x to 10
+set y to 20
+print x + y

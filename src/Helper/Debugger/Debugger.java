@@ -21,10 +21,10 @@ public class Debugger {
     private static final Set<Integer> breakpoints = new HashSet<>();
     private static final Set<String> watchlist = new HashSet<>();
 
-    public static Value run(ProgramNode program, Environment env) throws InterpreterException, ValueException {
+    public static Value run(ProgramNode program, Interpreter interpreter) throws InterpreterException, ValueException {
         ProgramCounter pc = new ProgramCounter(0);
         Scanner debugInput = new Scanner(System.in);
-        env = Initializer.initialize_program(program, env, new ProgramCounter(0));
+        interpreter = Initializer.initialize_program(program, interpreter, new ProgramCounter(0));
         Value eval = new VoidValue();
         boolean stepping = true;  // initially stepping
 
@@ -34,14 +34,14 @@ public class Debugger {
 
             if (!stepping && !breakpoints.contains(pc.get())) {
                 // if we outside the step loop and we arent currently on any breakpoints then we evaluate the program like normal
-                eval = Interpreter.evaluate(statement, env, pc, program);
+                eval = interpreter.evaluate(statement, pc, program);
                 pc.increment();
                 continue;
             }
 
             // We are in stepping or at a breakpoint
             System.out.println("[PC=" + pc.get() + "] Next: " + statement);
-            printWatchedVariables(env);
+            printWatchedVariables(interpreter.getLocalEnvironment());
 
             System.out.print("(debugger) > ");
             String command = debugInput.nextLine();
@@ -49,12 +49,12 @@ public class Debugger {
 
             switch (parts[0]) {
                 case "step", "" -> {
-                    eval = Interpreter.evaluate(statement, env, pc, program);
+                    eval = interpreter.evaluate(statement, pc, program);
                     pc.increment();
                     stepping = true;
                 }
                 case "continue" -> {
-                    eval = Interpreter.evaluate(statement, env, pc, program);
+                    eval = interpreter.evaluate(statement, pc, program);
                     pc.increment();
                     // set stepping to false so it will just continue evaluating without stopping again (unless breakpoints)
                     stepping = false;
@@ -84,14 +84,14 @@ public class Debugger {
                     if (parts.length < 3) {
                         System.out.println("Usage: set {variableName} {value}");
                     } else {
-                        setVariable(env, parts[1], parts[2]);
+                        setVariable(interpreter.getLocalEnvironment(), parts[1], parts[2]);
                     }
                 }
                 case "print" -> {
                     if (parts.length < 2) {
                         System.out.println("Usage: print {env|pc}");
                     } else if (parts[1].equals("env")) {
-                        System.out.println(env);
+                        System.out.println(interpreter.getLocalEnvironment());
                     } else if (parts[1].equals("pc")) {
                         System.out.println("PC = " + pc.get());
                     } else {
@@ -108,7 +108,7 @@ public class Debugger {
                         } else {
                             try {
                                 ProgramNode snippet = Parser.parseLine(code);
-                                Interpreter.evaluate(snippet, env, new ProgramCounter(0), snippet);
+                                interpreter.evaluate(snippet, new ProgramCounter(0), snippet);
                             } catch (ParserException | LexerException | InterpreterException e){
                                 System.out.println("Error while running snippet: " +e);
                             }
