@@ -129,20 +129,20 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_init(SalamiEvaluator.types.ast.StatementNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">evaluate_init</a><wbr>(<a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiEvaluator.types.ast">StatementNode</a>&nbsp;stat,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_init(SalamiEvaluator.types.ast.StatementNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">evaluate_init</a><wbr>(<a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiPreEvaluator.types.ast">StatementNode</a>&nbsp;stat,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#initialize_global_environment()" class="member-name-link">initialize_global_environment</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns a new environment made for the global scope.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#initialize_program(SalamiEvaluator.types.ast.ProgramNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">initialize_program</a><wbr>(<a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;p,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;environment,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;startingpc)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#initialize_program(SalamiEvaluator.types.ast.ProgramNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">initialize_program</a><wbr>(<a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;p,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;environment,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;startingpc)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">
      Pre-evaluates a program node by predefining all labels and subroutines.</div>
@@ -195,14 +195,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="initialize_program(SalamiEvaluator.types.ast.ProgramNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)">
 <h3>initialize_program</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a></span>&nbsp;<span class="element-name">initialize_program</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;p,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;environment,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;startingpc)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a></span>&nbsp;<span class="element-name">initialize_program</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;p,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;environment,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;startingpc)</span>
                                       throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <div class="block"><p>
      Pre-evaluates a program node by predefining all labels and subroutines. This ensures someone can jump to a label defined later in the file.
      Because we are using the <a href="Interpreter.html" title="class in SalamiRuntime"><code>Interpreter</code></a>'s <code>evaluate</code> statements, and the program we are given is the exact same as the interpreter,
-     no label will be defined outside the maximum <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime"><code>ProgramCounter</code></a> range.
+     no label will be defined outside the maximum <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData"><code>ProgramCounter</code></a> range.
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -219,7 +219,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="initialize_global_environment()">
 <h3>initialize_global_environment</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a></span>&nbsp;<span class="element-name">initialize_global_environment</span>()</div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a></span>&nbsp;<span class="element-name">initialize_global_environment</span>()</div>
 <div class="block">Returns a new environment made for the global scope.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -230,9 +230,9 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate_init(SalamiEvaluator.types.ast.StatementNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)">
 <h3>evaluate_init</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a></span>&nbsp;<span class="element-name">evaluate_init</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiEvaluator.types.ast">StatementNode</a>&nbsp;stat,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a></span>&nbsp;<span class="element-name">evaluate_init</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiPreEvaluator.types.ast">StatementNode</a>&nbsp;stat,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc)</span>
                                  throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <dl class="notes">
 <dt>Parameters:</dt>

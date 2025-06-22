@@ -2,9 +2,9 @@ package SalamiRuntime;
 
 import Helper.Logger.Logger;
 import Helper.Parameters.EnvironmentParameters;
-import SalamiEvaluator.*;
-import SalamiEvaluator.types.ast.*;
-import SalamiRuntime.Runtime.*;
+import SalamiPreEvaluator.*;
+import SalamiPreEvaluator.types.ast.*;
+import SalamiRuntime.RuntimeData.*;
 
 import java.util.List;
 import java.util.Random;
@@ -16,7 +16,6 @@ import Helper.Logger.Timer;
  */
 public class Initializer {
     public static Logger logger = new Logger("Initializer");
-    public static Interpreter initializer_interpreter = new Interpreter("initializer");
 
     /**
      * <p>
@@ -80,7 +79,7 @@ public class Initializer {
             StringValue s = (StringValue) params.get(0);
             logger.log(s.value, Logger.GREEN);
             System.out.print(">>> ");
-            String v = initializer_interpreter.reader.nextLine();
+            String v = Interpreter.reader.nextLine();
             return new StringValue(v);
         });
         //env.declareMethod("throw", List.of(StringValue.class), (params, logger) -> {
@@ -117,7 +116,7 @@ public class Initializer {
                         ((BooleanValue) array.getArrayValue(5)).value,
                         ((BooleanValue) array.getArrayValue(6)).value
                         ));
-                return initializer_interpreter.evaluate(p,modenv, new ProgramCounter(0), p);
+                return Interpreter.evaluate(p,modenv, new ProgramCounter(0), p, "Initializer");
 
             } catch (IndexOutOfBoundsException e){
                 throw new ValueException("Array given does not match required parameters to parse.");
@@ -132,7 +131,7 @@ public class Initializer {
             try {
                 ProgramNode p = Parser.parseLine(s.value);
                 Environment modenv = initialize_global_environment();
-                return initializer_interpreter.evaluate(p,modenv, new ProgramCounter(0), p);
+                return Interpreter.evaluate(p,modenv, new ProgramCounter(0), p,"Initializer");
             } catch (Error e){
                 throw new ValueException("String parsed with an error. `"+e.getMessage()+"`");
             } catch (ParserException | LexerException | InterpreterException e) {
@@ -155,15 +154,15 @@ public class Initializer {
     public static Environment evaluate_init(StatementNode stat, Environment env, ProgramCounter pc) throws InterpreterException{
         switch (stat.type){
             case LABELDECLARATIONSTATEMENT:
-                initializer_interpreter.evaluate_label_statement((LabelDeclarationStatement) stat, env, pc);
+                Interpreter.evaluate_label_statement((LabelDeclarationStatement) stat, env, pc);
                 return env;
             case SUBROUTINEDECLARATIONSTATEMENT:
                 SubroutineDeclarationStatement substat = (SubroutineDeclarationStatement) stat;
-                SubroutineValue sub = initializer_interpreter.evaluate_subroutine_declaration_statement(substat, env, pc);
+                SubroutineValue sub = Interpreter.evaluate_subroutine_declaration_statement(substat, env, pc);
                 sub.env = initialize_program(sub.code, sub.env, new ProgramCounter(0));
                 return env;
             case PORTSTATEMENT:
-                initializer_interpreter.evaluate_port_statement((PortStatement) stat, env, pc);
+                Interpreter.evaluate_port_statement((PortStatement) stat, env);
                 return env;
         }
         return env;

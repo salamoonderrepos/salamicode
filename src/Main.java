@@ -7,26 +7,25 @@
 
 import Helper.Debugger.Debugger;
 import Helper.Logger.Logger;
-import SalamiEvaluator.Lexer;
-import SalamiEvaluator.LexerException;
-import SalamiEvaluator.Parser;
-import SalamiEvaluator.ParserException;
-import SalamiEvaluator.types.ast.*;
+import SalamiPreEvaluator.Lexer;
+import SalamiPreEvaluator.LexerException;
+import SalamiPreEvaluator.Parser;
+import SalamiPreEvaluator.ParserException;
+import SalamiPreEvaluator.types.ast.*;
 import SalamiPackager.PackageException;
 import SalamiPackager.Packager;
 import SalamiPackager.Packages.SalamiPackage;
 import SalamiRuntime.Initializer;
 import SalamiRuntime.Interpreter;
 import SalamiRuntime.InterpreterException;
-import SalamiRuntime.Runtime.Environment;
-import SalamiRuntime.Runtime.ProgramCounter;
-import SalamiRuntime.Runtime.Value;
-import SalamiRuntime.Runtime.ValueException;
+import SalamiRuntime.RuntimeData.Environment;
+import SalamiRuntime.RuntimeData.ProgramCounter;
+import SalamiRuntime.RuntimeData.Value;
+import SalamiRuntime.RuntimeData.ValueException;
+import SalamiRuntime.Structure.Process;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import Helper.Logger.Timer;
 import SalamiRuntime.RuntimeDisruptedException;
@@ -35,6 +34,7 @@ import java.util.Scanner;
 
 public class Main {
     static final Logger logger = new Logger("Main");
+    static final String version = "1.7.2";
     static final String[] responses = {
             "WHOOPS. MY BAD.",
             "SORRY...",
@@ -79,7 +79,7 @@ public class Main {
         boolean doRepl;
 
         if (args.length<1){
-            System.out.println("(C) SalamiCode V1.7.3 \nUsage: (filename) {--silent} {--repl} {--monochrome} {--nolint}");
+            System.out.println("SalamiCode V"+version+" \nUsage: (filename) {--silent} {--repl} {--monochrome} {--nolint}");
             return;
         }
 
@@ -127,16 +127,16 @@ public class Main {
             logger.silence();
             Parser.logger.silence();
             Lexer.logger.silence();
-            Interpreter.logger.silence();
             Packager.logger.silence();
             Initializer.logger.silence();
+            Interpreter.logger.silence();
         }
 
         Environment env = Initializer.initialize_global_environment();
 
         if (!true == true){
-            SalamiPackage test = Packager.unzipPackage("C:\\Users\\Noah4\\Documents\\javaprograms\\salamicode\\src\\SalamiPackager\\Packages\\math.spkg");
-            Environment packagedenv = Packager.loadPackage(test, env);
+            SalamiPackage test = Packager.unzipPackage(Packager.findPackage("math"));
+            //Environment packagedenv = Packager.loadPackage(test, env, new Interpreter());
             logger.log("Boilerplate stuff");
 
             return;
@@ -160,7 +160,7 @@ public class Main {
         }
         try {
 
-            runFile(file, env);
+            runFile(file);
             logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.)");
         } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException | StackOverflowError | RuntimeDisruptedException |
                  PackageException e) {
@@ -175,12 +175,13 @@ public class Main {
         System.out.println(Logger.colorize(Logger.RED, e)+'\n');
         //System.out.println(e.getClass().getName());
     }
-    public static void runFile(File file, Environment env) throws ParserException, LexerException, InterpreterException, FileNotFoundException, ValueException, StackOverflowError, RuntimeDisruptedException{
+    public static void runFile(File file) throws ParserException, LexerException, InterpreterException, FileNotFoundException, ValueException, StackOverflowError, RuntimeDisruptedException{
         ProgramNode p = Parser.parseFile(file);
         ProgramCounter counter = new ProgramCounter(0);
+        Process fileProcess = new Process("Main", p, true);
         logger.log(p);
-        logger.log(Interpreter.evaluate(p, env, counter, null));
-        logger.log(env);
+        logger.log(fileProcess.begin());
+        logger.log(fileProcess.getLocalEnvironment());
         // passes in an ast node tree and the initialized env variable
     }
     public static void runDebugger(File file, Environment env) throws ParserException, LexerException, InterpreterException, FileNotFoundException, ValueException, StackOverflowError, RuntimeDisruptedException{
@@ -203,7 +204,7 @@ public class Main {
             next = scan.nextLine();
             if (next.equals("exit()")) break;
             try {
-                runLine(next, env);
+                runLine(next);
             } catch (ParserException | LexerException | InterpreterException | ValueException e) {
                 scan.close();
                 handleError(e, "repl");
@@ -211,12 +212,13 @@ public class Main {
         } while (true);
         scan.close();
     }
-    public static void runLine(String line, Environment env) throws ParserException, LexerException, InterpreterException{
+    public static void runLine(String line) throws ParserException, LexerException, InterpreterException{
 
         ProgramCounter counter = new ProgramCounter(0);
         ProgramNode ast = Parser.parseLine(line);
+        Environment jasonmylittlebabyboy = Initializer.initialize_global_environment();
         logger.log(ast);
-        Value result = Interpreter.evaluate(ast, env, counter, null);
+        Value result = Interpreter.evaluate(ast, jasonmylittlebabyboy, counter, null, "MainLine");
         logger.log(result);
     }
 
