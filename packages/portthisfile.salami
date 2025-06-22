@@ -1,3 +1,4 @@
+port "math2.scpkg"
 sub test(x y)
 return x + y
 subend

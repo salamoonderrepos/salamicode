@@ -36,6 +36,14 @@ public class Logger {
         }
 
     }
+    public void logExtra(Object obj,String extra){
+        if (!silent) {
+            String lintedtext = prettyize(obj);
+            String coloredtext = colorize(PURPLE, '@' + logType.NORMAL.toString())+"/"+extra + " [" + location + "] " + colorize(YELLOW, lintedtext);
+            System.out.println(coloredtext);
+        }
+
+    }
     public void debuglog(Object obj){
         String coloredtext = colorize(PURPLE, "[" + location + "] " + colorize(GREEN, obj));
         System.out.println(coloredtext);

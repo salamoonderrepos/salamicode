@@ -1,7 +1,8 @@
 package SalamiPackager.Packages;
 
-import SalamiEvaluator.types.ast.ProgramNode;
+import SalamiPreEvaluator.types.ast.ProgramNode;
 
+import java.io.File;
 import java.util.Map;
 
 public class SalamiPackage {
@@ -10,13 +11,14 @@ public class SalamiPackage {
     public ProgramNode main;
     public Map<String, ProgramNode> contents;
     public Map<String, String> extrameta;
-    public String location;
+    public File sourceFile;
 
-    public SalamiPackage(String ID, String version, ProgramNode main, Map<String, String> extrameta, String location) {
+    public SalamiPackage(String ID, String version, ProgramNode main, Map<String, String> extrameta, Map<String, ProgramNode> libcontents, File _sourceFile) {
         this.ID = ID;
         this.version = version;
         this.main = main;
         this.extrameta = extrameta;
-        this.location = location;
+        this.sourceFile = _sourceFile;
+        this.contents = libcontents;
     }
 }
