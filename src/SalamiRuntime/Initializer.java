@@ -2,6 +2,7 @@ package SalamiRuntime;
 
 import Helper.Logger.Logger;
 import Helper.Parameters.EnvironmentParameters;
+import SalamiPackager.Packages.SalamiPackage;
 import SalamiPreEvaluator.*;
 import SalamiPreEvaluator.types.ast.*;
 import SalamiRuntime.RuntimeData.*;
@@ -30,13 +31,13 @@ public class Initializer {
      * @return the initialized environment.
      * @throws InterpreterException Throws an interpreter exception in case the pre-evaluation fails. (Label declaration is mangled, etc...)
      */
-    public static Environment initialize_program(ProgramNode p, Environment environment, ProgramCounter startingpc) throws InterpreterException {
+    public static Environment initialize_program(ProgramNode p, Environment environment, ProgramCounter startingpc, SalamiPackage sourcePackage) throws InterpreterException {
         Timer inittimer = new Timer("InitializerTimer");
         Environment env = environment;
         ProgramCounter initpc = startingpc;
         while (initpc.get()<p.statements.size()){
             StatementNode statement = p.statements.get(initpc.get());
-            evaluate_init(statement, environment, initpc);
+            evaluate_init(statement, environment, initpc, sourcePackage);
 
             initpc.increment();
         }
@@ -151,7 +152,7 @@ public class Initializer {
      * @return the environment.
      * @throws InterpreterException Throws an interpreter exception if a statement is not evaluated correctly.
      */
-    public static Environment evaluate_init(StatementNode stat, Environment env, ProgramCounter pc) throws InterpreterException{
+    public static Environment evaluate_init(StatementNode stat, Environment env, ProgramCounter pc, SalamiPackage sourcePackage) throws InterpreterException{
         switch (stat.type){
             case LABELDECLARATIONSTATEMENT:
                 Interpreter.evaluate_label_statement((LabelDeclarationStatement) stat, env, pc);
@@ -159,10 +160,10 @@ public class Initializer {
             case SUBROUTINEDECLARATIONSTATEMENT:
                 SubroutineDeclarationStatement substat = (SubroutineDeclarationStatement) stat;
                 SubroutineValue sub = Interpreter.evaluate_subroutine_declaration_statement(substat, env, pc);
-                sub.env = initialize_program(sub.code, sub.env, new ProgramCounter(0));
+                sub.env = initialize_program(sub.code, sub.env, new ProgramCounter(0), sourcePackage);
                 return env;
             case PORTSTATEMENT:
-                Interpreter.evaluate_port_statement((PortStatement) stat, env);
+                Interpreter.evaluate_port_statement((PortStatement) stat, env, sourcePackage);
                 return env;
         }
         return env;

@@ -40,7 +40,7 @@ public class Packager {
         try {
             ProgramNode parsedFile = Parser.parseFile(file);
             Process tempProcess = new Process(
-                    "PackagerFile",
+                    "PackagerFile/"+file.getName(),
                     parsedFile,
                     true,
                     baseEnvironment);
@@ -70,9 +70,9 @@ public class Packager {
         }
         activleyLoadingPackages.add(fileID);
         try {
-            ProgramNode libFile = pack.contents.get(file);
+            ProgramNode libFile = pack.contents.get("lib/"+file);
 
-            Process tempProcess = new Process("PackagerLibFile", libFile, true, baseEnvironment);
+            Process tempProcess = new Process(pack.ID+"/PackagerLibFile/"+file, libFile, true, baseEnvironment);
             tempProcess.begin();
             newEnvironment = tempProcess.getLocalEnvironment();
         } catch (InterpreterException e ) {
@@ -100,7 +100,7 @@ public class Packager {
         // PACKAGES MUST END IN .scpkg
 
         String runningDirectory = "packages"+File.separator;
-        File packfile = new File(runningDirectory+packid+".scpkg");
+        File packfile = new File(runningDirectory+packid);
         boolean exists = packfile.exists();
         if (exists){
             return packfile;
@@ -117,7 +117,8 @@ public class Packager {
         activleyLoadingPackages.add(pack.ID);
         try {
             // we dont have to initialize the main.salami because it is automatically initialized in the evaluate function.
-            Process tempProcess = new Process("PackagerPack", pack.main,  true, coolfreakingenvironment);
+            Process tempProcess = new Process(pack.ID+"/PackagerProcess", pack.main,  true, coolfreakingenvironment);
+            tempProcess.setSourcePackage(pack);
             tempProcess.begin();
             newEnvironment = tempProcess.getLocalEnvironment();
 
@@ -167,11 +168,11 @@ public class Packager {
                 ByteArrayInputStream datastream = new ByteArrayInputStream(data);
                 // we can now loop over each entry in the scpkg file
                 // we can assume its of standard contents, any part of the package thats broken will be caught and thrown
-                if (entryName.equals("main.salami")){
+                if (entryName.equals("main.salami") || entryName.equals("main.sal")){
                     main = parseSalamiFile(datastream, entryName);
                 } else if (entryName.equals("package.json")){
                     metadata = JsonReader.parseJsonStream(datastream);
-                } else if (entryName.startsWith("lib"+File.separator) && !zipEntry.isDirectory()) {
+                } else if (entryName.startsWith("lib/") && !zipEntry.isDirectory()) {
                     validateEntryDepth(entryName);
                     if (entryName.endsWith(".sal") || entryName.endsWith(".salami") || entryName.endsWith(".scpkg")) {
                         libFilesInMemory.put(entryName, parseSalamiFile(datastream, entryName));
@@ -180,7 +181,7 @@ public class Packager {
                         throw new PackageException("Unsupported file type in lib: " + entryName);
                     }
                 }
-                zipEntry = zipFileReaderTool.getNextEntry();
+                //zipEntry = zipFileReaderTool.getNextEntry();
             }
 
             if (metadata.isEmpty()) throw new PackageException("Missing `package.json`");

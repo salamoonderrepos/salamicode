@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import Helper.Logger.Timer;
-
 
 /**
  * <p>
@@ -135,9 +133,10 @@ public class Interpreter {
         }
         return evaluate_subroutine_call_statement(callStatement, env, pc, programNode, location);
     }
-    public static Value evaluate_port_statement(PortStatement portStatement, Environment environment) throws InterpreterException, PackageException {
+    public static Value evaluate_port_statement(PortStatement portStatement, Environment environment, SalamiPackage sourcePackage) throws InterpreterException, PackageException {
         String thingtoport = portStatement.value;
-        if ((thingtoport.endsWith(".scpkg") || thingtoport.endsWith(".spkg"))) {
+
+        if ((thingtoport.endsWith(".scpkg"))) {
 
             File packfile = Packager.findPackage(thingtoport);
 
@@ -146,21 +145,18 @@ public class Interpreter {
             // this feels better
 
         } else if ((thingtoport.endsWith(".salami") || thingtoport.endsWith(".sal"))) {
+            if (sourcePackage != null) {
+                Packager.loadFileFromPack(sourcePackage,thingtoport,environment);
+                return new VoidValue();
+            }
             File file = new File("packages\\"+thingtoport);
             Packager.loadFile(file, environment);
             // same here
         } else {
-            throw new InterpreterException("Port statement does not reference a correct file.");
+            throw new InterpreterException("Can only port a `.salami`, `.sal`, or `.scpkg` file.");
         }
         return new VoidValue();
     }
-//    public static Value evaluate_port_statement_from_package(PortStatement portStatement, Environment environment, SalamiPackage sourcePackage) throws InterpreterException, PackageException {
-//        String thingtoport = portStatement.value;
-//        if (!(sourcePackage.contents.containsKey(thingtoport))){
-//            ProgramNode programtoport = sourcePackage.contents.get(thingtoport);
-//        }
-//        return new VoidValue();
-//    }
 
     public static Value evaluate_method_call_statement(CallStatement methodCallStatement, Environment env, ProgramCounter pc, ProgramNode program, String location) throws InterpreterException{
         MethodValue method = env.lookupMethod(methodCallStatement.identifier);

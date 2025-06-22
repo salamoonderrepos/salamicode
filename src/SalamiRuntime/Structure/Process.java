@@ -2,6 +2,7 @@ package SalamiRuntime.Structure;
 
 import Helper.Logger.Logger;
 import Helper.Logger.Timer;
+import SalamiPackager.Packages.SalamiPackage;
 import SalamiPreEvaluator.types.ast.ProgramNode;
 import SalamiPreEvaluator.types.ast.StatementNode;
 import SalamiRuntime.Initializer;
@@ -16,6 +17,7 @@ public class Process {
     public ProgramNode localProgram;
     public String location;
     public Logger localProcessLogger;
+    public SalamiPackage sourcePackage;
     public Process(String _location, ProgramNode salamiprogram, boolean _preInitilization){
         location = "Process/"+_location;
         logger =  new Logger(location);
@@ -53,7 +55,7 @@ public class Process {
 
         Value eval = new VoidValue(); // initialize the eval variables
         ProgramCounter pc = startingpc;
-        if (preInitilization) Initializer.initialize_program(localProgram, localEnvironment, new ProgramCounter(startingpc.get())); // declare labels ahead of time
+        if (preInitilization) Initializer.initialize_program(localProgram, localEnvironment, new ProgramCounter(startingpc.get()),sourcePackage); // declare labels ahead of time
         //
         while (pc.get()<localProgram.statements.size()){
             StatementNode statement = localProgram.statements.get(pc.get());
@@ -72,5 +74,9 @@ public class Process {
 
     public ProgramNode getLocalProgram() {
         return localProgram;
+    }
+
+    public void setSourcePackage(SalamiPackage pack) {
+        sourcePackage = pack;
     }
 }
