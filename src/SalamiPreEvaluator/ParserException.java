@@ -1,7 +1,9 @@
 package SalamiPreEvaluator;
 
-public class ParserException extends Throwable {
-    public ParserException(String s) {
-        super(s);
+import Structure.BaseException;
+
+public class ParserException extends BaseException {
+    public ParserException(String s, int[] lff) {
+        super(s,lff);
     }
 }

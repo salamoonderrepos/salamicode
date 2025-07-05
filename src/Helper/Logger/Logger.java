@@ -65,6 +65,14 @@ public class Logger {
             System.out.println(coloredtext);
         }
     }
+    public void print(Object obj, String Color){
+        if (!silent) {
+            String lintedtext = prettyize(obj);
+            String coloredtext = colorize(Color, lintedtext);
+
+            System.out.println(coloredtext);
+        }
+    }
 
     public void whisper(Object obj){
         if (!silent) {

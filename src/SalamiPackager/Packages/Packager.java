@@ -1,18 +1,16 @@
-package SalamiPackager;
+package SalamiPackager.Packages;
 
+import Helper.JsonReader;
 import Helper.Logger.Timer;
 import SalamiPreEvaluator.LexerException;
 import SalamiPreEvaluator.Parser;
 import SalamiPreEvaluator.ParserException;
 import SalamiPreEvaluator.types.ast.ProgramNode;
-import SalamiPackager.Packages.SalamiPackage;
-import SalamiRuntime.Interpreter;
 import SalamiRuntime.InterpreterException;
 import SalamiRuntime.RuntimeData.Environment;
 
 import Helper.Logger.Logger;
-import SalamiRuntime.RuntimeData.ProgramCounter;
-import SalamiRuntime.Structure.Process;
+import Structure.Process;
 
 import java.io.*;
 import java.util.HashMap;
@@ -48,11 +46,11 @@ public class Packager {
             tempProcess.begin();
             newEnvironment = tempProcess.getLocalEnvironment();
         } catch (ParserException | LexerException e) {
-            throw new PackageException("Error parsing "+file.getName()+": "+e.getMessage());
+            throw new PackageException("Error parsing "+file.getName()+": "+e.getMessage(), e.getLocation());
         } catch (InterpreterException e ) {
-            throw new PackageException("Exception occurred interpreting "+file.getName()+": "+ e.getMessage());
+            throw new PackageException("Exception occurred interpreting "+file.getName()+": "+ e.getMessage(), e.getLocation());
         } catch (IOException e ) {
-            throw new PackageException("Could not locate file: " + file.getName());
+            throw new PackageException("Could not locate file: " + file.getName(), null);
         }
         logger.whisper("Took "+fileloadtimer.time()+" milliseconds (FILELOAD)");
         activleyLoadingPackages.remove(file.getName());
@@ -76,9 +74,9 @@ public class Packager {
             tempProcess.begin();
             newEnvironment = tempProcess.getLocalEnvironment();
         } catch (InterpreterException e ) {
-            throw new PackageException("Exception occurred interpreting "+fileID+": "+ e.getMessage());
+            throw new PackageException("Exception occurred interpreting "+fileID+": "+ e.getMessage(), e.getLocation());
         } catch (NullPointerException e ) {
-            throw new PackageException("Could not locate file: " + fileID);
+            throw new PackageException("Could not locate file: " + fileID, null);
         }
         logger.whisper("Took "+fileloadtimer.time()+" milliseconds (FILELOAD)");
         activleyLoadingPackages.remove(fileID);
@@ -99,13 +97,24 @@ public class Packager {
 
         // PACKAGES MUST END IN .scpkg
 
-        String runningDirectory = "packages"+File.separator;
-        File packfile = new File(runningDirectory+packid);
-        boolean exists = packfile.exists();
-        if (exists){
-            return packfile;
+        String runningDirectory = "";
+        String runningPackageDirectory = runningDirectory+File.separator+"packages"+File.separator;
+        String runningLibDirectory = runningDirectory+File.separator+"lib"+File.separator;
+        File runningDirectorypackfile = new File(runningDirectory+packid);
+        File runningPackageDirectorypackfile = new File(runningPackageDirectory+packid);
+        File runningLibDirectorypackfile = new File(runningLibDirectory+packid);
+        boolean runningDirectoryexists = runningDirectorypackfile.exists();
+        boolean runningPackageDirectoryexists = runningDirectorypackfile.exists();
+        boolean runningLibDirectoryexists = runningDirectorypackfile.exists();
+        if (runningDirectoryexists){
+            return runningDirectorypackfile;
+
+        } else if (runningPackageDirectoryexists){
+            return runningPackageDirectorypackfile;
+        }else if (runningLibDirectoryexists){
+            return runningLibDirectorypackfile;
         }
-        throw new PackageException("Package: \""+packid+"\" could not be located.");
+        throw new PackageException("Package: \""+packid+"\" could not be located.", null);
     }
     public static Environment loadPackage(SalamiPackage pack, Environment coolfreakingenvironment) throws PackageException {
         Timer packageloadtimer = new Timer("PackageLoadTimer");
@@ -123,7 +132,7 @@ public class Packager {
             newEnvironment = tempProcess.getLocalEnvironment();
 
         } catch (InterpreterException e) {
-            throw new PackageException("Exception occurred interpreting package: "+ pack.extrameta.get("name") + "\n" + e.getMessage());
+            throw new PackageException("Exception occurred interpreting package: "+ pack.extrameta.get("name") + "\n" + e.getMessage(), null);
         }
         logger.whisper("Took "+packageloadtimer.time()+" milliseconds (PACKLOAD)");
         activleyLoadingPackages.remove(pack.ID);
@@ -133,13 +142,13 @@ public class Packager {
     public static boolean arePackageDuplicates(String packageID){
         if (loadedPackageIDs.contains(packageID)){
             if (harshDuplicateLoading){
-                throw new PackageException("Tried to load package \""+packageID+"\" which has already been loaded into memory. (HARSH)");
+                throw new PackageException("Tried to load package \""+packageID+"\" which has already been loaded into memory. (HARSH)", null);
             } else {
                 return true;
             }
         }else if (activleyLoadingPackages.contains(packageID)){
             if (harshRecursivePorting){
-                throw new PackageException("Tried to port file \""+packageID+"\" which is but its own parent porting process. (HARSH)");
+                throw new PackageException("Tried to port file \""+packageID+"\" which is but its own parent porting process. (HARSH)", null);
             } else {
                 return true;
             }
@@ -161,7 +170,7 @@ public class Packager {
                 String entryName = zipEntry.getName().replace("\\", "/");
                 // replace the stupid backslashes with the cooler sibling: the forward slash
                 if (entryName.contains("..") || entryName.startsWith("/")) {
-                    throw new PackageException("Entry name attempts directory traversal: " + entryName);
+                    throw new PackageException("Entry name attempts directory traversal: " + entryName, null);
                 }
 
                 byte[] data = readZipEntryData(zipFileReaderTool);
@@ -178,14 +187,14 @@ public class Packager {
                         libFilesInMemory.put(entryName, parseSalamiFile(datastream, entryName));
 
                     } else {
-                        throw new PackageException("Unsupported file type in lib: " + entryName);
+                        throw new PackageException("Unsupported file type in lib: " + entryName, null);
                     }
                 }
                 //zipEntry = zipFileReaderTool.getNextEntry();
             }
 
-            if (metadata.isEmpty()) throw new PackageException("Missing `package.json`");
-            if (main == null) throw new PackageException("Missing `main.salami`");
+            if (metadata.isEmpty()) throw new PackageException("Missing `package.json`", null);
+            if (main == null) throw new PackageException("Missing `main.salami`", null);
 
             String id = metadata.get("id");
             String version = metadata.get("version");
@@ -206,7 +215,7 @@ public class Packager {
         int depth = entryName.split("[/\\\\]").length - 1; // handles / and \
         // wait why do we need to regex the slashes if its already switched to forward slash?
         if (depth > 5) {
-            throw new PackageException("Exceeded max depth (5) in lib folder: " + entryName);
+            throw new PackageException("Exceeded max depth (5) in lib folder: " + entryName, null);
         }
     }
 
@@ -217,7 +226,7 @@ public class Packager {
         try {
             return Parser.parseStream(datacomingin);
         } catch (ParserException | LexerException e) {
-            throw new PackageException("Error parsing \""+nameoffile+"\": "+e.getMessage());
+            throw new PackageException("Error parsing \""+nameoffile+"\": "+e.getMessage(), null);
         }
     }
     public static byte[] readZipEntryData(ZipInputStream zipFileInput) throws IOException{

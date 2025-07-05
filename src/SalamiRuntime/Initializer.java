@@ -88,20 +88,16 @@ public class Initializer {
         //    throw new RuntimeDisruptedException(s.value);
         //    //return new VoidValue();
         //});
-        env.declareMethod("salami", List.of(), (params, logger) -> {
-            String poem =
-            """
+        env.declareMethod("salami", List.of(), (params, logger) ->
+            new StringValue("""
             That's me!
-            """;
-            return new StringValue(poem);
-        });
-        env.declareMethod("version", List.of(), (params, logger) -> {
-            String poem =
-                    """
-                    SalamiCode V1.7.3
-                    """;
-            return new StringValue(poem);
-        });
+            """)
+        );
+        env.declareMethod("version", List.of(), (params, logger) ->
+                new StringValue("""
+                SalamiCode V1.7.3
+                """)
+        );
         env.declareMethod("governedparse", List.of(StringValue.class, ArrayValue.class), (params, logger) -> {
             StringValue s = (StringValue) params.get(0);
             ArrayValue array = (ArrayValue) params.get(1);

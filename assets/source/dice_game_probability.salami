@@ -48,7 +48,7 @@ comp [guess==result] jump Loose
 print "You guessed: "+guess
 print "I rolled: "+result
 comp [(length of results)>9] jump Win
-print "You cant guess: " + results
+print "You cant guess: " + toString(results)
 print "Good guess! Would you like to hold or guess another number?"
 label choose
 --set option to get("(hold OR guess)")

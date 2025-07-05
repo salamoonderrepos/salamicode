@@ -2,11 +2,11 @@ package SalamiRuntime;
 
 
 import Helper.Logger.Logger;
-import SalamiPackager.PackageException;
+import SalamiPackager.Packages.PackageException;
 import SalamiPreEvaluator.Lexer;
 import SalamiPreEvaluator.Parser;
 import SalamiPreEvaluator.types.ast.*;
-import SalamiPackager.Packager;
+import SalamiPackager.Packages.Packager;
 import SalamiPackager.Packages.SalamiPackage;
 import SalamiRuntime.RuntimeData.*;
 import SalamiRuntime.RuntimeData.Method.MethodValue;
@@ -46,9 +46,10 @@ public class Interpreter {
      * @throws ValueException If at any point two values are mismatched, or some other error like that, this gets thrown.
      */
     public static Value evaluate(StatementNode s, Environment environment, ProgramCounter pc, ProgramNode program, String location) throws InterpreterException, ValueException, RuntimeDisruptedException{
+
         switch (s.type){
             case PROGRAM:
-                throw new InterpreterException("`PROGRAM` AST Node has been given to the interpreter. This was not you. Don't worry. It's Salamoonder's fault. Yell at him please.");
+                throw new InterpreterException("`PROGRAM` AST Node has been given to the interpreter. This was not you. Don't worry. It's Salamoonder's fault. Yell at him please.", new int[]{0, 0});
             case PORTSTATEMENT:
                 return new VoidValue();
                 // DONT HANDLE PORTS CUZ THEY SHOULD BE DONE BY INITIALIZER
@@ -114,7 +115,7 @@ public class Interpreter {
                 return evaluate_compare_statement(compNode, environment, pc, program, location);
             case VOIDLITERAL, COMMENT:
                 return new VoidValue();
-            default: throw new InterpreterException("Node '" +s.type+ "' was not evaluated correctly. Contact the development team.");
+            default: throw new InterpreterException("Node '" +s.type+ "' was not evaluated correctly. Contact the development team.", s.getLocationFromFile());
         }
     }
 
@@ -128,7 +129,7 @@ public class Interpreter {
     ///-----------------------------
 
     public static Value evaluate_call_statement(CallStatement callStatement, Environment env, ProgramCounter pc, ProgramNode programNode, String location) throws InterpreterException{
-        if (env.hasMethod(callStatement.identifier)){
+        if (env.hasMethodRecursive(callStatement.identifier)){
             return evaluate_method_call_statement(callStatement, env, pc, programNode, location);
         }
         return evaluate_subroutine_call_statement(callStatement, env, pc, programNode, location);
@@ -153,7 +154,7 @@ public class Interpreter {
             Packager.loadFile(file, environment);
             // same here
         } else {
-            throw new InterpreterException("Can only port a `.salami`, `.sal`, or `.scpkg` file.");
+            throw new InterpreterException("Can only port a `.salami`, `.sal`, or `.scpkg` file.", portStatement.getLocationFromFile());
         }
         return new VoidValue();
     }
@@ -161,7 +162,7 @@ public class Interpreter {
     public static Value evaluate_method_call_statement(CallStatement methodCallStatement, Environment env, ProgramCounter pc, ProgramNode program, String location) throws InterpreterException{
         MethodValue method = env.lookupMethod(methodCallStatement.identifier);
         if (methodCallStatement.parameters.size() != method.parameters.size()){
-            throw new InterpreterException("Parameter mismatch with method: "+methodCallStatement.identifier);
+            throw new InterpreterException("Parameter mismatch with method: "+methodCallStatement.identifier, methodCallStatement.getLocationFromFile());
         }
         List<Value> passins = new ArrayList<>(List.of());
         for (int i = 0; i<methodCallStatement.parameters.size(); i++){
@@ -212,7 +213,7 @@ public class Interpreter {
 
         SubroutineValue subroutine = env.lookupSubroutine(subroutineCallStatement.identifier);
         if (subroutineCallStatement.parameters.size() != subroutine.parameters.size()){
-            throw new InterpreterException("Parameter mismatch with subroutine: "+subroutineCallStatement.identifier);
+            throw new InterpreterException("Parameter mismatch with subroutine: "+subroutineCallStatement.identifier, subroutineCallStatement.getLocationFromFile());
         }
         for (int i = 0; i<subroutineCallStatement.parameters.size(); i++){
             Value arguement = evaluate(subroutineCallStatement.parameters.get(i), env, pc, program, location);
@@ -301,23 +302,43 @@ public class Interpreter {
      * @return
      * @throws InterpreterException
      */
-    public static VoidValue evaluate_increment_statement(ExpressionIncrementStatement incrementNode, Environment env, ProgramCounter pc) throws InterpreterException{
+    public static Value evaluate_increment_statement(ExpressionIncrementStatement incrementNode, Environment env, ProgramCounter pc) throws InterpreterException{
         Value variable_value = env.lookupVariale(incrementNode.identifier);
-        switch (variable_value.type){
-            case NUMBER:
-                NumberValue number_value = (NumberValue) variable_value;
-                env.assignVariable(incrementNode.identifier, new NumberValue(number_value.value+1));
-                return new VoidValue();
-            case FLOAT:
-                FloatingValue float_value = (FloatingValue) variable_value;
-                env.assignVariable(incrementNode.identifier, new FloatingValue(float_value.value+1F));
-                return new VoidValue();
-            case STRING:
-                StringValue stringValue = (StringValue) variable_value;
-                env.assignVariable(incrementNode.identifier, new StringValue(stringValue.value + stringValue.value));
-                return new VoidValue();
-            default: throw new InterpreterException("Increment node applied to types that AREN'T number/float.");
+        if (incrementNode.incrementBeforeUsage){
+            switch (variable_value.type) {
+                case NUMBER:
+                    NumberValue number_value = (NumberValue) variable_value;
+                    env.assignVariable(incrementNode.identifier, new NumberValue(number_value.value + 1));
+                    return new NumberValue(number_value.value + 1);
+                case FLOAT:
+                    FloatingValue float_value = (FloatingValue) variable_value;
+                    env.assignVariable(incrementNode.identifier, new FloatingValue(float_value.value + 1F));
+                    return new FloatingValue(float_value.value + 1F);
+                case STRING:
+                    StringValue stringValue = (StringValue) variable_value;
+                    env.assignVariable(incrementNode.identifier, new StringValue(stringValue.value + stringValue.value));
+                    return new StringValue(stringValue.value + stringValue.value);
+                default:
+                    throw new InterpreterException("Increment node applied to types that AREN'T number/float/string.", incrementNode.getLocationFromFile());
+            }
+        } else {
+            switch (variable_value.type){
+                case NUMBER:
+                    NumberValue number_value = (NumberValue) variable_value;
+                    env.assignVariable(incrementNode.identifier, new NumberValue(number_value.value+1));
+                    return number_value;
+                case FLOAT:
+                    FloatingValue float_value = (FloatingValue) variable_value;
+                    env.assignVariable(incrementNode.identifier, new FloatingValue(float_value.value+1F));
+                    return float_value;
+                case STRING:
+                    StringValue stringValue = (StringValue) variable_value;
+                    env.assignVariable(incrementNode.identifier, new StringValue(stringValue.value + stringValue.value));
+                    return stringValue;
+                default: throw new InterpreterException("Increment node applied to types that AREN'T number/float/string.", incrementNode.getLocationFromFile());
+            }
         }
+
     }
 
 
@@ -342,7 +363,7 @@ public class Interpreter {
             }
             pc.increment();
         }
-        throw new InterpreterException("Subroutine found EOF before returning.");
+        throw new InterpreterException("Subroutine found EOF before returning.", p.getLocationFromFile());
     }
     public static Value evaluate_index_expression(IndexExpressionNode node, Environment env, ProgramCounter pc, ProgramNode program, String location) throws InterpreterException, ValueException {
         Value indexVal = evaluate(node.index, env, pc, program, location);
@@ -351,17 +372,17 @@ public class Interpreter {
         if (collectionVal instanceof ArrayValue array) {
             int indexnumber = (int) NumberValue.parseNumberValue(indexVal).value;
             if (indexnumber < 0 || indexnumber >= array.values.size())
-                throw new InterpreterException("Array index out of bounds.");
+                throw new InterpreterException("Array index out of bounds.", node.getLocationFromFile());
             return array.values.get(indexnumber);
         }
 
         if (collectionVal instanceof StringValue str) {
             int indexnumber = (int) NumberValue.parseNumberValue(indexVal).value;
             if (indexnumber < 0 || indexnumber >= str.value.length())
-                throw new InterpreterException("String index out of bounds.");
+                throw new InterpreterException("String index out of bounds.", node.getLocationFromFile());
             return new StringValue(Character.toString(str.value.charAt(indexnumber)));
         }
-        throw new InterpreterException("Cannot index type: " + collectionVal.type);
+        throw new InterpreterException("Cannot index type: " + collectionVal.type, node.getLocationFromFile());
     }
 
     public static Value evaluate_index_attributed_expression(AttributeExpressionNode node, Environment env, ProgramCounter pc, ProgramNode program, String location) throws InterpreterException, ValueException {
@@ -369,11 +390,11 @@ public class Interpreter {
         Value val = evaluate(node.collection, env, pc, program, location);
 
         if (val.attributes.isEmpty()){
-            throw new InterpreterException("Cannot attribute type: " + val.type);
+            throw new InterpreterException("Cannot attribute type: " + val.type, node.getLocationFromFile());
         }
 
         if (!val.attributes.containsKey(attribute)){
-            throw new InterpreterException("Attribute \""+attribute+"\" does not exist for value "+val.type);
+            throw new InterpreterException("Attribute \""+attribute+"\" does not exist for value "+val.type, node.getLocationFromFile());
         };
         AttributeValue attributeFunction = val.attributes.get(attribute);
 
@@ -409,7 +430,7 @@ public class Interpreter {
                         BooleanValue v = (BooleanValue) preevalright;
                         return new BooleanValue(!v.value);
                     default:
-                        throw new InterpreterException("'!' operator cannot be applied to given types: "+preevalright.type);
+                        throw new InterpreterException("'!' operator cannot be applied to given types: " + preevalright.type, unaryNode.getLocationFromFile());
                 }
             case "-":
                 switch (preevalright.type){
@@ -433,9 +454,9 @@ public class Interpreter {
                         VoidValue vo = (VoidValue) preevalright;
                         return new VoidValue();
                     default:
-                        throw new InterpreterException("Cannot negate a "+preevalright.type+" type of value.");
+                        throw new InterpreterException("Cannot negate a "+preevalright.type+" type of value.", unaryNode.getLocationFromFile());
                 }
-            default: throw new InterpreterException("Unexpected Operator in Unary Expression Node");
+            default: throw new InterpreterException("Unexpected Operator in Unary Expression Node", unaryNode.getLocationFromFile());
         }
     }
 
@@ -451,7 +472,7 @@ public class Interpreter {
         Value right = (Value) evaluate(binaryNode.rightExpression, env, pc, program, location);
         if (left.type == RuntimeType.VOID | right.type == RuntimeType.VOID){ // if the expression contains a void value then it must be resolved to void
 
-            throw new InterpreterException("Void Value used inside of a logical expression");
+            throw new InterpreterException("Void Value used inside of a logical expression", binaryNode.getLocationFromFile());
         }
         if (left.type == RuntimeType.ARRAY | right.type == RuntimeType.ARRAY){ // if the expression contains a void value then it must be resolved to void
 
@@ -470,7 +491,7 @@ public class Interpreter {
             return evaluate_string_logical_expression(left, right, binaryNode.op);
         }
         if (left.type != right.type){
-            throw new InterpreterException("Comparative contains types that can't be directly compaired.");
+            throw new InterpreterException("Comparative contains types that can't be directly compaired.", binaryNode.getLocationFromFile());
         }
         return evaluate_boolean_logical_expression(left, right, binaryNode.op);
 
@@ -493,7 +514,7 @@ public class Interpreter {
             case "<": return new BooleanValue(left.value < right.value);
             case ">=": return new BooleanValue(left.value >= right.value);
             case "<=": return new BooleanValue(left.value <= right.value);
-            default: throw new InterpreterException("Cannot use "+op+" operator on type Number.");
+            default: throw new InterpreterException("Cannot use "+op+" operator on type Number.", null);
         }
     }
 
@@ -513,7 +534,7 @@ public class Interpreter {
             case "<": return new BooleanValue(left.value < right.value);
             case ">=": return new BooleanValue(left.value >= right.value);
             case "<=": return new BooleanValue(left.value <= right.value);
-            default: throw new InterpreterException("Cannot use "+op+" operator on type Float.");
+            default: throw new InterpreterException("Cannot use "+op+" operator on type Float.", null);
         }
     }
 
@@ -522,7 +543,7 @@ public class Interpreter {
         FloatingValue right = FloatingValue.parseFloatingValue(preEvalRight);
         switch (op){
             case "==": return new BooleanValue(left.value == right.value);
-            default: throw new InterpreterException("Cannot use "+op+" operator on type Array.");
+            default: throw new InterpreterException("Cannot use "+op+" operator on type Array.", null);
         }
     }
 
@@ -538,7 +559,7 @@ public class Interpreter {
         StringValue right = StringValue.parseStringValue(preEvalRight);
         switch (op){
             case "==": return new BooleanValue(Objects.equals(left.value, right.value));
-            default: throw new InterpreterException("Cannot use "+op+" operator on type String.");
+            default: throw new InterpreterException("Cannot use "+op+" operator on type String.", null);
         }
     }
 
@@ -556,7 +577,7 @@ public class Interpreter {
             case "==": return new BooleanValue(left.value == right.value);
             case "&": return new BooleanValue(left.value & right.value);
             case "|": return new BooleanValue(left.value | right.value);
-            default: throw new InterpreterException("Cannot use "+op+" operator on type Boolean.");
+            default: throw new InterpreterException("Cannot use "+op+" operator on type Boolean.", null);
         }
     }
 
@@ -581,15 +602,15 @@ public class Interpreter {
             case "/":
                 float calc = (float) left.value / (float) right.value; // divide the two numbers
                 if (right.value==0){
-                    throw new InterpreterException("Division by zero");
+                    throw new InterpreterException("Division by zero", null);
                 } // if its a division by zero we throw an error
                 if (Math.floor(calc) != calc){ // if the result is a decimal, we give a floating value
                     return new FloatingValue((float) calc);
                 }
                 return new NumberValue(calc); // else we return a normal value
             case "%": return new NumberValue(left.value%right.value);
-            case "-*": throw new InterpreterException("-* Operator only works on string values.");
-            default: throw new InterpreterException("Unexpected Operator in Binary Expression Node");
+            case "-*": throw new InterpreterException("-* Operator only works on string values.", null);
+            default: throw new InterpreterException("Unexpected Operator in Binary Expression Node", null);
         }
     }
 
@@ -612,11 +633,11 @@ public class Interpreter {
                     return new StringValue(left.value.substring(0, index) + left.value.substring(index + right.value.length()));
                 }
                 return new StringValue(left.value);
-            case "*": throw new InterpreterException("Cannot use multiplication on string values");
-            case "/": throw new InterpreterException("Cannot use division on string values");
-            case "%": throw new InterpreterException("Cannot use modulus on string values");
+            case "*": throw new InterpreterException("Cannot use multiplication on string values", null);
+            case "/": throw new InterpreterException("Cannot use division on string values", null);
+            case "%": throw new InterpreterException("Cannot use modulus on string values", null);
             case "-*":return new StringValue(left.value.replace(right.value,""));
-            default: throw new InterpreterException("Unexpected Operator in Binary Expression Node");
+            default: throw new InterpreterException("Unexpected Operator in Binary Expression Node", null);
         }
     }
 
@@ -628,11 +649,11 @@ public class Interpreter {
             case "+": left.values.addAll(right.values); return left;
             case "-":
                 left.values.remove(right.values.get(0)); return left;
-            case "*": throw new InterpreterException("Cannot use multiplication on array values");
-            case "/": throw new InterpreterException("Cannot use division on array values");
-            case "%": throw new InterpreterException("Cannot use modulus on array values");
+            case "*": throw new InterpreterException("Cannot use multiplication on array values", null);
+            case "/": throw new InterpreterException("Cannot use division on array values", null);
+            case "%": throw new InterpreterException("Cannot use modulus on array values", null);
             case "-*": left.values.removeAll(right.values); return left;
-            default: throw new InterpreterException("Unexpected Operator in Binary Expression Node");
+            default: throw new InterpreterException("Unexpected Operator in Binary Expression Node", null);
         }
     }
 
@@ -652,12 +673,12 @@ public class Interpreter {
             case "*": return new FloatingValue(left.value*right.value);
             case "/":
                 if (right.value==0){
-                    throw new InterpreterException("Division by zero");
+                    throw new InterpreterException("Division by zero", null);
                 }
                 return new FloatingValue(left.value/right.value);
-            case "%": throw new InterpreterException("Cannot use modulus on floating point values");
-            case "-*": throw new InterpreterException("-* Operator only works on string or array values.");
-            default: throw new InterpreterException("Unexpected Operator in Binary Expression Node");
+            case "%": throw new InterpreterException("Cannot use modulus on floating point values", null);
+            case "-*": throw new InterpreterException("-* Operator only works on string or array values.", null);
+            default: throw new InterpreterException("Unexpected Operator in Binary Expression Node", null);
         }
     }
 
@@ -690,7 +711,7 @@ public class Interpreter {
 
         if (preEvalRight.type != preEvalLeft.type){ // if they arent floats or strings or voids, and they arent the same, then assume its a node
             // we havent handled yet
-            throw new InterpreterException("Type promotion is not available for these types. Are you performing operations on different type?");
+            throw new InterpreterException("Type promotion is not available for these types. Are you performing operations on different type?", null);
         }
 
         return evaluate_numeric_binary_expression(preEvalLeft, preEvalRight, binaryNode.op);

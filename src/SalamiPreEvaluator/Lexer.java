@@ -30,7 +30,7 @@ public class Lexer {
     }
     public static TokenizedList lex(String source) throws LexerException{
         TokenizedList finaltk = tokenizeLine(source, 1);
-        finaltk.addToken(new Token(TokenType.EOF, "EndOfLine",new int[]{finaltk.tokens.size(), 0}));
+        finaltk.addToken(new Token(TokenType.EOF, "EndOfLine",finaltk.getEndLocation()));
         return finaltk;
     }
     public static TokenizedList lex(InputStream stream) throws LexerException, FileNotFoundException {
@@ -53,11 +53,11 @@ public class Lexer {
             lineindex++;
         }
         // end of the file here
-        tk.addToken(new Token(TokenType.EOF, "", new int[]{tk.tokens.size(), 0}));
+        tk.addToken(new Token(TokenType.EOF, "",tk.getEndLocation()));
 
         //tk.get();
         scan.close();
-        logger.whisper("Took "+lextimer.time()+" milliseconds");
+        logger.whisper("Took "+lextimer.time()+" milliseconds (LexerStream)");
         return tk;
     }
 
@@ -77,11 +77,11 @@ public class Lexer {
             lineindex++;
         }
         // end of the file here
-        tk.addToken(new Token(TokenType.EOF, "", new int[]{tk.tokens.size(), 0}));
+        tk.addToken(new Token(TokenType.EOF, "",tk.getEndLocation()));
 
         //tk.get();
         scan.close();
-        logger.whisper("Took "+lextimer.time()+" milliseconds");
+        logger.whisper("Took "+lextimer.time()+" milliseconds (LexerFile)");
         return tk;
     }
 
@@ -165,7 +165,7 @@ public class Lexer {
                             index++;
                         }
                     } else {
-                        throw new LexerException("Invalid floating-point number at index " + index);
+                        throw new LexerException("Invalid floating-point number at index " + index,new int[]{lineindex, index+1});
                     }
                 }
 
@@ -207,7 +207,7 @@ public class Lexer {
                     case '}' -> TokenType.RARRAY;
                     case '[' -> TokenType.LCOMPARE;
                     case ']' -> TokenType.RCOMPARE;
-                    default -> throw new LexerException("Unknown delimiter at index " + index);
+                    default -> throw new LexerException("Unknown delimiter at index " + index,new int[]{lineindex, index+1});
                 };
                 tk.addToken(new Token(type, String.valueOf(currentChar), new int[]{lineindex, index+1}));
                 index++; // Move to the next character
@@ -252,7 +252,7 @@ public class Lexer {
                     if (stringEnded) break;
                 }
                 if (!stringEnded){
-                    throw new LexerException("Unclosed String Literal at line [" + lineindex + ", " + (index+1)+"]");
+                    throw new LexerException("Unclosed String Literal at line [" + lineindex + ", " + (index+1)+"]",new int[]{lineindex, index+1});
                 }
                 tk.addToken(new Token(TokenType.STRING, stringBuilder.toString(), new int[]{lineindex, index+1}));
                 index++;
@@ -264,11 +264,11 @@ public class Lexer {
                 continue;
             }
             // Handle unknown/invalid characters
-            throw new LexerException("Undetermined Character at line [" + lineindex + ", " + (index+1) + "]: \"" +currentChar+"\"");
+            throw new LexerException("Undetermined Character at line [" + lineindex + ", " + (index+1) + "]: \"" +currentChar+"\"",new int[]{lineindex, index+1});
         }
 
-        logger.log(line);
-        logger.log(tk);
+        //logger.log(line);
+        //logger.log(tk);
         return tk;
         //tk.addToken(new Token(Type.NEWLINE, String.valueOf(lineindex)));
     }

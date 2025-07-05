@@ -1,0 +1,121 @@
+set cards_list to {'Ace' '2' '3' '4' '5' '6' '7' '8' '9' '10' 'Jack' 'Queen' 'King'}
+
+
+sub card_value(card)
+    comp [(card) == 'Jack'] jump ten
+    comp [(card) == 'Queen'] jump ten
+    comp [(card) == 'King'] jump ten
+    comp [(card) == 'Ace'] jump eleven
+
+    return toNumber(card)
+
+    label eleven
+    return 11
+    label ten
+    return 10
+subend
+
+sub pullCard()
+    return rand(0 (length of cards_list)-1) from cards_list
+subend
+
+sub scoreHand(hand)
+    set index to (length of hand)-1
+    set summation to 0
+
+    label loopOverHand
+        set summation to summation + card_value(index from hand)
+        comp [index<1] jump breakOutOfLoop
+        set index to index - 1
+    jump loopOverHand
+    label breakOutOfLoop
+
+    return summation
+subend
+
+sub printStats()
+print "dealer had: "
+print dealer_hand
+print "("+scoreHand(dealer_hand)+")"
+print "you had: "
+print player_hand
+print "("+scoreHand(player_hand)+")"
+return void
+subend
+
+label mastergamerestart
+
+set player_hand to {pullCard() pullCard()}
+set dealer_hand to {pullCard() pullCard()}
+
+label mainLoop
+    print "You have this: "
+    print player_hand
+    print "Which adds up to this: "+scoreHand(player_hand)
+
+    label restart
+
+    print "You can (hit/stand)"
+    set choice to get("pick one")
+    comp [choice=="hit"] jump hit
+    comp [choice=="stand"] jump stop
+    jump invalidChoice
+
+    label hit
+    set new_card to pullCard()
+    set player_hand to player_hand + new_card
+    jump end
+
+    label stop
+    jump dealerLoop
+
+    label invalidChoice
+    print "Invalid choice."
+    jump restart
+
+    label end
+    comp [(scoreHand(player_hand)) > 21] jump playerbust
+jump mainLoop
+
+label dealerLoop
+    comp [(scoreHand(dealer_hand)) > 16] jump dealerLoopEnd
+    set new_card to pullCard()
+    set dealer_hand to dealer_hand + new_card
+jump dealerLoop
+label dealerLoopEnd
+
+
+set dealerScore to scoreHand(dealer_hand)
+set playerScore to scoreHand(player_hand)
+
+comp [dealerScore > 21] jump dealerbust
+comp [dealerScore > playerScore] jump dealerwon
+comp [playerScore > dealerScore] jump playerwon
+comp [dealerScore == playerScore] jump tie
+
+
+label tie
+    print "its a tie"
+    printStats()
+jump break
+
+label dealerwon
+    print "the dealer won (higher)"
+    printStats()
+jump break
+label playerwon
+    print "you won! (u got more)"
+    printStats()
+jump break
+label dealerbust
+    print "dealer busted. u win omg"
+    printStats()
+jump break
+label playerbust
+    print "u busted sorry"
+    printStats()
+label break
+print "game over :("
+set choice to get("play again? (y/n)")
+comp [choice=="y"] jump mastergamerestart
+print ("Sad to see you go :( i love you")

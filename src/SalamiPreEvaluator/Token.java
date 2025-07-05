@@ -11,10 +11,10 @@ public class Token{
         type = t;
         data = d;
     }
-    public Token(TokenType t, String d, int[] loc){
+    public Token(TokenType t, String d, int[] _loc){
         type = t;
         data = d;
-        loc = loc;
+        loc = _loc;
     }
     @Override
     public String toString() {

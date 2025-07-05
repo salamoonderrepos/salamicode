@@ -1,4 +1,4 @@
-package SalamiRuntime.Structure;
+package Structure;
 
 import Helper.Logger.Logger;
 import Helper.Logger.Timer;
@@ -9,6 +9,9 @@ import SalamiRuntime.Initializer;
 import SalamiRuntime.Interpreter;
 import SalamiRuntime.InterpreterException;
 import SalamiRuntime.RuntimeData.*;
+import SalamiRuntime.RuntimeDisruptedException;
+
+import java.util.Arrays;
 
 public class Process {
     public Logger logger;
@@ -60,7 +63,16 @@ public class Process {
         while (pc.get()<localProgram.statements.size()){
             StatementNode statement = localProgram.statements.get(pc.get());
             // here the statement will go through checks to see if this process permits it to run
-            eval = Interpreter.evaluate(statement, localEnvironment, pc, localProgram, location);
+
+            // catch an error and rethrow with location
+            try {
+                eval = Interpreter.evaluate(statement, localEnvironment, pc, localProgram, location);
+            } catch (InterpreterException e){
+                localProcessLogger.print("Runtime stopped abruptly and we don't really know where :(", Logger.GRAY);
+                localProcessLogger.print("!! Error caught in running process "+location, Logger.PURPLE);
+                localProcessLogger.print("The last statement evaluated in "+location+": " + Arrays.toString(statement.getLocationFromFile()), Logger.GREEN);
+                throw e;
+            }
             pc.increment();
         }
         localProcessLogger.whisper("Took "+evaltimer.time()+" milliseconds");

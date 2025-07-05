@@ -1,7 +1,9 @@
 package SalamiPreEvaluator;
 
-public class LexerException extends Throwable {
-    public LexerException(String s) {
-        super(s);
+import Structure.BaseException;
+
+public class LexerException extends BaseException {
+    public LexerException(String s, int[] lff) {
+        super(s,lff);
     }
 }

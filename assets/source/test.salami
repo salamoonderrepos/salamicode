@@ -1,12 +1,8 @@
-port "math2.scpkg"
-port "portthisfile.salami"
 set x to 10
-print x
-print reverseMessage("thanks")
-print factorial(9)
-print test(5 5)
+set y to 10
 
 
-sub reverseMessage (message)
-return -message
-subend
+
+
+
+print a

@@ -22,6 +22,12 @@ public class TokenizedList {
             System.out.println(t.toString());
         }
     }
+    public Token getLastToken(){
+        return grab(tokens.size()-1);
+    }
+    public int[] getEndLocation(){
+        return getLastToken().loc;
+    }
 
     public void addTokens(TokenizedList t){
         for (Token token : t.tokens){

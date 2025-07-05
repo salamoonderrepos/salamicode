@@ -12,8 +12,8 @@ import SalamiPreEvaluator.LexerException;
 import SalamiPreEvaluator.Parser;
 import SalamiPreEvaluator.ParserException;
 import SalamiPreEvaluator.types.ast.*;
-import SalamiPackager.PackageException;
-import SalamiPackager.Packager;
+import SalamiPackager.Packages.PackageException;
+import SalamiPackager.Packages.Packager;
 import SalamiPackager.Packages.SalamiPackage;
 import SalamiRuntime.Initializer;
 import SalamiRuntime.Interpreter;
@@ -22,10 +22,12 @@ import SalamiRuntime.RuntimeData.Environment;
 import SalamiRuntime.RuntimeData.ProgramCounter;
 import SalamiRuntime.RuntimeData.Value;
 import SalamiRuntime.RuntimeData.ValueException;
-import SalamiRuntime.Structure.Process;
+import Structure.BaseException;
+import Structure.Process;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Random;
 import Helper.Logger.Timer;
 import SalamiRuntime.RuntimeDisruptedException;
@@ -34,7 +36,7 @@ import java.util.Scanner;
 
 public class Main {
     static final Logger logger = new Logger("Main");
-    static final String version = "1.7.2";
+    static final String version = "1.8.0";
     static final String[] responses = {
             "WHOOPS. MY BAD.",
             "SORRY...",
@@ -70,6 +72,15 @@ public class Main {
             "YEAH MAN YOU BETTER CUT YOUR LOSSES...",
             "NOT YOUR CUP OF TEA EH?",
             "EVEN I CANT READ YOUR SPAGHETTI CODE",
+            "DUDE WHAT EVEN IS THIS",
+            "PACK IT UP",
+            "IT'S BETTER THAN JAVASCRIPT...",
+            "10% NEW FEATURES, 90% REFACTORING",
+            "DEBUG PRINT TO THE RESCUE",
+            "DID YOU MEAN FOR THAT TO HAPPEN?",
+            "THAT WAS INTENTIONAL RIGHT?",
+            "MHM. YEP. MY NOTES HERE SAY THIS IS UNEXPECTED. SORRY.",
+            "YOU MISSED SOMETHING ON LINE 18"
     };
 
     public static void main(String[] args) {
@@ -79,7 +90,7 @@ public class Main {
         boolean doRepl;
 
         if (args.length<1){
-            System.out.println("SalamiCode V"+version+" \nUsage: (filename) {--silent} {--repl} {--monochrome} {--nolint}");
+            System.out.println("SalamiCode V"+version+" \nUsage: (filename) {--silent} {--repl} {--monochrome} {--nopretty}");
             return;
         }
 
@@ -117,7 +128,7 @@ public class Main {
                 doRepl = true;
             }else if (arg.equals("--monochrome")) {
                 Logger.doColor = false;
-            }else if (arg.equals("--nolint")){
+            }else if (arg.equals("--nopretty")){
                 logger.deprettify();
             }
 
@@ -151,7 +162,8 @@ public class Main {
                 runDebugger(file, env);
                 logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.) (Debugger)");
                 return;
-            } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException | StackOverflowError | RuntimeDisruptedException |
+            } catch (ParserException | LexerException | FileNotFoundException | InterpreterException |
+                     StackOverflowError |
                      PackageException e) {
                 handleError(e, file.getAbsolutePath());
                 logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.) (Interrupted) (Debugger)");
@@ -162,7 +174,7 @@ public class Main {
 
             runFile(file);
             logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.)");
-        } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | ValueException | StackOverflowError | RuntimeDisruptedException |
+        } catch (ParserException | LexerException | FileNotFoundException | InterpreterException | StackOverflowError |
                  PackageException e) {
             handleError(e, file.getAbsolutePath());
             logger.yell("END OF PROGRAM (took "+(maintimer.time())+" miliseconds.) (Interrupted)");
@@ -170,24 +182,39 @@ public class Main {
 
     }
     public static void handleError(Throwable e, String file){
-        System.out.println(Logger.colorize(Logger.RED, randomMessage()+"\n"));
-        System.out.println(Logger.colorize(Logger.GRAY, "ERROR HAS OCCURRED WITH LOCATION '"+file+'\''));
-        System.out.println(Logger.colorize(Logger.RED, e)+'\n');
+        Logger errorLogger = new Logger("ErrorLog");
+        errorLogger.print(randomMessage()+"\n",Logger.RED);
+        errorLogger.print("AN ERROR HAS OCCURRED WITHIN FILE '"+file+'\'',Logger.GRAY);
+        if (e instanceof BaseException) {
+
+            BaseException runtimeexcp = (BaseException) e;
+            if (runtimeexcp.getLocation()!= null){
+                System.out.println(Logger.colorize(Logger.GRAY, "ON LINE "+runtimeexcp.getLocationLineNumber()+" COLUMN "+ runtimeexcp.getLocationColumnNumber()));
+            }
+        }
+
+        errorLogger.print(e.toString()+'\n',Logger.RED);
+
+
         //System.out.println(e.getClass().getName());
     }
     public static void runFile(File file) throws ParserException, LexerException, InterpreterException, FileNotFoundException, ValueException, StackOverflowError, RuntimeDisruptedException{
         ProgramNode p = Parser.parseFile(file);
         ProgramCounter counter = new ProgramCounter(0);
         Process fileProcess = new Process("Main", p, true);
-        logger.log(p);
+        //logger.log(p);
+        Runtime runtime = Runtime.getRuntime();
+        //long usedMemory = runtime.totalMemory() - runtime.freeMemory();
+        //logger.log(usedMemory / (1024 * 1024));
         logger.log(fileProcess.begin());
-        logger.log(fileProcess.getLocalEnvironment());
+
+        //logger.log(fileProcess.getLocalEnvironment());
         // passes in an ast node tree and the initialized env variable
     }
     public static void runDebugger(File file, Environment env) throws ParserException, LexerException, InterpreterException, FileNotFoundException, ValueException, StackOverflowError, RuntimeDisruptedException{
         ProgramNode p = Parser.parseFile(file);
         ProgramCounter counter = new ProgramCounter(0);
-        Debugger.run(p, env);
+        Debugger.run(p, env, "DebuggerMain");
     }
 
     public static void runRepl(File file, Environment env) {
@@ -205,7 +232,7 @@ public class Main {
             if (next.equals("exit()")) break;
             try {
                 runLine(next);
-            } catch (ParserException | LexerException | InterpreterException | ValueException e) {
+            } catch (ParserException | LexerException | InterpreterException e) {
                 scan.close();
                 handleError(e, "repl");
             }

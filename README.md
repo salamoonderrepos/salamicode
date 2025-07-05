@@ -24,7 +24,7 @@ SalamiCode is a programming language developed by Salamoonder. The language is m
 * Automatic type promotion.
 * High performance
 * Interactive
-* Object-oriented elements like classes and packages (planned).
+* User package creation and support
 * Able to be run on any system (JDK 17+)
 > Simply create a file ending in `.salami`, and run it with the java program (look below).
 
@@ -40,6 +40,7 @@ SalamiCode started as a project intending to help me with my math assignments. I
 * `--silent` enables silent mode for a quieter console.
 * `--monochrome` turns off ANSI coloring on text. Some consoles don't have support for ANSI, which is why this is an option. If your log messages look really cluttered, then try running with this flag.
 * `--debug` runs with the debugger. Does not work with repl at the same time. The debugger can step through the program given to it.
+* `--nopretty` runs without making object prints pretty
 
 ## Documentation
 I **HIGHLY** recommend visiting [the wikis](https://github.com/salamoonderrepos/salamicode/wiki). It contains a bunch of information for beginner's like langauge syntax, built-in methods, and advanced features for advanced users.
@@ -47,7 +48,31 @@ I **HIGHLY** recommend visiting [the wikis](https://github.com/salamoonderrepos/
 # Previous Releases
 (Refer to main branch for roadmap.)
 
-## 1.7 (C) *- Attributes and Arrays*
+## 1.8.TESTINGBRANCH (C) *- Packages*
+Added support for packages and the `port` statement. User created
+packages are now supported, and you can learn how to make one yourself in the wikis.
+* Lexer changes
+    * Strings support escaped quotes and newlines
+    * Identifiers support ASCII characters
+* Package support
+* Major backend refactoring
+  * Switched back to static Interpreter
+  * Each object requests data from eachother instead of being instances individually
+* `++` operator now acts as intended. (Adding one after returning)
+  * `++` is now an expression rather than a statement. Meaning you can use it in `comp` or a binary expression.
+* Port statement supports porting other `.sal` and `.salami` files
+* Console logging actively supports log locations
+  * `print` and `throw` respectively
+* Changed `--nolint` to `--nopretty` to better represent what the flag does
+* Errors now properly point to locations within a file.
+
+BUGFIXES -
+* Fixed bug where methods would skip parent lookup making methods unable to be called inside subroutines.
+* Fixed bug where lexer would jot down incorrect values for token locations
+
+Just gotta write the JavaDocs and I'll push this into master as 1.8. Everything thats in this branch right now is practically what 1.8 will be, given room for bug fixes and final tweaks.
+
+## 1.7 *- Attributes and Arrays*
 Added arrays and indexing for strings and arrays using `from` statement. Access attributes of values using `to`.
 - Tweaks to Lexer, Parser, and Interpreter.
 - Debugger tool available with `--debug`.
@@ -118,19 +143,14 @@ Initial release. Basic calculator-like commands.
 + Main file
 
 What is planned:
-* Class declaration
-* Class instantiation
 * Variable references
 * Decrement statement
-* Package creating
-* Package importing
 * Screen package for making windows
-* Perhaps double buffer animation?
 * Keyboard package for interacting with keystrokes
 * Math package for complex mathematical operations
 * Executable download
 * Global variables
-* Static variables
+* Modules
 
 
 > Licenced under MIT
