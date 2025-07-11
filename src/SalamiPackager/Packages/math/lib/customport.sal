@@ -1,0 +1,1 @@
+print "this file is not imported in main.salami, but can still be imported in .salami"

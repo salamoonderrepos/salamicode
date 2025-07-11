@@ -2,7 +2,6 @@
     "id": "math",
     "name": "Math Utilities",
     "author": "Base",
-    "version": "1.0.0",
-    "dependencies": ["utils"],
-    "main": "SalamiPackager.Packages.math.MathPackage"
+    "version": "1.0.1",
+    "requirements": []
 }

@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2025-01-25">
-<meta name="description" content="declaration: package: SalamiRuntime.Runtime, class: SubroutineValue">
+<meta name="description" content="declaration: package: SalamiRuntime.RuntimeData, class: SubroutineValue">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../script-dir/jquery-ui.min.css" title="Style">
@@ -68,27 +68,28 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">SalamiRuntime.Runtime</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">SalamiRuntime.RuntimeData</a></div>
 <h1 title="Class SubroutineValue" class="title">Class SubroutineValue</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="Value.html" title="class in SalamiRuntime.Runtime">SalamiRuntime.Runtime.Value</a>
-<div class="inheritance">SalamiRuntime.Runtime.SubroutineValue</div>
+<div class="inheritance"><a href="Value.html" title="class in SalamiRuntime.RuntimeData">SalamiRuntime.RuntimeData.Value</a>
+<div class="inheritance">SalamiRuntime.RuntimeData.SubroutineValue</div>
 </div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SubroutineValue</span>
-<span class="extends-implements">extends <a href="Value.html" title="class in SalamiRuntime.Runtime">Value</a></span></div>
+<span class="extends-implements">extends <a href="Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></span></div>
 <div class="block"><p>This acts as an independent manager for subroutines.
- Subroutines have their own unique scope, or <a href="Environment.html" title="class in SalamiRuntime.Runtime"><code>Environment</code></a>. They also store the code to be run
- using a <a href="../../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast"><code>ProgramNode</code></a>.</p></div>
+ Subroutines have their own unique scope, or <a href="Environment.html" title="class in SalamiRuntime.RuntimeData"><code>Environment</code></a>. They also store the code to be run
+ using a <a href="../../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast"><code>ProgramNode</code></a>.</p></div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list-long">
-<li><a href="Environment.html" title="class in SalamiRuntime.Runtime"><code>Environment</code></a></li>
-<li><a href="../Interpreter.html#evaluate_subroutine(SalamiEvaluator.types.ast.ProgramNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)"><code>Interpreter.evaluate_subroutine(SalamiEvaluator.types.ast.ProgramNode, SalamiRuntime.Runtime.Environment, SalamiRuntime.Runtime.ProgramCounter)</code></a></li>
+<li><a href="Environment.html" title="class in SalamiRuntime.RuntimeData"><code>Environment</code></a></li>
+<li><a href="../Interpreter.html#evaluate_subroutine(SalamiEvaluator.types.ast.ProgramNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)"><code>Interpreter.evaluate_subroutine(SalamiPreEvaluator.types.ast.ProgramNode,
+    SalamiRuntime.RuntimeData.Environment, SalamiRuntime.RuntimeData.ProgramCounter)</code></a></li>
 </ul>
 </dd>
 </dl>
@@ -104,10 +105,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a></code></div>
+<div class="col-first even-row-color"><code><a href="../../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a></code></div>
 <div class="col-second even-row-color"><code><a href="#code" class="member-name-link">code</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="Environment.html" title="class in SalamiRuntime.Runtime">Environment</a></code></div>
+<div class="col-first odd-row-color"><code><a href="Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#env" class="member-name-link">env</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>int</code></div>
@@ -118,7 +119,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 <div class="inherited-list">
-<h3 id="fields-inherited-from-class-SalamiRuntime.Runtime.Value">Fields inherited from class&nbsp;SalamiRuntime.Runtime.<a href="Value.html" title="class in SalamiRuntime.Runtime">Value</a></h3>
+<h3 id="fields-inherited-from-class-SalamiRuntime.Runtime.Value">Fields inherited from class&nbsp;SalamiRuntime.RuntimeData.<a href="Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></h3>
 <code><a href="Value.html#type">type</a></code></div>
 </section>
 </li>
@@ -130,10 +131,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(SalamiRuntime.Runtime.Environment,java.util.ArrayList,int,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">SubroutineValue</a><wbr>(<a href="Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;parent,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(SalamiRuntime.Runtime.Environment,java.util.ArrayList,int,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">SubroutineValue</a><wbr>(<a href="Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;parent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;params,
  int&nbsp;loc,
- <a href="../../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;_code)</code></div>
+ <a href="../../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;_code)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -149,7 +150,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Environment.html" title="class in SalamiRuntime.Runtime">Environment</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reset()" class="member-name-link">reset</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
@@ -175,7 +176,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="env">
 <h3>env</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Environment.html" title="class in SalamiRuntime.Runtime">Environment</a></span>&nbsp;<span class="element-name">env</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a></span>&nbsp;<span class="element-name">env</span></div>
 </section>
 </li>
 <li>
@@ -193,7 +194,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="code">
 <h3>code</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a></span>&nbsp;<span class="element-name">code</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a></span>&nbsp;<span class="element-name">code</span></div>
 </section>
 </li>
 </ul>
@@ -207,14 +208,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(SalamiRuntime.Runtime.Environment,java.util.ArrayList,int,SalamiEvaluator.types.ast.ProgramNode)">
 <h3>SubroutineValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SubroutineValue</span><wbr><span class="parameters">(<a href="Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;parent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SubroutineValue</span><wbr><span class="parameters">(<a href="Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;parent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;params,
  int&nbsp;loc,
- <a href="../../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;_code)</span>
-                throws <span class="exceptions"><a href="ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></span></div>
+ <a href="../../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;_code)</span>
+                throws <span class="exceptions"><a href="ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
-<dd><code><a href="ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></code></dd>
+<dd><code><a href="ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></code></dd>
 </dl>
 </section>
 </li>
@@ -229,7 +230,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="reset()">
 <h3>reset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Environment.html" title="class in SalamiRuntime.Runtime">Environment</a></span>&nbsp;<span class="element-name">reset</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a></span>&nbsp;<span class="element-name">reset</span>()</div>
 </section>
 </li>
 <li>
@@ -238,7 +239,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="Value.html#toString()">toString</a></code>&nbsp;in class&nbsp;<code><a href="Value.html" title="class in SalamiRuntime.Runtime">Value</a></code></dd>
+<dd><code><a href="Value.html#toString()">toString</a></code>&nbsp;in class&nbsp;<code><a href="Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></code></dd>
 </dl>
 </section>
 </li>

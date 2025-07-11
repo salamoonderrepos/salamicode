@@ -1,0 +1,84 @@
+set testNumber to get("Test number (2-12)")
+-- this is the number to test the probability with of winning
+
+sub inArray(num array)
+comp [(length of array) == 0] return false
+set loops to (length of array) - 1
+label loop
+set index to loops from array
+comp [num==index] return true
+set loops to loops - 1
+comp [loops>=0] jump loop
+
+return false
+subend
+
+set mainloops to 10000
+set wins to 0
+set losses to 0
+label main
+
+set results to {}
+
+label guess
+
+print "Guess a number between 2 and 12"
+--set guess to toNumber(get("(2-12)"))
+set guess to toNumber(testNumber)
+
+label hold
+
+set dice to toNumber(rand(1 6))
+set dice2 to toNumber(rand(1 6))
+set result to dice+dice2
+set isinarray to inArray(result results)
+comp [isinarray] jump hold
+
+comp [[guess<2]|[guess>12]] jump InvalidGuessError
+set isinarray to inArray(guess results)
+comp [isinarray] jump InvalidGuessError
+
+set results to results + result
+
+
+
+comp [guess==result] jump Loose
+
+
+print "You guessed: "+guess
+print "I rolled: "+result
+comp [(length of results)>9] jump Win
+print "You cant guess: " + toString(results)
+print "Good guess! Would you like to hold or guess another number?"
+label choose
+--set option to get("(hold OR guess)")
+set option to "hold"
+
+
+
+comp [option=="hold"] jump hold
+comp [option=="guess"] jump guess
+
+jump choose
+
+label Loose
+print "You lost! Try again!"
+set losses to losses + 1
+jump end
+label InvalidGuessError
+print "Invalid guess"
+jump guess
+jump end
+label Win
+print "YOU WON!!!"
+set wins to wins + 1
+jump end
+
+label end
+print "Thanks for playing!"
+set mainloops to mainloops - 1
+comp [mainloops>0] jump main
+print "Probability of winning with "+testNumber+": " + ((wins/losses)*100) + "%"
+print "Wins: " + wins
+print "Losses: " + losses
+print "Ran: " + (wins + losses)

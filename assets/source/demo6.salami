@@ -1,0 +1,26 @@
+set messages to {
+"not rare"
+}
+
+set rarermessages to {
+"rare"
+}
+set loops to 20
+label loops
+
+    set randchance to rand(0 9)
+-- one in ten chance to give rare
+
+    comp [randchance<1] jump raremessage
+    print rand(0 (length of messages)-1) from messages
+    jump end
+    label raremessage
+    print rand(0 (length of rarermessages)-1) from rarermessages
+
+    label end
+
+    set loops to loops - 1
+comp [loops==0] jump realend
+jump loops
+
+label realend

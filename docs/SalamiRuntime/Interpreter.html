@@ -79,14 +79,14 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">Interpreter</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block"><p>
-     Handles interpreting of an AST structure. Pass in any <a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiEvaluator.types.ast"><code>StatementNode</code></a> to the <code>evaluate(StatementNode)</code> method to begin interpreting.
+     Handles interpreting of an AST structure. Pass in any <a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiPreEvaluator.types.ast"><code>StatementNode</code></a> to the <code>evaluate(StatementNode)</code> method to begin interpreting.
  </p></div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list">
-<li><a href="../SalamiEvaluator/Parser.html" title="class in SalamiEvaluator"><code>Parser</code></a></li>
-<li><a href="../SalamiEvaluator/Lexer.html" title="class in SalamiEvaluator"><code>Lexer</code></a></li>
+<li><a href="../SalamiEvaluator/Parser.html" title="class in SalamiPreEvaluator"><code>Parser</code></a></li>
+<li><a href="../SalamiEvaluator/Lexer.html" title="class in SalamiPreEvaluator"><code>Lexer</code></a></li>
 </ul>
 </dd>
 </dl>
@@ -117,146 +117,146 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate(SalamiEvaluator.types.ast.StatementNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate</a><wbr>(<a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiEvaluator.types.ast">StatementNode</a>&nbsp;s,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;environment,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate(SalamiEvaluator.types.ast.StatementNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate</a><wbr>(<a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiPreEvaluator.types.ast">StatementNode</a>&nbsp;s,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;environment,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">
      Evaluates a single statement.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_binary_expression(SalamiEvaluator.types.ast.BinaryExpressionNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_binary_expression</a><wbr>(<a href="../SalamiEvaluator/types/ast/BinaryExpressionNode.html" title="class in SalamiEvaluator.types.ast">BinaryExpressionNode</a>&nbsp;binaryNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;environment,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_binary_expression(SalamiEvaluator.types.ast.BinaryExpressionNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_binary_expression</a><wbr>(<a href="../SalamiEvaluator/types/ast/BinaryExpressionNode.html" title="class in SalamiPreEvaluator.types.ast">BinaryExpressionNode</a>&nbsp;binaryNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;environment,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.Runtime">BooleanValue</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_boolean_logical_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_boolean_logical_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.RuntimeData">BooleanValue</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_boolean_logical_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_boolean_logical_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.Runtime">BooleanValue</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_compare_statement(SalamiEvaluator.types.ast.CompareStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_compare_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/CompareStatement.html" title="class in SalamiEvaluator.types.ast">CompareStatement</a>&nbsp;compareNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.RuntimeData">BooleanValue</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_compare_statement(SalamiEvaluator.types.ast.CompareStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_compare_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/CompareStatement.html" title="class in SalamiPreEvaluator.types.ast">CompareStatement</a>&nbsp;compareNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_floating_binary_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_floating_binary_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_floating_binary_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_floating_binary_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.Runtime">BooleanValue</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_floating_logical_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_floating_logical_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.RuntimeData">BooleanValue</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_floating_logical_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_floating_logical_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_identifier(SalamiEvaluator.types.ast.IdentifierNode,SalamiRuntime.Runtime.Environment)" class="member-name-link">evaluate_identifier</a><wbr>(<a href="../SalamiEvaluator/types/ast/IdentifierNode.html" title="class in SalamiEvaluator.types.ast">IdentifierNode</a>&nbsp;node,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;environment)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_identifier(SalamiEvaluator.types.ast.IdentifierNode,SalamiRuntime.Runtime.Environment)" class="member-name-link">evaluate_identifier</a><wbr>(<a href="../SalamiEvaluator/types/ast/IdentifierNode.html" title="class in SalamiPreEvaluator.types.ast">IdentifierNode</a>&nbsp;node,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;environment)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime">VoidValue</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_increment_statement(SalamiEvaluator.types.ast.ExpressionIncrementStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">evaluate_increment_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/ExpressionIncrementStatement.html" title="class in SalamiEvaluator.types.ast">ExpressionIncrementStatement</a>&nbsp;incrementNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData">VoidValue</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_increment_statement(SalamiEvaluator.types.ast.ExpressionIncrementStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">evaluate_increment_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/ExpressionIncrementStatement.html" title="class in SalamiPreEvaluator.types.ast">ExpressionIncrementStatement</a>&nbsp;incrementNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime">VoidValue</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_jump_statement(SalamiEvaluator.types.ast.JumpStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">evaluate_jump_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/JumpStatement.html" title="class in SalamiEvaluator.types.ast">JumpStatement</a>&nbsp;jumpNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData">VoidValue</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_jump_statement(SalamiEvaluator.types.ast.JumpStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">evaluate_jump_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/JumpStatement.html" title="class in SalamiPreEvaluator.types.ast">JumpStatement</a>&nbsp;jumpNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Evaluates jump statements, which set the program counter to the label passed in.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime">VoidValue</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_label_statement(SalamiEvaluator.types.ast.LabelDeclarationStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">evaluate_label_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/LabelDeclarationStatement.html" title="class in SalamiEvaluator.types.ast">LabelDeclarationStatement</a>&nbsp;declarationNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData">VoidValue</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_label_statement(SalamiEvaluator.types.ast.LabelDeclarationStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">evaluate_label_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/LabelDeclarationStatement.html" title="class in SalamiPreEvaluator.types.ast">LabelDeclarationStatement</a>&nbsp;declarationNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Evaluates label declaration statements like: <br>
  <code>label loopName</code></div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.Runtime">BooleanValue</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_logical_expression(SalamiEvaluator.types.ast.BinaryExpressionNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_logical_expression</a><wbr>(<a href="../SalamiEvaluator/types/ast/BinaryExpressionNode.html" title="class in SalamiEvaluator.types.ast">BinaryExpressionNode</a>&nbsp;binaryNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.RuntimeData">BooleanValue</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_logical_expression(SalamiEvaluator.types.ast.BinaryExpressionNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_logical_expression</a><wbr>(<a href="../SalamiEvaluator/types/ast/BinaryExpressionNode.html" title="class in SalamiPreEvaluator.types.ast">BinaryExpressionNode</a>&nbsp;binaryNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_numeric_binary_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_numeric_binary_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_numeric_binary_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_numeric_binary_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.Runtime">BooleanValue</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_numeric_logical_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_numeric_logical_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.RuntimeData">BooleanValue</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_numeric_logical_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_numeric_logical_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime">VoidValue</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_print_statement(SalamiEvaluator.types.ast.PrintStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_print_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/PrintStatement.html" title="class in SalamiEvaluator.types.ast">PrintStatement</a>&nbsp;printNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData">VoidValue</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_print_statement(SalamiEvaluator.types.ast.PrintStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_print_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/PrintStatement.html" title="class in SalamiPreEvaluator.types.ast">PrintStatement</a>&nbsp;printNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Evaluates print statements like: <br>
  <code>print 'Hello, world!</code></div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_program(SalamiEvaluator.types.ast.ProgramNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,boolean)" class="member-name-link">evaluate_program</a><wbr>(<a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;p,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;environment,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;startingpc,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_program(SalamiEvaluator.types.ast.ProgramNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,boolean)" class="member-name-link">evaluate_program</a><wbr>(<a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;p,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;environment,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;startingpc,
  boolean&nbsp;initializeProgram)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">
-     Takes in a <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast"><code>ProgramNode</code></a> and evaluates each <a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiEvaluator.types.ast"><code>StatementNode</code></a> in the program.</div>
+     Takes in a <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast"><code>ProgramNode</code></a> and evaluates each <a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiPreEvaluator.types.ast"><code>StatementNode</code></a> in the program.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_return_statement(SalamiEvaluator.types.ast.ReturnStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_return_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/ReturnStatement.html" title="class in SalamiEvaluator.types.ast">ReturnStatement</a>&nbsp;returnStatement,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_return_statement(SalamiEvaluator.types.ast.ReturnStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_return_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/ReturnStatement.html" title="class in SalamiPreEvaluator.types.ast">ReturnStatement</a>&nbsp;returnStatement,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime">VoidValue</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_set_statement(SalamiEvaluator.types.ast.VariableDeclarationStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_set_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/VariableDeclarationStatement.html" title="class in SalamiEvaluator.types.ast">VariableDeclarationStatement</a>&nbsp;declarationNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData">VoidValue</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_set_statement(SalamiEvaluator.types.ast.VariableDeclarationStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_set_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/VariableDeclarationStatement.html" title="class in SalamiPreEvaluator.types.ast">VariableDeclarationStatement</a>&nbsp;declarationNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Evaluates variable declaration statements like: <br>
  <code>set message to 'Hello, world!"</code></div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_string_binary_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_string_binary_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_string_binary_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_string_binary_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.Runtime">BooleanValue</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_string_logical_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_string_logical_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.RuntimeData">BooleanValue</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_string_logical_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)" class="member-name-link">evaluate_string_logical_expression</a><wbr>(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_subroutine(SalamiEvaluator.types.ast.ProgramNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">evaluate_subroutine</a><wbr>(<a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;p,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;environment,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;startingpc)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_subroutine(SalamiEvaluator.types.ast.ProgramNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">evaluate_subroutine</a><wbr>(<a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;p,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;environment,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;startingpc)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_subroutine_call_statement(SalamiEvaluator.types.ast.SubroutineCallStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_subroutine_call_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/SubroutineCallStatement.html" title="class in SalamiEvaluator.types.ast">SubroutineCallStatement</a>&nbsp;subroutineCallStatement,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_subroutine_call_statement(SalamiEvaluator.types.ast.SubroutineCallStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_subroutine_call_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/SubroutineCallStatement.html" title="class in SalamiPreEvaluator.types.ast">SubroutineCallStatement</a>&nbsp;subroutineCallStatement,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/SubroutineValue.html" title="class in SalamiRuntime.Runtime">SubroutineValue</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_subroutine_declaration_statement(SalamiEvaluator.types.ast.SubroutineDeclarationStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">evaluate_subroutine_declaration_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/SubroutineDeclarationStatement.html" title="class in SalamiEvaluator.types.ast">SubroutineDeclarationStatement</a>&nbsp;subroutineDeclarationStatement,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/SubroutineValue.html" title="class in SalamiRuntime.RuntimeData">SubroutineValue</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_subroutine_declaration_statement(SalamiEvaluator.types.ast.SubroutineDeclarationStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)" class="member-name-link">evaluate_subroutine_declaration_statement</a><wbr>(<a href="../SalamiEvaluator/types/ast/SubroutineDeclarationStatement.html" title="class in SalamiPreEvaluator.types.ast">SubroutineDeclarationStatement</a>&nbsp;subroutineDeclarationStatement,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_unary_expression(SalamiEvaluator.types.ast.UnaryExpressionNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_unary_expression</a><wbr>(<a href="../SalamiEvaluator/types/ast/UnaryExpressionNode.html" title="class in SalamiEvaluator.types.ast">UnaryExpressionNode</a>&nbsp;unaryNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#evaluate_unary_expression(SalamiEvaluator.types.ast.UnaryExpressionNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)" class="member-name-link">evaluate_unary_expression</a><wbr>(<a href="../SalamiEvaluator/types/ast/UnaryExpressionNode.html" title="class in SalamiPreEvaluator.types.ast">UnaryExpressionNode</a>&nbsp;unaryNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -292,12 +292,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate(SalamiEvaluator.types.ast.StatementNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)">
 <h3>evaluate</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></span>&nbsp;<span class="element-name">evaluate</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiEvaluator.types.ast">StatementNode</a>&nbsp;s,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;environment,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></span>&nbsp;<span class="element-name">evaluate</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiPreEvaluator.types.ast">StatementNode</a>&nbsp;s,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;environment,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
                       throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a>,
-<a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></span></div>
+<a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></span></div>
 <div class="block"><p>
      Evaluates a single statement. A
  </p></div>
@@ -310,16 +310,16 @@ loadScripts(document, 'script');</script>
 <dd>the correctly evaluated statement.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></code> - If it encounters a statement which it doesn't have an evaluator function for, it throws an error.</dd>
-<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></code> - If at any point two values are mismatched, or some other error like that, this gets thrown.</dd>
+<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></code> - If at any point two values are mismatched, or some other error like that, this gets thrown.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="evaluate_jump_statement(SalamiEvaluator.types.ast.JumpStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)">
 <h3>evaluate_jump_statement</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime">VoidValue</a></span>&nbsp;<span class="element-name">evaluate_jump_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/JumpStatement.html" title="class in SalamiEvaluator.types.ast">JumpStatement</a>&nbsp;jumpNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData">VoidValue</a></span>&nbsp;<span class="element-name">evaluate_jump_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/JumpStatement.html" title="class in SalamiPreEvaluator.types.ast">JumpStatement</a>&nbsp;jumpNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc)</span></div>
 <div class="block">Evaluates jump statements, which set the program counter to the label passed in. <br>
  <code>jump loopName</code></div>
 <dl class="notes">
@@ -328,25 +328,25 @@ loadScripts(document, 'script');</script>
 <dd><code>env</code> - The environment to look up the label to jump too.</dd>
 <dd><code>pc</code> - The program counter to be set so it can actually jump.</dd>
 <dt>Returns:</dt>
-<dd>a <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime"><code>VoidValue</code></a>.</dd>
+<dd>a <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData"><code>VoidValue</code></a>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="evaluate_subroutine_declaration_statement(SalamiEvaluator.types.ast.SubroutineDeclarationStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)">
 <h3>evaluate_subroutine_declaration_statement</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/SubroutineValue.html" title="class in SalamiRuntime.Runtime">SubroutineValue</a></span>&nbsp;<span class="element-name">evaluate_subroutine_declaration_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/SubroutineDeclarationStatement.html" title="class in SalamiEvaluator.types.ast">SubroutineDeclarationStatement</a>&nbsp;subroutineDeclarationStatement,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/SubroutineValue.html" title="class in SalamiRuntime.RuntimeData">SubroutineValue</a></span>&nbsp;<span class="element-name">evaluate_subroutine_declaration_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/SubroutineDeclarationStatement.html" title="class in SalamiPreEvaluator.types.ast">SubroutineDeclarationStatement</a>&nbsp;subroutineDeclarationStatement,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="evaluate_return_statement(SalamiEvaluator.types.ast.ReturnStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)">
 <h3>evaluate_return_statement</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></span>&nbsp;<span class="element-name">evaluate_return_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/ReturnStatement.html" title="class in SalamiEvaluator.types.ast">ReturnStatement</a>&nbsp;returnStatement,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></span>&nbsp;<span class="element-name">evaluate_return_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/ReturnStatement.html" title="class in SalamiPreEvaluator.types.ast">ReturnStatement</a>&nbsp;returnStatement,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
                                        throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
@@ -357,10 +357,10 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate_subroutine_call_statement(SalamiEvaluator.types.ast.SubroutineCallStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)">
 <h3>evaluate_subroutine_call_statement</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></span>&nbsp;<span class="element-name">evaluate_subroutine_call_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/SubroutineCallStatement.html" title="class in SalamiEvaluator.types.ast">SubroutineCallStatement</a>&nbsp;subroutineCallStatement,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></span>&nbsp;<span class="element-name">evaluate_subroutine_call_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/SubroutineCallStatement.html" title="class in SalamiPreEvaluator.types.ast">SubroutineCallStatement</a>&nbsp;subroutineCallStatement,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
                                                 throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
@@ -371,9 +371,9 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate_label_statement(SalamiEvaluator.types.ast.LabelDeclarationStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)">
 <h3>evaluate_label_statement</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime">VoidValue</a></span>&nbsp;<span class="element-name">evaluate_label_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/LabelDeclarationStatement.html" title="class in SalamiEvaluator.types.ast">LabelDeclarationStatement</a>&nbsp;declarationNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData">VoidValue</a></span>&nbsp;<span class="element-name">evaluate_label_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/LabelDeclarationStatement.html" title="class in SalamiPreEvaluator.types.ast">LabelDeclarationStatement</a>&nbsp;declarationNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc)</span></div>
 <div class="block">Evaluates label declaration statements like: <br>
  <code>label loopName</code></div>
 <dl class="notes">
@@ -382,17 +382,17 @@ loadScripts(document, 'script');</script>
 <dd><code>env</code> - The environment to declare the label to.</dd>
 <dd><code>pc</code> - The program counter to tell the label where it is in the program.</dd>
 <dt>Returns:</dt>
-<dd>a <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime"><code>VoidValue</code></a>.</dd>
+<dd>a <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData"><code>VoidValue</code></a>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="evaluate_print_statement(SalamiEvaluator.types.ast.PrintStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)">
 <h3>evaluate_print_statement</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime">VoidValue</a></span>&nbsp;<span class="element-name">evaluate_print_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/PrintStatement.html" title="class in SalamiEvaluator.types.ast">PrintStatement</a>&nbsp;printNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData">VoidValue</a></span>&nbsp;<span class="element-name">evaluate_print_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/PrintStatement.html" title="class in SalamiPreEvaluator.types.ast">PrintStatement</a>&nbsp;printNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
                                           throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <div class="block">Evaluates print statements like: <br>
  <code>print 'Hello, world!</code></div>
@@ -402,7 +402,7 @@ loadScripts(document, 'script');</script>
 <dd><code>env</code> - The environment to grab identifiers from.</dd>
 <dd><code>pc</code> - The program counter. Does not have to be a specific counter, as it will never be used.</dd>
 <dt>Returns:</dt>
-<dd>a <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime"><code>VoidValue</code></a>.</dd>
+<dd>a <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData"><code>VoidValue</code></a>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></code> - In case the evaluation of what needs to be printed goes wrong.</dd>
 </dl>
@@ -411,10 +411,10 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate_set_statement(SalamiEvaluator.types.ast.VariableDeclarationStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)">
 <h3>evaluate_set_statement</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime">VoidValue</a></span>&nbsp;<span class="element-name">evaluate_set_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/VariableDeclarationStatement.html" title="class in SalamiEvaluator.types.ast">VariableDeclarationStatement</a>&nbsp;declarationNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData">VoidValue</a></span>&nbsp;<span class="element-name">evaluate_set_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/VariableDeclarationStatement.html" title="class in SalamiPreEvaluator.types.ast">VariableDeclarationStatement</a>&nbsp;declarationNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
                                         throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <div class="block">Evaluates variable declaration statements like: <br>
  <code>set message to 'Hello, world!"</code></div>
@@ -424,7 +424,7 @@ loadScripts(document, 'script');</script>
 <dd><code>env</code> - The environment to declare the variable too.</dd>
 <dd><code>pc</code> - The program counter. Does not have to be a specific counter, as it will never be used.</dd>
 <dt>Returns:</dt>
-<dd>a <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime"><code>VoidValue</code></a>.</dd>
+<dd>a <a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData"><code>VoidValue</code></a>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></code> - If what we are defining the variable as can't be evaluated, then it throws an error.</dd>
 </dl>
@@ -433,10 +433,10 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate_compare_statement(SalamiEvaluator.types.ast.CompareStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)">
 <h3>evaluate_compare_statement</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.Runtime">BooleanValue</a></span>&nbsp;<span class="element-name">evaluate_compare_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/CompareStatement.html" title="class in SalamiEvaluator.types.ast">CompareStatement</a>&nbsp;compareNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.RuntimeData">BooleanValue</a></span>&nbsp;<span class="element-name">evaluate_compare_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/CompareStatement.html" title="class in SalamiPreEvaluator.types.ast">CompareStatement</a>&nbsp;compareNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
                                                throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -452,9 +452,9 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate_increment_statement(SalamiEvaluator.types.ast.ExpressionIncrementStatement,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)">
 <h3>evaluate_increment_statement</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/VoidValue.html" title="class in SalamiRuntime.Runtime">VoidValue</a></span>&nbsp;<span class="element-name">evaluate_increment_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/ExpressionIncrementStatement.html" title="class in SalamiEvaluator.types.ast">ExpressionIncrementStatement</a>&nbsp;incrementNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/VoidValue.html" title="class in SalamiRuntime.RuntimeData">VoidValue</a></span>&nbsp;<span class="element-name">evaluate_increment_statement</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/ExpressionIncrementStatement.html" title="class in SalamiPreEvaluator.types.ast">ExpressionIncrementStatement</a>&nbsp;incrementNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc)</span>
                                               throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -470,41 +470,41 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate_subroutine(SalamiEvaluator.types.ast.ProgramNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter)">
 <h3>evaluate_subroutine</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></span>&nbsp;<span class="element-name">evaluate_subroutine</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;p,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;environment,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;startingpc)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></span>&nbsp;<span class="element-name">evaluate_subroutine</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;p,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;environment,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;startingpc)</span>
                                  throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a>,
-<a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></span></div>
+<a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></code></dd>
-<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></code></dd>
+<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></code></dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="evaluate_identifier(SalamiEvaluator.types.ast.IdentifierNode,SalamiRuntime.Runtime.Environment)">
 <h3>evaluate_identifier</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></span>&nbsp;<span class="element-name">evaluate_identifier</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/IdentifierNode.html" title="class in SalamiEvaluator.types.ast">IdentifierNode</a>&nbsp;node,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;environment)</span>
-                                 throws <span class="exceptions"><a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></span>&nbsp;<span class="element-name">evaluate_identifier</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/IdentifierNode.html" title="class in SalamiPreEvaluator.types.ast">IdentifierNode</a>&nbsp;node,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;environment)</span>
+                                 throws <span class="exceptions"><a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>node</code> - </dd>
 <dd><code>environment</code> - </dd>
 <dt>Returns:</dt>
 <dt>Throws:</dt>
-<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></code></dd>
+<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></code></dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="evaluate_unary_expression(SalamiEvaluator.types.ast.UnaryExpressionNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)">
 <h3>evaluate_unary_expression</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></span>&nbsp;<span class="element-name">evaluate_unary_expression</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/UnaryExpressionNode.html" title="class in SalamiEvaluator.types.ast">UnaryExpressionNode</a>&nbsp;unaryNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></span>&nbsp;<span class="element-name">evaluate_unary_expression</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/UnaryExpressionNode.html" title="class in SalamiPreEvaluator.types.ast">UnaryExpressionNode</a>&nbsp;unaryNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
                                        throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -520,10 +520,10 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate_logical_expression(SalamiEvaluator.types.ast.BinaryExpressionNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)">
 <h3>evaluate_logical_expression</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.Runtime">BooleanValue</a></span>&nbsp;<span class="element-name">evaluate_logical_expression</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/BinaryExpressionNode.html" title="class in SalamiEvaluator.types.ast">BinaryExpressionNode</a>&nbsp;binaryNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;env,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.RuntimeData">BooleanValue</a></span>&nbsp;<span class="element-name">evaluate_logical_expression</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/BinaryExpressionNode.html" title="class in SalamiPreEvaluator.types.ast">BinaryExpressionNode</a>&nbsp;binaryNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;env,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
                                                 throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -539,8 +539,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate_numeric_logical_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)">
 <h3>evaluate_numeric_logical_expression</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.Runtime">BooleanValue</a></span>&nbsp;<span class="element-name">evaluate_numeric_logical_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.RuntimeData">BooleanValue</a></span>&nbsp;<span class="element-name">evaluate_numeric_logical_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</span>
                                                         throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <dl class="notes">
@@ -557,8 +557,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate_floating_logical_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)">
 <h3>evaluate_floating_logical_expression</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.Runtime">BooleanValue</a></span>&nbsp;<span class="element-name">evaluate_floating_logical_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.RuntimeData">BooleanValue</a></span>&nbsp;<span class="element-name">evaluate_floating_logical_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</span>
                                                          throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <dl class="notes">
@@ -575,8 +575,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate_string_logical_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)">
 <h3>evaluate_string_logical_expression</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.Runtime">BooleanValue</a></span>&nbsp;<span class="element-name">evaluate_string_logical_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.RuntimeData">BooleanValue</a></span>&nbsp;<span class="element-name">evaluate_string_logical_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</span>
                                                        throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <dl class="notes">
@@ -593,8 +593,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate_boolean_logical_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)">
 <h3>evaluate_boolean_logical_expression</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.Runtime">BooleanValue</a></span>&nbsp;<span class="element-name">evaluate_boolean_logical_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/BooleanValue.html" title="class in SalamiRuntime.RuntimeData">BooleanValue</a></span>&nbsp;<span class="element-name">evaluate_boolean_logical_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</span>
                                                         throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></span></div>
 <dl class="notes">
@@ -611,11 +611,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evaluate_numeric_binary_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)">
 <h3>evaluate_numeric_binary_expression</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></span>&nbsp;<span class="element-name">evaluate_numeric_binary_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></span>&nbsp;<span class="element-name">evaluate_numeric_binary_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</span>
                                                 throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a>,
-<a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></span></div>
+<a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>preEvalLeft</code> - </dd>
@@ -624,18 +624,18 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dt>Throws:</dt>
 <dd><code><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></code></dd>
-<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></code></dd>
+<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></code></dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="evaluate_string_binary_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)">
 <h3>evaluate_string_binary_expression</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></span>&nbsp;<span class="element-name">evaluate_string_binary_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></span>&nbsp;<span class="element-name">evaluate_string_binary_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</span>
                                                throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a>,
-<a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></span></div>
+<a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>preEvalLeft</code> - </dd>
@@ -644,18 +644,18 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dt>Throws:</dt>
 <dd><code><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></code></dd>
-<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></code></dd>
+<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></code></dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="evaluate_floating_binary_expression(SalamiRuntime.Runtime.Value,SalamiRuntime.Runtime.Value,java.lang.String)">
 <h3>evaluate_floating_binary_expression</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></span>&nbsp;<span class="element-name">evaluate_floating_binary_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalLeft,
- <a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a>&nbsp;preEvalRight,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></span>&nbsp;<span class="element-name">evaluate_floating_binary_expression</span><wbr><span class="parameters">(<a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalLeft,
+ <a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a>&nbsp;preEvalRight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</span>
                                                  throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a>,
-<a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></span></div>
+<a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>preEvalLeft</code> - </dd>
@@ -664,19 +664,19 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dt>Throws:</dt>
 <dd><code><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></code></dd>
-<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></code></dd>
+<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></code></dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="evaluate_binary_expression(SalamiEvaluator.types.ast.BinaryExpressionNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,SalamiEvaluator.types.ast.ProgramNode)">
 <h3>evaluate_binary_expression</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></span>&nbsp;<span class="element-name">evaluate_binary_expression</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/BinaryExpressionNode.html" title="class in SalamiEvaluator.types.ast">BinaryExpressionNode</a>&nbsp;binaryNode,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;environment,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;pc,
- <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></span>&nbsp;<span class="element-name">evaluate_binary_expression</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/BinaryExpressionNode.html" title="class in SalamiPreEvaluator.types.ast">BinaryExpressionNode</a>&nbsp;binaryNode,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;environment,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;pc,
+ <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;program)</span>
                                         throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a>,
-<a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></span></div>
+<a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>binaryNode</code> - </dd>
@@ -685,22 +685,22 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dt>Throws:</dt>
 <dd><code><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></code></dd>
-<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></code></dd>
+<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></code></dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="evaluate_program(SalamiEvaluator.types.ast.ProgramNode,SalamiRuntime.Runtime.Environment,SalamiRuntime.Runtime.ProgramCounter,boolean)">
 <h3>evaluate_program</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.Runtime">Value</a></span>&nbsp;<span class="element-name">evaluate_program</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast">ProgramNode</a>&nbsp;p,
- <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime">Environment</a>&nbsp;environment,
- <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime">ProgramCounter</a>&nbsp;startingpc,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Runtime/Value.html" title="class in SalamiRuntime.RuntimeData">Value</a></span>&nbsp;<span class="element-name">evaluate_program</span><wbr><span class="parameters">(<a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast">ProgramNode</a>&nbsp;p,
+ <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData">Environment</a>&nbsp;environment,
+ <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData">ProgramCounter</a>&nbsp;startingpc,
  boolean&nbsp;initializeProgram)</span>
                               throws <span class="exceptions"><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a>,
-<a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></span></div>
+<a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></span></div>
 <div class="block"><p>
-     Takes in a <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiEvaluator.types.ast"><code>ProgramNode</code></a> and evaluates each <a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiEvaluator.types.ast"><code>StatementNode</code></a> in the program.
-     Pass in an <a href="Runtime/Environment.html" title="class in SalamiRuntime.Runtime"><code>Environment</code></a> and a <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.Runtime"><code>ProgramCounter</code></a> so it can properly modify variables and use <code>jump</code> statements.
+     Takes in a <a href="../SalamiEvaluator/types/ast/ProgramNode.html" title="class in SalamiPreEvaluator.types.ast"><code>ProgramNode</code></a> and evaluates each <a href="../SalamiEvaluator/types/ast/StatementNode.html" title="class in SalamiPreEvaluator.types.ast"><code>StatementNode</code></a> in the program.
+     Pass in an <a href="Runtime/Environment.html" title="class in SalamiRuntime.RuntimeData"><code>Environment</code></a> and a <a href="Runtime/ProgramCounter.html" title="class in SalamiRuntime.RuntimeData"><code>ProgramCounter</code></a> so it can properly modify variables and use <code>jump</code> statements.
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -712,7 +712,7 @@ loadScripts(document, 'script');</script>
 <dd>the evaluation of the last statement.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="InterpreterException.html" title="class in SalamiRuntime">InterpreterException</a></code> - If a statement fails to be evaluated, an InterpreterException will occur.</dd>
-<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.Runtime">ValueException</a></code></dd>
+<dd><code><a href="Runtime/ValueException.html" title="class in SalamiRuntime.RuntimeData">ValueException</a></code></dd>
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list">

@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2025-01-25">
-<meta name="description" content="declaration: package: SalamiEvaluator, class: TokenizedList">
+<meta name="description" content="declaration: package: SalamiPreEvaluator, class: TokenizedList">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../script-dir/jquery-ui.min.css" title="Style">
@@ -68,11 +68,11 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">SalamiEvaluator</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">SalamiPreEvaluator</a></div>
 <h1 title="Class TokenizedList" class="title">Class TokenizedList</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">SalamiEvaluator.TokenizedList</div>
+<div class="inheritance">SalamiPreEvaluator.TokenizedList</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
@@ -106,10 +106,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addToken(SalamiEvaluator.Token)" class="member-name-link">addToken</a><wbr>(<a href="Token.html" title="class in SalamiEvaluator">Token</a>&nbsp;t)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addToken(SalamiEvaluator.Token)" class="member-name-link">addToken</a><wbr>(<a href="Token.html" title="class in SalamiPreEvaluator">Token</a>&nbsp;t)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addTokens(SalamiEvaluator.TokenizedList)" class="member-name-link">addTokens</a><wbr>(<a href="TokenizedList.html" title="class in SalamiEvaluator">TokenizedList</a>&nbsp;t)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addTokens(SalamiEvaluator.TokenizedList)" class="member-name-link">addTokens</a><wbr>(<a href="TokenizedList.html" title="class in SalamiPreEvaluator">TokenizedList</a>&nbsp;t)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clear()" class="member-name-link">clear</a>()</code></div>
@@ -117,7 +117,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#get()" class="member-name-link">get</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Token.html" title="class in SalamiEvaluator">Token</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Token.html" title="class in SalamiPreEvaluator">Token</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#grab(int)" class="member-name-link">grab</a><wbr>(int&nbsp;ind)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
@@ -157,7 +157,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addToken(SalamiEvaluator.Token)">
 <h3>addToken</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">addToken</span><wbr><span class="parameters">(<a href="Token.html" title="class in SalamiEvaluator">Token</a>&nbsp;t)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">addToken</span><wbr><span class="parameters">(<a href="Token.html" title="class in SalamiPreEvaluator">Token</a>&nbsp;t)</span></div>
 </section>
 </li>
 <li>
@@ -169,7 +169,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addTokens(SalamiEvaluator.TokenizedList)">
 <h3>addTokens</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addTokens</span><wbr><span class="parameters">(<a href="TokenizedList.html" title="class in SalamiEvaluator">TokenizedList</a>&nbsp;t)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addTokens</span><wbr><span class="parameters">(<a href="TokenizedList.html" title="class in SalamiPreEvaluator">TokenizedList</a>&nbsp;t)</span></div>
 </section>
 </li>
 <li>
@@ -181,7 +181,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="grab(int)">
 <h3>grab</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Token.html" title="class in SalamiEvaluator">Token</a></span>&nbsp;<span class="element-name">grab</span><wbr><span class="parameters">(int&nbsp;ind)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Token.html" title="class in SalamiPreEvaluator">Token</a></span>&nbsp;<span class="element-name">grab</span><wbr><span class="parameters">(int&nbsp;ind)</span></div>
 </section>
 </li>
 <li>

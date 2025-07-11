@@ -1,12 +1,12 @@
 package Helper.Debugger;
 
-import SalamiEvaluator.LexerException;
-import SalamiEvaluator.Parser;
-import SalamiEvaluator.ParserException;
-import SalamiEvaluator.types.ast.*;
+import SalamiPreEvaluator.LexerException;
+import SalamiPreEvaluator.Parser;
+import SalamiPreEvaluator.ParserException;
+import SalamiPreEvaluator.types.ast.*;
 import SalamiRuntime.Initializer;
 import SalamiRuntime.Interpreter;
-import SalamiRuntime.Runtime.*;
+import SalamiRuntime.RuntimeData.*;
 import SalamiRuntime.InterpreterException;
 import SalamiRuntime.RuntimeDisruptedException;
 
@@ -21,10 +21,10 @@ public class Debugger {
     private static final Set<Integer> breakpoints = new HashSet<>();
     private static final Set<String> watchlist = new HashSet<>();
 
-    public static Value run(ProgramNode program, Environment env) throws InterpreterException, ValueException {
+    public static Value run(ProgramNode program, Environment env, String loc) throws InterpreterException, ValueException {
         ProgramCounter pc = new ProgramCounter(0);
         Scanner debugInput = new Scanner(System.in);
-        env = Initializer.initialize_program(program, env, new ProgramCounter(0));
+        env = Initializer.initialize_program(program, env, new ProgramCounter(0),null);
         Value eval = new VoidValue();
         boolean stepping = true;  // initially stepping
 
@@ -34,7 +34,7 @@ public class Debugger {
 
             if (!stepping && !breakpoints.contains(pc.get())) {
                 // if we outside the step loop and we arent currently on any breakpoints then we evaluate the program like normal
-                eval = Interpreter.evaluate(statement, env, pc, program);
+                eval = Interpreter.evaluate(statement, env, pc, program, loc);
                 pc.increment();
                 continue;
             }
@@ -49,12 +49,12 @@ public class Debugger {
 
             switch (parts[0]) {
                 case "step", "" -> {
-                    eval = Interpreter.evaluate(statement, env, pc, program);
+                    eval = Interpreter.evaluate(statement, env, pc, program, loc);
                     pc.increment();
                     stepping = true;
                 }
                 case "continue" -> {
-                    eval = Interpreter.evaluate(statement, env, pc, program);
+                    eval = Interpreter.evaluate(statement, env, pc, program, loc);
                     pc.increment();
                     // set stepping to false so it will just continue evaluating without stopping again (unless breakpoints)
                     stepping = false;
@@ -108,7 +108,7 @@ public class Debugger {
                         } else {
                             try {
                                 ProgramNode snippet = Parser.parseLine(code);
-                                Interpreter.evaluate(snippet, env, new ProgramCounter(0), snippet);
+                                Interpreter.evaluate(snippet, env, new ProgramCounter(0), snippet, loc);
                             } catch (ParserException | LexerException | InterpreterException e){
                                 System.out.println("Error while running snippet: " +e);
                             }
