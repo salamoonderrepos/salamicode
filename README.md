@@ -1,7 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![Static Badge](https://img.shields.io/badge/Current_Version-V1.8.TESTINGBRANCH-green)
+![Static Badge](https://img.shields.io/badge/Current_Version-V1.8-green)
 ![Static Badge](https://img.shields.io/badge/SalamiCode-orange)
-![Static Badge](https://img.shields.io/badge/TEST%20BRANCH-red)
+
 
 ```
    .-'''-.    ____      .---.        ____    ,---.    ,---..-./`)     _______      ,-----.     ______         .-''-.   
@@ -25,17 +25,30 @@ SalamiCode is a programming language developed by Salamoonder. The language is m
 * High performance
 * Interactive
 * User package creation and support
-* Able to be run on any system (JDK 17+)
+* Able to be run on any system
 > Simply create a file ending in `.salami`, and run it with the java program (look below).
 
-SalamiCode started as a project intending to help me with my math assignments. I wanted a simple versatile language that would help me code formulas, so I could do my homework faster. The project begun on CodeHS on my school chromebook and transformed into a full-fledged language with IntelliJ IDEA. Thank you [tylerlaceby](https://www.youtube.com/channel/UCK94nZHoLfxXISrVflJqK5Q) on YouTube for giving me the knowledge needed to start this project.
+SalamiCode started as a project intending to help me with my math assignments. I wanted a simple, versatile language that would help me code formulas so I could do my homework faster. The project begun on CodeHS on my school Chromebook and transformed into a full-fledged language with IntelliJ IDEA. Thank you [tylerlaceby](https://www.youtube.com/channel/UCK94nZHoLfxXISrVflJqK5Q) on YouTube for giving me the knowledge needed to start this project.
 
-## How to use (currently)
+## How to install
+
+### Archive
+1. Download whichever SalamiCode archive you need
+2. Unzip
+3. Use your command line to run use the associated `.sh` and `.bat` files
+
+> You could optionally, for Windows, add the `salamicode.bat` file to your PATH.
+
+*You don't need to install Java with the archive. It already comes with it*
+
+### Source
 1. Download the source code.
-2. Install JDK 17
-3. Compile
+2. Install JDK 17 or some other JRE (17+). (only needs `java.base`)
+3. Build
 4. Run `java Main <file>` (for default settings).
+> You can add flags after `<file>`
 ### Flags:
+* `--file <path-to-file>` supplies the file to the program.
 * `--repl` enables the repl for this language. Most statements do not work properly with this mode.
 * `--silent` enables silent mode for a quieter console.
 * `--monochrome` turns off ANSI coloring on text. Some consoles don't have support for ANSI, which is why this is an option. If your log messages look really cluttered, then try running with this flag.
@@ -45,10 +58,14 @@ SalamiCode started as a project intending to help me with my math assignments. I
 ## Documentation
 I **HIGHLY** recommend visiting [the wikis](https://github.com/salamoonderrepos/salamicode/wiki). It contains a bunch of information for beginner's like langauge syntax, built-in methods, and advanced features for advanced users.
 
-# Previous Releases
-(Refer to main branch for roadmap.)
+# Roadmap
 
-## 1.8.TESTINGBRANCH (C) *- Packages*
+## 1.9 *- ???*
+- Modules
+- Some other statements
+- Dictionary?
+
+## 1.8 (C) *- Packages*
 Added support for packages and the `port` statement. User created
 packages are now supported, and you can learn how to make one yourself in the wikis.
 * Lexer changes
@@ -64,13 +81,17 @@ packages are now supported, and you can learn how to make one yourself in the wi
 * Console logging actively supports log locations
   * `print` and `throw` respectively
 * Changed `--nolint` to `--nopretty` to better represent what the flag does
+* To supply a file, use `--file <FILE>` instead.
 * Errors now properly point to locations within a file.
+* Archive distribution (Bundled JRE)
 
 BUGFIXES -
 * Fixed bug where methods would skip parent lookup making methods unable to be called inside subroutines.
 * Fixed bug where lexer would jot down incorrect values for token locations
+* Improved compatibility with Linux
+* Couple tweaks to CLI argument parsing
 
-Just gotta write the JavaDocs and I'll push this into master as 1.8. Everything thats in this branch right now is practically what 1.8 will be, given room for bug fixes and final tweaks.
+JavaDocs will be written through versions.
 
 ## 1.7 *- Attributes and Arrays*
 Added arrays and indexing for strings and arrays using `from` statement. Access attributes of values using `to`.

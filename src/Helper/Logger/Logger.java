@@ -10,7 +10,7 @@ enum logType {
 
 public class Logger {
     String location;
-    boolean silent = false;
+    public boolean silent = false;
     boolean prettylint = false;
     public static boolean doColor = true;
     public static final String RESET = "\u001B[0m";
@@ -24,7 +24,7 @@ public class Logger {
     public Logger (String loc){
         location = loc;
     }
-    public Logger (String loc, boolean si){
+    public Logger (String loc, boolean si) {
         location = loc;
         silent = si;
     }
@@ -44,17 +44,12 @@ public class Logger {
         }
 
     }
-    public void debuglog(Object obj){
-        String coloredtext = colorize(PURPLE, "[" + location + "] " + colorize(GREEN, obj));
-        System.out.println(coloredtext);
-
-    }
-    public void debuglog(Object obj, boolean pretty){
-        if (pretty) {
+    public void logExtra(Object obj,String color, String extra){
+        if (!silent) {
             String lintedtext = prettyize(obj);
-            String coloredtext = colorize(PURPLE, "[" + location + "] " + colorize(GREEN, lintedtext));
+            String coloredtext = colorize(PURPLE, '@' + logType.NORMAL.toString())+"/"+extra + " [" + location + "] " + colorize(color, lintedtext);
             System.out.println(coloredtext);
-        } else {debuglog(obj);}
+        }
 
     }
     public void log(Object obj, String Color){
@@ -75,7 +70,9 @@ public class Logger {
     }
 
     public void whisper(Object obj){
+
         if (!silent) {
+            //System.out.println(this.location);
             String lintedtext = prettyize(obj);
             String coloredtext = colorize(GRAY, '@' + logType.WHISPER.toString() + " [" + location + "] " + lintedtext);
 

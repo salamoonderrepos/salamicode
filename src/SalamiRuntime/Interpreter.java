@@ -139,7 +139,7 @@ public class Interpreter {
 
         if ((thingtoport.endsWith(".scpkg"))) {
 
-            File packfile = Packager.findPackage(thingtoport);
+            File packfile = Packager.findFileToLoad(thingtoport);
 
             SalamiPackage pack = Packager.unzipPackage(packfile);
             Packager.loadPackage(pack, environment);
@@ -150,7 +150,7 @@ public class Interpreter {
                 Packager.loadFileFromPack(sourcePackage,thingtoport,environment);
                 return new VoidValue();
             }
-            File file = new File("packages\\"+thingtoport);
+            File file = Packager.findFileToLoad(thingtoport);
             Packager.loadFile(file, environment);
             // same here
         } else {
@@ -168,7 +168,7 @@ public class Interpreter {
         for (int i = 0; i<methodCallStatement.parameters.size(); i++){
             passins.add(evaluate(methodCallStatement.parameters.get(i), env, pc, program, location));
         }
-        return method.run(passins, programlogger);
+        return method.run(passins, programlogger, location);
 
 
     }
@@ -398,7 +398,7 @@ public class Interpreter {
         };
         AttributeValue attributeFunction = val.attributes.get(attribute);
 
-        return attributeFunction.getValue(logger);
+        return attributeFunction.getValue(logger, location);
 
     }
 

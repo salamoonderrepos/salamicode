@@ -41,7 +41,7 @@ public class Packager {
                     "PackagerFile/"+file.getName(),
                     parsedFile,
                     true,
-                    baseEnvironment);
+                    baseEnvironment, logger.silent);
             //interpreter.evaluate(parsedFile, env, new ProgramCounter(0), parsedFile);
             tempProcess.begin();
             newEnvironment = tempProcess.getLocalEnvironment();
@@ -70,7 +70,7 @@ public class Packager {
         try {
             ProgramNode libFile = pack.contents.get("lib/"+file);
 
-            Process tempProcess = new Process(pack.ID+"/PackagerLibFile/"+file, libFile, true, baseEnvironment);
+            Process tempProcess = new Process(pack.ID+"/PackagerLibFile/"+file, libFile, true, baseEnvironment, logger.silent);
             tempProcess.begin();
             newEnvironment = tempProcess.getLocalEnvironment();
         } catch (InterpreterException e ) {
@@ -83,7 +83,7 @@ public class Packager {
         loadedPackageIDs.add(fileID);
         return newEnvironment;
     }
-    public static File findPackage(String packid){
+    public static File findFileToLoad(String packid){
         // we need to check some directories for packages
         // first we should check the running directory
         // then we should check the specified location given by a process
@@ -97,24 +97,21 @@ public class Packager {
 
         // PACKAGES MUST END IN .scpkg
 
-        String runningDirectory = "";
-        String runningPackageDirectory = runningDirectory+File.separator+"packages"+File.separator;
-        String runningLibDirectory = runningDirectory+File.separator+"lib"+File.separator;
-        File runningDirectorypackfile = new File(runningDirectory+packid);
-        File runningPackageDirectorypackfile = new File(runningPackageDirectory+packid);
-        File runningLibDirectorypackfile = new File(runningLibDirectory+packid);
-        boolean runningDirectoryexists = runningDirectorypackfile.exists();
-        boolean runningPackageDirectoryexists = runningDirectorypackfile.exists();
-        boolean runningLibDirectoryexists = runningDirectorypackfile.exists();
-        if (runningDirectoryexists){
-            return runningDirectorypackfile;
 
-        } else if (runningPackageDirectoryexists){
-            return runningPackageDirectorypackfile;
-        }else if (runningLibDirectoryexists){
-            return runningLibDirectorypackfile;
+        String[] dirsToSearch = {
+            System.getProperty("user.dir"),
+            System.getProperty("user.dir")+File.separator+"packages",
+            System.getProperty("user.dir")+File.separator+"lib"
+
+        };
+        for (String dir : dirsToSearch){
+            File tempFile = new File(dir+File.separator+packid);
+            if (tempFile.exists()){
+                return tempFile;
+            }
         }
-        throw new PackageException("Package: \""+packid+"\" could not be located.", null);
+
+        throw new PackageException("File OR Package: \""+packid+"\" could not be located.", null);
     }
     public static Environment loadPackage(SalamiPackage pack, Environment coolfreakingenvironment) throws PackageException {
         Timer packageloadtimer = new Timer("PackageLoadTimer");
@@ -126,7 +123,7 @@ public class Packager {
         activleyLoadingPackages.add(pack.ID);
         try {
             // we dont have to initialize the main.salami because it is automatically initialized in the evaluate function.
-            Process tempProcess = new Process(pack.ID+"/PackagerProcess", pack.main,  true, coolfreakingenvironment);
+            Process tempProcess = new Process(pack.ID+"/PackagerProcess", pack.main,  true, coolfreakingenvironment, logger.silent);
             tempProcess.setSourcePackage(pack);
             tempProcess.begin();
             newEnvironment = tempProcess.getLocalEnvironment();

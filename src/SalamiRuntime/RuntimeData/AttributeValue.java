@@ -19,8 +19,8 @@ public class AttributeValue extends Value {
         parent = _parent;
     }
 
-    public Value getValue(Logger logger) throws ValueException{
-        return func.execute(List.of(parent), logger);
+    public Value getValue(Logger logger, String location) throws ValueException{
+        return func.execute(List.of(parent), logger, location);
     }
 
 }

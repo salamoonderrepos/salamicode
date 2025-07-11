@@ -55,20 +55,20 @@ public class Initializer {
         env.declareVariable("false", new BooleanValue(false), true);
         env.declareLabel("start", 0);
 
-        env.declareMethod("pow", List.of(Value.class, Value.class), (params, logger) -> {
+        env.declareMethod("pow", List.of(Value.class, Value.class), (params, logger, locallocation) -> {
             FloatingValue floatarg1 = FloatingValue.parseFloatingValue(params.get(0));
             FloatingValue floatarg2 = FloatingValue.parseFloatingValue(params.get(1));
             return new FloatingValue((float) Math.pow(floatarg1.value,floatarg2.value));
         });
-        env.declareMethod("toString", List.of(Value.class), (params, logger) -> StringValue.parseStringValue(params.get(0)));
-        env.declareMethod("toNumber", List.of(Value.class), (params, logger) -> {
+        env.declareMethod("toString", List.of(Value.class), (params, logger, locallocation) -> StringValue.parseStringValue(params.get(0)));
+        env.declareMethod("toNumber", List.of(Value.class), (params, logger, locallocation) -> {
             return NumberValue.parseNumberValue(params.get(0));
         });
-        env.declareMethod("toFloat", List.of(Value.class), (params, logger) -> {
+        env.declareMethod("toFloat", List.of(Value.class), (params, logger, locallocation) -> {
             return FloatingValue.parseFloatingValue(params.get(0));
         });
 
-        env.declareMethod("rand", List.of(NumberValue.class, NumberValue.class), (params, logger) -> {
+        env.declareMethod("rand", List.of(NumberValue.class, NumberValue.class), (params, logger, locallocation) -> {
             NumberValue numarg1 = (NumberValue) params.get(0);
             NumberValue numarg2 = (NumberValue) params.get(1);
             int numarg1value = (int) numarg1.value;
@@ -76,9 +76,9 @@ public class Initializer {
             Random numgen = new Random();
             return new NumberValue(numgen.nextInt(numarg2value - numarg1value + 1) + numarg1value);
         });
-        env.declareMethod("get", List.of(StringValue.class), (params, logger) -> {
+        env.declareMethod("get", List.of(StringValue.class), (params, logger, locallocation) -> {
             StringValue s = (StringValue) params.get(0);
-            logger.log(s.value, Logger.GREEN);
+            logger.logExtra(s.value, Logger.GREEN, locallocation);
             System.out.print(">>> ");
             String v = Interpreter.reader.nextLine();
             return new StringValue(v);
@@ -88,17 +88,17 @@ public class Initializer {
         //    throw new RuntimeDisruptedException(s.value);
         //    //return new VoidValue();
         //});
-        env.declareMethod("salami", List.of(), (params, logger) ->
+        env.declareMethod("salami", List.of(), (params, logger, locallocation) ->
             new StringValue("""
             That's me!
             """)
         );
-        env.declareMethod("version", List.of(), (params, logger) ->
+        env.declareMethod("version", List.of(), (params, logger, locallocation) ->
                 new StringValue("""
                 SalamiCode V1.7.3
                 """)
         );
-        env.declareMethod("governedparse", List.of(StringValue.class, ArrayValue.class), (params, logger) -> {
+        env.declareMethod("governedparse", List.of(StringValue.class, ArrayValue.class), (params, logger, locallocation) -> {
             StringValue s = (StringValue) params.get(0);
             ArrayValue array = (ArrayValue) params.get(1);
             try {
@@ -123,7 +123,7 @@ public class Initializer {
                 throw new RuntimeDisruptedException(e.getMessage());
             }
         });
-        env.declareMethod("parse", List.of(StringValue.class), (params, logger) -> {
+        env.declareMethod("parse", List.of(StringValue.class), (params, logger, locallocation) -> {
             StringValue s = (StringValue) params.get(0);
             try {
                 ProgramNode p = Parser.parseLine(s.value);

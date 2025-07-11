@@ -14,28 +14,31 @@ import SalamiRuntime.RuntimeDisruptedException;
 import java.util.Arrays;
 
 public class Process {
-    public Logger logger;
     private boolean preInitilization;
     public Environment localEnvironment;
     public ProgramNode localProgram;
     public String location;
     public Logger localProcessLogger;
     public SalamiPackage sourcePackage;
-    public Process(String _location, ProgramNode salamiprogram, boolean _preInitilization){
+    public Process(String _location, ProgramNode salamiprogram, boolean _preInitilization, boolean silent){
         location = "Process/"+_location;
-        logger =  new Logger(location);
         preInitilization = _preInitilization;
         localEnvironment = Initializer.initialize_global_environment();
         localProgram = salamiprogram;
         localProcessLogger = new Logger(location);
+        if (silent){
+            localProcessLogger.silence();
+        }
     }
-    public Process(String _location, ProgramNode salamiprogram, boolean _preInitilization, Environment givenEnvironment){
+    public Process(String _location, ProgramNode salamiprogram, boolean _preInitilization, Environment givenEnvironment, boolean silent){
         location = "Process/"+_location;
-        logger =  new Logger(location);
         preInitilization = _preInitilization;
         localEnvironment = givenEnvironment;
         localProgram = salamiprogram;
         localProcessLogger = new Logger(location);
+        if (silent){
+            localProcessLogger.silence();
+        }
     }
 
     public Value begin() throws InterpreterException {

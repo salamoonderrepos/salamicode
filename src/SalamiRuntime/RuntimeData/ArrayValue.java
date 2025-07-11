@@ -14,7 +14,7 @@ public class ArrayValue extends Value{
     public ArrayValue(List<Value> v){
         super(RuntimeType.ARRAY);
         HashMap<String, AttributeValue> temp = new HashMap<>();
-        temp.put("length", new AttributeValue(((params, logger) -> {
+        temp.put("length", new AttributeValue(((params, logger, locallocation) -> {
             ArrayValue parentValue = ArrayValue.parseArrayValue(params.get(0));
             return new NumberValue(parentValue.values.size());
 

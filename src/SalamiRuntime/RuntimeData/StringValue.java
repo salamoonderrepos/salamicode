@@ -11,7 +11,7 @@ public class StringValue extends Value{
     public StringValue(String v){
         super(RuntimeType.STRING);
         HashMap<String, AttributeValue> temp = new HashMap<>();
-        temp.put("length", new AttributeValue(((params, logger) -> {
+        temp.put("length", new AttributeValue(((params, logger, locallocation) -> {
             StringValue parentValue = StringValue.parseStringValue(params.get(0));
             return new NumberValue(parentValue.value.length());
 
